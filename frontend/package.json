@@ -1,0 +1,22 @@
+{
+  "name": "template-vite-react-tailwind-v3",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.8",
+    "postcss": "^8.4.16",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.0.7",
+    "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.13",
+    "vitawind": "^2.2.4",
+    "vite": "^2.7.2"
+  }
+}
