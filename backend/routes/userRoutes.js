@@ -9,15 +9,7 @@ const {
     deleteUser
 } = require('../controllers/userController');
 
-/*
-const {
-    getVannstand, 
-    setVannstand, 
-    updateVannstand, 
-    deleteVannstand
-} = require('../controllers/vannstandController');
-*/
-
+// /api/version/users
 router.route('/').get(getUsers).post(setUser);
 router.route('/id/:id').get(getUserById).patch(updateUser).delete(deleteUser);
 router.route('/username/').get(getUserByUsername);
