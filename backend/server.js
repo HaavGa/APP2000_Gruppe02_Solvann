@@ -8,12 +8,12 @@ const { errorHandler } = require("./middleware/errorMiddleware");
 connectDB();
 const app = express();
 
-
-// app.use("/api/version/vannstand", require("./routes/vannstandRoutes")); feks
 app.use(express.json());
 // app.use(express.urlencoded({extended: false}))
 app.use(errorHandler);
+app.use("/api/version/vannstand", require('./routes/vannstandRoutes'));
 app.use("/api/version/users", require('./routes/userRoutes'));
+
 
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
