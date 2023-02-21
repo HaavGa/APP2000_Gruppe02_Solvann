@@ -111,6 +111,7 @@ dist
 .vscode-test
 
 # pnpm
+.pnpm-lock.yaml
 pnpm-lock.yaml
 
 # yarn v2
