@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ApiData from "./components/ApiData";
 
 function App() {
   // random testkode
@@ -11,13 +12,14 @@ function App() {
   return (
     <>
       <div className="flex h-screen flex-col items-center justify-center bg-gray-700">
-        {visible && <h1 className="text-3xl text-white">Hallo!</h1>}
+        {/* {visible && <h1 className="text-3xl text-white">Hallo!</h1>}
         <button
           onClick={toggle}
           className="btn translate-y-10 bg-red-300 hover:bg-red-400"
         >
           Trykk
-        </button>
+        </button> */}
+        <ApiData />
       </div>
     </>
   );
