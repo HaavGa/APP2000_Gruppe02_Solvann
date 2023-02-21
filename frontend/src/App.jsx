@@ -1,15 +1,15 @@
 import { useState } from "react";
 import ApiData from "./components/ApiData";
+import SignupForm from "./components/SignupForm";
 
 function App() {
-  const [visible, setVisible] = useState(false);
-
   return (
-    <>
-      <div className="flex h-screen flex-col items-center justify-center bg-gray-700">
-        <ApiData />
+    <div className="grid h-screen grid-cols-1 items-center bg-gray-700 lg:grid-cols-2">
+      <ApiData />
+      <div className="mx-auto">
+        <SignupForm />
       </div>
-    </>
+    </div>
   );
 }
 
