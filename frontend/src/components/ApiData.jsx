@@ -21,12 +21,10 @@ function PowerPrice() {
     );
     setPrice(getPrice.data);
     setSolar(Math.round(getSolar.data * 100) / 100);    
-    console.log(solar)
   }
 
   return (
     <>
-
         <button
           className="btn translate-y-10 bg-red-300 hover:bg-red-400"
           onClick={handleClick}
@@ -34,14 +32,12 @@ function PowerPrice() {
           Hent API-data
         </button>
 
-
         {isShown && (
           <div className="mt-5 text-white text-center">
             <p className="pb-3 pt-10">Strømpris: {price} NOK/MWh</p>
             <p>Solcelleproduksjon: {solar} kWh/s</p>
           </div>
         )}
-
     </>
   );
 }
