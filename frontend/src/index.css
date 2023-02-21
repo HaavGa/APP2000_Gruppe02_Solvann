@@ -3,5 +3,9 @@
 @tailwind utilities;
 
 .btn {
-  @apply rounded-lg px-4 py-2 shadow transition;
+  @apply rounded-sm px-4 py-2 shadow transition;
+}
+
+.input {
+  @apply block w-full appearance-none rounded-sm bg-gray-200 p-3 text-gray-700 focus:bg-gray-300 focus:shadow-inner focus:outline-none;
 }
