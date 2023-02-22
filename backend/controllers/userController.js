@@ -1,15 +1,15 @@
 import asyncHandler from "express-async-handler";
-import { userModel as users } from "../models/userModel.js";
+import { userModel as Users } from "../models/userModel.js";
 import mongoose from "mongoose";
 
 // @desc    Get all users
 // @route   GET /api/goals
 // @access  Private
-const getUsers = async (req, res) => {
+const getUsers = asyncHandler(async (req, res) => {
   console.log("Fetching users");
-  const usersFound = await users.find({}).sort({ username: 1 }); //
+  const usersFound = await Users.find({}).sort({ username: 1 }); //
   return res.status(200).json(usersFound);
-};
+});
 
 // @desc    Get single user
 // @route   GET /api/goals
@@ -21,9 +21,9 @@ const getUserById = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(404).json({ error: "No such user" });
   }
-  const user = await users
-    .findById(req.params.id)
-    .sort({ createdAt: -1 });
+  const user = await Users.findById(req.params.id).sort({
+    createdAt: -1,
+  });
 
   if (!user) {
     // 404 because it can't be found. Traversy ville vel satt 400 - bad user request eller noe
@@ -41,7 +41,7 @@ const getUserByUsername = async (req, res) => {
     throw new Error("Please add a username field.");
   }
 
-  const user = await users.findOne({ username: req.body.username });
+  const user = await Users.findOne({ username: req.body.username });
 
   if (!user) {
     // 404 because it can't be found. Traversy ville vel satt 400 - bad user request eller noe
@@ -79,7 +79,7 @@ const setUser = asyncHandler(async (req, res) => {
     throw new Error("Username already exists");
   }
 
-  await users.create(newUser);
+  await Users.create(newUser);
   res.status(200).json(newUser);
 });
 
@@ -88,7 +88,7 @@ const setUser = asyncHandler(async (req, res) => {
 // @access  Private
 const updateUser = asyncHandler(async (req, res) => {
   console.log("Oppdaterer bruker");
-  const user = await users.findById(req.params.id);
+  const user = await Users.findById(req.params.id);
   if (!user) {
     res.status(400);
     throw new Error("User not found.");
@@ -108,7 +108,7 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route   DELETE /api/goals/:id
 // @access  Private
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await users.findById(req.params.id);
+  const user = await Users.findById(req.params.id);
   if (!user) {
     res.status(400);
     throw new Error("User not found.");
