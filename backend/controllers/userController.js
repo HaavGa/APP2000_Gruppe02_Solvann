@@ -74,9 +74,9 @@ const setUser = asyncHandler(async (req, res) => {
 
   const newUser = req.body;
 
-  if (await users.findOne({ username: newUser.username })) {
+  if (await Users.findOne({ email: newUser.email })) {
     res.status(400);
-    throw new Error("Username already exists");
+    throw new Error("Email already exists");
   }
 
   await Users.create(newUser);
@@ -93,7 +93,7 @@ const updateUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("User not found.");
   }
-  const updatedUser = await users.findByIdAndUpdate(
+  const updatedUser = await Users.findByIdAndUpdate(
     req.params.id,
     req.body,
     {
