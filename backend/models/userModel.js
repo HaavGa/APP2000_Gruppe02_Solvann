@@ -18,13 +18,13 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Please add a last name."],
     },
-    password: {
-      type: String,
-      required: [true, "Please add a password."],
-    },
     email: {
       type: String,
       required: [true, "Please add an email."],
+    },
+    password: {
+      type: String,
+      required: [true, "Please add a password."],
     },
   },
   {
