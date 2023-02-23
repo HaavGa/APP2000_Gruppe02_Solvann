@@ -28,7 +28,7 @@ const SignupForm = () => {
         .required("Vennligst skriv inn eposten"),
       password: Yup.string()
         .required("Vennligst skriv inn passordet")
-        .min(10, "Passordet må inneholde minst 10 bokstaver")
+        .min(10, "Passordet må inneholde minst 10 tegn")
         .minLowercase(1, "Passordet må inneholde minst en liten bokstav")
         .minUppercase(1, "Passordet må inneholde minst en stor bokstav")
         .minNumbers(1, "Passordet må inneholde minst ett tall")
