@@ -1,3 +1,4 @@
+import Axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
@@ -38,10 +39,21 @@ const SignupForm = () => {
     }),
 
     // submit form
-    onSubmit: ({ firstName, lastName, email, password }) => {
-      console.log({ firstName, lastName, email, password });
+    onSubmit: (values, { resetForm }) => {
+      submitHandler(values);
+      resetForm(values);
     },
   });
+  const submitHandler = (values) => {
+    // må sjekke om eposten allerede finnes i db
+    const data = ({ firstName, lastName, email, password } = values);
+    try {
+      Axios.post("http://localhost:5000/api/version/users/", data);
+      console.log("POST user");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="mx-auto w-11/12 bg-white p-12">
