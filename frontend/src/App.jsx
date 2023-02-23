@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ApiData from "./components/ApiData";
 import SignupForm from "./components/SignupForm";
 

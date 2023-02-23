@@ -1,14 +1,14 @@
-const express = require('express');
+import express from "express";
 const router = express.Router();
-const {
-    getVannstand,
-    setVannstand,
-    updateVannstand,
-    deleteVannstand
-} = require('../controllers/vannstandController');
+import {
+  getVannstand,
+  setVannstand,
+  updateVannstand,
+  deleteVannstand,
+} from "../controllers/vannstandController.js";
 
 // /api/version/vannstand
-router.route('/').get(getVannstand).post(setVannstand);
-router.route('/:id').patch(updateVannstand).delete(deleteVannstand);
+router.route("/").get(getVannstand).post(setVannstand);
+router.route("/:id").patch(updateVannstand).delete(deleteVannstand);
 
-module.exports = router;
+export default router;
