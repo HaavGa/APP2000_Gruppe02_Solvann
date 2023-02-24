@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const vannstandSchema = new Schema(
+const waterLevelSchema = new Schema(
   {
-    niva: {
+    level: {
       type: Number,
       required: [true, "Please add water level."],
     },
@@ -14,7 +14,7 @@ const vannstandSchema = new Schema(
   }
 );
 
-export const vannstandModel = mongoose.model(
-  "vannstand",
-  vannstandSchema
+export const waterLevelModel = mongoose.model(
+  "waterlevel",
+  waterLevelSchema
 );
