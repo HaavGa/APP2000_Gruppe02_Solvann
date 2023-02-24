@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .btn {
-  @apply rounded-sm px-4 py-2 shadow transition;
+  @apply mt-6 self-center rounded-lg bg-black px-5 py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none focus:outline-none;
 }
 
 .input {
-  @apply block w-full appearance-none rounded-sm bg-gray-200 p-3 text-gray-700 focus:bg-gray-300 focus:shadow-inner focus:outline-none;
+  @apply block w-full appearance-none rounded-lg bg-gray-200 p-3 text-gray-700 focus:bg-gray-300 focus:shadow-inner focus:outline-none;
 }
