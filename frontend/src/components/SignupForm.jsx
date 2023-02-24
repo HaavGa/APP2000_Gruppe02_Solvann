@@ -56,7 +56,7 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="mx-auto w-11/12 bg-white p-12">
+    <div className="mx-auto w-11/12 rounded-lg bg-white p-12">
       <h1 className="text-xl font-semibold">
         Heisann, vennligst lag en bruker slik at du får tilgang til Solvann.
       </h1>
@@ -182,10 +182,7 @@ const SignupForm = () => {
             <div className="mb-4"></div>
           )}
         </div>
-        <button
-          type="submit"
-          className="mt-6 w-full bg-black py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:bg-gray-900 hover:shadow-none focus:outline-none"
-        >
+        <button type="submit" className="btn w-full">
           Registrer
         </button>
         {/* <p className="mt-4 inline-block cursor-pointer justify-between text-sm text-gray-500 hover:text-black">
