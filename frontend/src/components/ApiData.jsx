@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Axios from "axios";
+import ApiCard from "./ApiCard";
 
 const PowerPrice = () => {
-  const [isShown, setIsShown] = useState(false);
   const [price, setPrice] = useState(0);
   const [solar, setSolar] = useState(0);
 
@@ -23,15 +23,13 @@ const PowerPrice = () => {
 
   return (
     <div className="flex flex-col">
-      <button
-        className="btn self-center bg-red-300 hover:bg-red-400"
-        onClick={handleClick}
-      >
+      <button className="btn" onClick={handleClick}>
         Oppdater API-data
       </button>
-      <div className="text-center text-white">
-        <p className="pb-3">Strømpris: {price} NOK/MWh</p>
-        <p>Solcelleproduksjon: {solar} kWh/s</p>
+
+      <div className="mt-5 flex justify-center gap-5">
+        <ApiCard text={["Solcelleproduksjon:", "kWh/s"]} data={solar} />
+        <ApiCard text={["Strømpris:", "NOK/MWh"]} data={price} />
       </div>
     </div>
   );
