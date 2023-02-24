@@ -1,26 +1,28 @@
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import cors from "cors";
-dotenv.config();
 import colors from "colors";
 import { connectDB } from "./config/db.js";
-const port = process.env.PORT || 5000;
 import { errorHandler } from "./middleware/errorMiddleware.js";
-import userRoute from "./routes/userRoutes.js";
-import vannstandRoute from "./routes/vannstandRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import waterLevelRoutes from "./routes/waterLevelRoutes.js";
 
+const port = process.env.PORT || 5000;
+
+dotenv.config();
+console.log(process.env.MONGO_URI);
 mongoose.set("strictQuery", false);
-connectDB();
+
 const app = express();
+connectDB();
 
 app.use(express.json());
 app.use(cors());
 // app.use(express.urlencoded({extended: false}))
 app.use(errorHandler);
-app.use("/api/version/users", userRoute);
-app.use("/api/version/vannstand", vannstandRoute);
+app.use("/api/version/users", userRoutes);
+app.use("/api/version/waterLevel", waterLevelRoutes);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
-
-// app.get('/turbine/:turbineId/:status', (req, res) => { eksempel på shit
+//hello

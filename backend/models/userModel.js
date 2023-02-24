@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-// Trenger noe middleware et eller annet sted for å
-// sjekke om passordet er valid og om brukernavnet
-// er tatt eller ikke. Om passordet er valid kan sjekkes
-// front end. brukernavnet må være unikt så det må jeg
-// gjøre her i backend.
-
 const userSchema = new Schema(
   {
     firstName: {
@@ -33,3 +27,4 @@ const userSchema = new Schema(
 );
 
 export const userModel = mongoose.model("user", userSchema);
+//hello

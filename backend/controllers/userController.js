@@ -1,36 +1,30 @@
 import asyncHandler from "express-async-handler";
-import { userModel as Users } from "../models/userModel.js";
+import { userModel as users } from "../models/userModel.js";
 import mongoose from "mongoose";
 
 // @desc    Get all users
-// @route   GET /api/goals
+// @route   GET /api/version/users
 // @access  Private
 const getUsers = asyncHandler(async (req, res) => {
-  console.log("Fetching users");
-  const usersFound = await Users.find({}).sort({ username: 1 }); //
+  console.log("Henter brukere");
+  const usersFound = await users.find({}).sort({ username: 1 }); //
   return res.status(200).json(usersFound);
 });
 
 // @desc    Get single user
-// @route   GET /api/goals
+// @route   GET /api/version/users/:id
 // @access  Private
 
 const getUserById = async (req, res) => {
-  //const { id } = req.params;
-  console.log(`Getting user ${req.params.id}`);
+  console.log(`Henter bruker med id: ${req.params.id}`);
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     return res.status(404).json({ error: "No such user" });
   }
-  const user = await Users.findById(req.params.id).sort({
+  const userFound = await users.findById(req.params.id).sort({
     createdAt: -1,
   });
 
-  if (!user) {
-    // 404 because it can't be found. Traversy ville vel satt 400 - bad user request eller noe
-    return res.status(404).json({ error: "No such user" });
-  }
-
-  res.status(200).json(user);
+  res.status(200).json(userFound);
 };
 
 const getUserByUsername = async (req, res) => {
@@ -41,45 +35,22 @@ const getUserByUsername = async (req, res) => {
     throw new Error("Please add a username field.");
   }
 
-  const user = await Users.findOne({ username: req.body.username });
+  const user = await users.findOne({ username: req.body.username });
 
   if (!user) {
-    // 404 because it can't be found. Traversy ville vel satt 400 - bad user request eller noe
     return res.status(404).json({ error: "No such user" });
   }
 
   res.status(200).json(user);
 };
-// traversy media har gjort det slik som under. Han har
-// her brukt urlencoded. Er det det vi trenger?
-/*
-const setUser = asyncHandler(async (req, res) => {
-    if(!req.body.text){
-        res.status(400)
-        throw new Error('Please add a text field.')
-    }
-
-    const goal = await Goal.create({
-        text: req.body.text
-    })
-    res.status(200).json(goal);
-})
-*/
 
 // @desc    Set user
 // @route   POST /api/version/users/
 // @access  Private
 const setUser = asyncHandler(async (req, res) => {
   console.log(req.body);
-
   const newUser = req.body;
-
-  if (await Users.findOne({ email: newUser.email })) {
-    res.status(400);
-    throw new Error("Email already exists");
-  }
-
-  await Users.create(newUser);
+  await users.create(newUser);
   res.status(200).json(newUser);
 });
 
@@ -88,12 +59,12 @@ const setUser = asyncHandler(async (req, res) => {
 // @access  Private
 const updateUser = asyncHandler(async (req, res) => {
   console.log("Oppdaterer bruker");
-  const user = await Users.findById(req.params.id);
-  if (!user) {
+  const userFound = await users.findById(req.params.id);
+  if (!userFound) {
     res.status(400);
-    throw new Error("User not found.");
+    throw new Error({ Error: "User not found." });
   }
-  const updatedUser = await Users.findByIdAndUpdate(
+  const updatedUser = await users.findByIdAndUpdate(
     req.params.id,
     req.body,
     {
@@ -108,13 +79,13 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route   DELETE /api/goals/:id
 // @access  Private
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await Users.findById(req.params.id);
-  if (!user) {
+  const userFound = await users.findById(req.params.id);
+  if (!userFound) {
     res.status(400);
-    throw new Error("User not found.");
+    throw new Error({ Error: "User not found." });
   }
 
-  await user.remove();
+  await userFound.remove();
 
   res.status(200).json({ id: req.params.id });
 });
@@ -127,3 +98,4 @@ export {
   updateUser,
   deleteUser,
 };
+//hello
