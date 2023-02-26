@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import colors from "colors";
-import { connectDB } from "./backend/config/db.js";
+import { connectDB } from "./config/db.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
 import waterLevelRoutes from "./routes/waterLevelRoutes.js";
@@ -25,3 +25,4 @@ app.use("/api/version/users", userRoutes);
 app.use("/api/version/waterLevel", waterLevelRoutes);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
+// deploy
