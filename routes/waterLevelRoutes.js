@@ -5,7 +5,7 @@ import {
   setWaterLevel,
   updateWaterLevel,
   deleteWaterLevel,
-} from "../controllers/waterLevelController.js";
+} from "./controllers/waterLevelController.js";
 
 // /api/version/vannstand
 router.route("/").get(getWaterLevel).post(setWaterLevel);
