@@ -18,4 +18,3 @@ export const waterLevelModel = mongoose.model(
   "waterlevel",
   waterLevelSchema
 );
-//hello

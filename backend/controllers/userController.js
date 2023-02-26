@@ -54,8 +54,8 @@ const setUser = asyncHandler(async (req, res) => {
   res.status(200).json(newUser);
 });
 
-// @desc    Update goal
-// @route   PUT /api/goals/:id
+// @desc    Update user
+// @route   PUT /api/version/users/:id
 // @access  Private
 const updateUser = asyncHandler(async (req, res) => {
   console.log("Oppdaterer bruker");
@@ -76,7 +76,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 // @desc    Delete goal
-// @route   DELETE /api/goals/:id
+// @route   DELETE /api/version/users
 // @access  Private
 const deleteUser = asyncHandler(async (req, res) => {
   const userFound = await users.findById(req.params.id);
@@ -98,4 +98,3 @@ export {
   updateUser,
   deleteUser,
 };
-//hello
