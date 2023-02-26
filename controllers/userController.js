@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { userModel as users } from "./models/userModel.js";
+import { userModel as users } from "../models/userModel.js";
 import mongoose from "mongoose";
 
 // @desc    Get all users

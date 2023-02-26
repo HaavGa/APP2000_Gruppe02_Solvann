@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { waterLevelModel as waterLevel } from "./models/waterLevelModel.js";
+import { waterLevelModel as waterLevel } from "../models/waterLevelModel.js";
 //import mongoose from "mongoose";
 
 // @desc    Get all measurements of water level

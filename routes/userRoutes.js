@@ -8,7 +8,7 @@ import {
   setUser,
   updateUser,
   deleteUser,
-} from "./controllers/userController.js";
+} from "../controllers/userController.js";
 
 // /api/version/users
 
