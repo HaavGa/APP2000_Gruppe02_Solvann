@@ -12,5 +12,3 @@ router.route("/").get(getWaterLevel).post(setWaterLevel);
 router.route("/:id").patch(updateWaterLevel).delete(deleteWaterLevel);
 
 export default router;
-
-//deployment
