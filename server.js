@@ -11,10 +11,9 @@ import waterLevelRoutes from "./routes/waterLevelRoutes.js";
 const port = process.env.PORT || 5000;
 
 dotenv.config();
+const app = express();
 console.log(process.env.MONGO_URI);
 mongoose.set("strictQuery", false);
-
-const app = express();
 connectDB();
 
 app.use(express.json());
