@@ -6,7 +6,7 @@ const errorHandler = (err, req, res, next) => {
   res.json({
     message: err.message,
     // Hvis den er i production så ikke vis errormeldinger.
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+    stack: import.meta.env.DEV ? err.stack : null,
   });
 };
 
