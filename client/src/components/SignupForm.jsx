@@ -50,6 +50,9 @@ const SignupForm = () => {
     try {
       Axios.post("http://localhost:5000/api/version/users/", data);
       console.log("POST user");
+      if (import.meta.env.DEV) {
+        console.log(data);
+      }
     } catch (err) {
       console.log(err);
     }
