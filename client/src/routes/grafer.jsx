@@ -1,0 +1,10 @@
+
+const Grafer = () => {
+  return (
+    <div className="h-screen bg-gray-700 py-5 text-center text-white">
+      <h1 className="text-4xl">Grafer</h1>
+    </div>
+  );
+};
+
+export default Grafer;
