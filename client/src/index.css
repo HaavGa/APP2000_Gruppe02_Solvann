@@ -9,3 +9,7 @@
 .input {
   @apply block w-full appearance-none rounded-lg bg-gray-200 p-3 text-gray-700 focus:bg-gray-300 focus:shadow-inner focus:outline-none;
 }
+
+.navLink {
+  @apply flex px-3 py-2
+}
