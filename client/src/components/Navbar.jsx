@@ -1,29 +1,59 @@
-import {Link } from "react-router-dom";
+import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import logo from "../images/solvann-logo.png";
 
-const Navbar = () => {
+export default function Navbar() {
   return (
-    <div>
-      <nav className=" bg-gray-800 p-10 text-3xl text-white">
-        <ul className="flex justify-between">
-          <li>
-            <Link to="/">Hjem</Link>
-          </li>
-          <li>
-            <Link to="/admin">Admin</Link>
-          </li>
-          <li>
-            <Link to="/grafer">Grafer</Link>
-          </li>
-          <li>
-            <Link to="/rapporter">Rapporter</Link>
-          </li>
-          <li>
-            <Link to="/minside">Min side</Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  );
-};
+    <nav className="flex h-28 bg-gray-800 px-8 text-white">
+      <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
+        <div className="flex items-center gap-4">
+          <Link to="/">
+            <img
+              className="h-16 w-auto lg:block"
+              src={logo}
+              alt="Solvann logo"
+            />
+          </Link>
+          <Link to="/" className="text-4xl">
+            Solvann
+          </Link>
+        </div>
+      </div>
 
-export default Navbar;
+      <ul className="flex list-none items-center gap-8 px-10 text-2xl">
+        <CustomLink to="/" className="navLink">
+          Hjem
+        </CustomLink>
+        <CustomLink to="/rapporter" className="navLink">
+          Rapporter
+        </CustomLink>
+        <CustomLink to="/grafer" className="navLink">
+          Grafer
+        </CustomLink>
+        <CustomLink to="/admin" className="navLink">
+          Admin
+        </CustomLink>
+        <CustomLink to="/minside" className="navLink">
+          Min side
+        </CustomLink>
+      </ul>
+    </nav>
+  );
+}
+
+function CustomLink({ to, children, ...props }) {
+  const resolvedPath = useResolvedPath(to);
+  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+  return (
+    <li
+      className={
+        isActive
+          ? "active rounded-xl border bg-white text-black"
+          : "hover:underline"
+      }
+    >
+      <Link to={to} {...props}>
+        {children}
+      </Link>
+    </li>
+  );
+}
