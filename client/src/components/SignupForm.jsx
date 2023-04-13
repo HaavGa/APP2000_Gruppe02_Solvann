@@ -185,7 +185,7 @@ const SignupForm = () => {
             <div className="mb-4"></div>
           )}
         </div>
-        <button type="submit" className="btn w-full">
+        <button type="submit" className="btn w-full bg-black hover:bg-gray-900">
           Registrer
         </button>
         {/* <p className="mt-4 inline-block cursor-pointer justify-between text-sm text-gray-500 hover:text-black">
