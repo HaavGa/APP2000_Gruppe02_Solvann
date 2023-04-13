@@ -23,7 +23,7 @@ const PowerPrice = () => {
 
   return (
     <div className="flex flex-col">
-      <button className="btn" onClick={handleClick}>
+      <button className="btn bg-black hover:bg-gray-900" onClick={handleClick}>
         Oppdater API-data
       </button>
 
