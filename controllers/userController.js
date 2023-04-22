@@ -54,6 +54,19 @@ const setUser = asyncHandler(async (req, res) => {
   res.status(200).json(newUser);
 });
 
+// @desc    signup user
+// @route   POST /api/version/users/signup/
+// @access  Private
+const signupUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  try{
+    const user = await users.signup(email, password);
+    res.status(200).json({ email, user })
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+});
+
 // @desc    Update user
 // @route   PUT /api/version/users/:id
 // @access  Private
@@ -91,6 +104,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 });
 
 export {
+  signupUser,
   getUsers,
   getUserById,
   getUserByUsername,
