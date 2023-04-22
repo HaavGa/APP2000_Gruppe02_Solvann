@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import { waterLevelModel as waterLevel } from "../models/waterLevelModel.js";
 import Axios from "axios";
+
+const MEASUREMENT_INTERVAL = 10000;
 //import mongoose from "mongoose";
 
 // @desc    Get all measurements of water level
@@ -8,7 +10,9 @@ import Axios from "axios";
 // @access  Private
 const getWaterLevel = asyncHandler(async (req, res) => {
   console.log("Henter alle målinger");
-  const waterLevelFound = await waterLevel.find({}).sort({ createdAt: -1 });
+  const waterLevelFound = await waterLevel
+    .find({})
+    .sort({ createdAt: -1 });
   res.status(200).json(waterLevelFound);
 });
 
@@ -71,15 +75,20 @@ const fetchWaterLevel = asyncHandler(async (req, res) => {
 
   const lastMeasurement = { level: waterData.data };
   console.log(lastMeasurement);
-  
+
   if (!lastMeasurement.level) {
     res.status(400);
     throw new Error("No waterlevel.");
   }
   await waterLevel.create(lastMeasurement);
-
 });
 
-setInterval(fetchWaterLevel, 43200000);
+setInterval(fetchWaterLevel, MEASUREMENT_INTERVAL);
 
-export { getWaterLevel, setWaterLevel, updateWaterLevel, deleteWaterLevel, fetchWaterLevel };
+export {
+  getWaterLevel,
+  setWaterLevel,
+  updateWaterLevel,
+  deleteWaterLevel,
+  fetchWaterLevel,
+};
