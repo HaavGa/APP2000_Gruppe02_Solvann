@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import {
   Chart as ChartJS,
@@ -9,8 +9,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -22,8 +22,7 @@ ChartJS.register(
   Legend
 );
 
-const WaterChart = () => {
-
+const PowerpriceChart = () => {
   const labels = [
     "dato",
     "dato",
@@ -54,31 +53,33 @@ const WaterChart = () => {
   });
 
   useEffect(() => {
-    const fetchData= async()=> {
-      const waterData = await Axios.get("https://solvann.azurewebsites.net/api/WaterInflux/all")
+    const fetchData = async () => {
+      const waterData = await Axios.get(
+        "https://solvann.azurewebsites.net/api/WaterInflux/all"
+      );
       setChartData({
         labels,
         datasets: [
           {
             label: "Meter",
             data: [
-              30.7, 39.2, 31.2, 38.5, 39.9, 33.1, 37.9, 30.7, 39.2, 32.7, 36.4, 27.3, 29.1, 35.3
-            ], //funker ikke med waterData.data
+              600, 500, 550, 650, 690, 530, 590, 500, 450, 420, 720, 520, 370,
+              480], //funker ikke med waterData.data
             borderColor: "#334155",
             backgroundColor: "#fbbf24",
           },
         ],
       });
-    }
-    fetchData(); 
+    };
+    fetchData();
   }, []);
 
   return (
     <div className="mx-auto mt-8 flex h-auto w-2/4 justify-center rounded-lg bg-white">
       <Line options={styling} data={chartData} />
     </div>
-  ); 
-}; 
+  );
+};
 
 const styling = {
   responsive: true,
@@ -99,7 +100,7 @@ const styling = {
     },
     title: {
       display: true,
-      text: "VANNSTAND",
+      text: "STRØMPRIS",
       color: "#334155",
       font: {
         size: 20,
@@ -125,7 +126,7 @@ const styling = {
         color: "#334155",
         font: {
           size: 18,
-          weight: 'bold',
+          weight: "bold",
           lineHeight: 1.2,
         },
         padding: { top: 20, left: 0, right: 0, bottom: 0 },
@@ -139,15 +140,13 @@ const styling = {
       //     weight: 'bold',
       //   },
       // },
-      min: 20,
-      max: 45,
       title: {
         display: true,
-        text: "Meter",
+        text: "Kr/MWh",
         color: "#334155",
         font: {
           size: 18,
-          weight: 'bold',
+          weight: "bold",
         },
         padding: { top: 0, left: 0, right: 0, bottom: 10 },
       },
@@ -155,7 +154,4 @@ const styling = {
   },
 };
 
-
-
-
-export default WaterChart; 
+export default PowerpriceChart;
