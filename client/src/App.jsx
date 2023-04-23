@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Hjem from "./routes/hjem";
-import Admin from "./routes/admin";
-import Grafer from "./routes/grafer";
-import Rapporter from "./routes/rapporter";
-import Minside from "./routes/minside";
-import ErrorPage from "./routes/error-page";
+import Hjem from "./pages/Home";
+import Admin from "./pages/Admin";
+import Grafer from "./pages/Grafer";
+import Rapporter from "./pages/Rapporter";
+import Minside from "./pages/MinSide";
+import ErrorPage from "./pages/ErrorPage";
 
 
 function App() {
