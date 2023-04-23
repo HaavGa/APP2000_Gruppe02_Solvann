@@ -7,8 +7,8 @@ import { connectDB } from "./config/db.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
 import waterLevelRoutes from "./routes/waterLevelRoutes.js";
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "path";
+import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -22,16 +22,17 @@ connectDB();
 app.use(cors());
 
 app.use(express.json());
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }));
 
 app.use(errorHandler);
 
+// husk å oppdatere
 app.use("/api/version/users", userRoutes);
-app.use("/api/version/waterLevel", waterLevelRoutes);
+app.use("/api/water", waterLevelRoutes);
 
 app.use(express.static(path.join(__dirname, "./client/dist")));
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "./client/dist/index.html"));
+  res.sendFile(path.join(__dirname, "./client/dist/index.html"));
 });
 
 const port = process.env.PORT || 5000;

@@ -67,6 +67,9 @@ const deleteWaterLevel = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
+// @desc    Fetch measurement
+// @route   GET /api/water/last
+// @access  Private
 const fetchWaterLevel = asyncHandler(async (req, res) => {
   const waterData = await Axios.get(
     "https://solvann.azurewebsites.net/api/WaterInflux"
