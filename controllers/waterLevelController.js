@@ -2,9 +2,6 @@ import asyncHandler from "express-async-handler";
 import { waterLevelModel as waterLevel } from "../models/waterLevelModel.js";
 import Axios from "axios";
 
-const MEASUREMENT_INTERVAL = 10000;
-//import mongoose from "mongoose";
-
 // @desc    Get all measurements of water level
 // @route   GET /api/version/waterLevel/
 // @access  Private
@@ -86,7 +83,7 @@ const fetchWaterLevel = asyncHandler(async (req, res) => {
   await waterLevel.create(lastMeasurement);
 });
 
-setInterval(fetchWaterLevel, MEASUREMENT_INTERVAL);
+// fetchWaterLevel();
 
 export {
   getWaterLevel,
