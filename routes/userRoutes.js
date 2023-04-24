@@ -15,7 +15,6 @@ import {
 
 router.route("/")
   .get(getUsers)
-  .post(setUser)
   .post(signupUser);
   
 router.route("/id/:id")
