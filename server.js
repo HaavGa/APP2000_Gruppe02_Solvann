@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(errorHandler);
 
 // husk å oppdatere
-app.use("/api/version/users", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/water", waterLevelRoutes);
 
 app.use(express.static(path.join(__dirname, "./client/dist")));
