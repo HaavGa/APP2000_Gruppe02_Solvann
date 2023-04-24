@@ -1,5 +1,7 @@
 import React from "react";
 
+// Hentet fra https://loading.io/css/
+
 const Spinner = () => {
   return (
     <div class="lds-spinner">
