@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
@@ -49,11 +49,11 @@ const SignupForm = () => {
     const data = ({ firstName, lastName, email, password } = values);
     try {
       if (import.meta.env.DEV) {
-        Axios.post("http://localhost:5000/api/users/", data);
+        axios.post("http://localhost:5000/api/users/", data);
         console.log("POST user");
         console.log(data);
       } else {
-        Axios.post("https://solvann.cyclic.app/api/users/");
+        axios.post("https://solvann.cyclic.app/api/users/", data);
       }
     } catch (err) {
       console.log(err);
