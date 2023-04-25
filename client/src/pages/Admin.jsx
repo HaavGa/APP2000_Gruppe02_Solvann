@@ -10,9 +10,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
-      const response = await Axios.get(
-        "http://localhost:5000/api/version/users/"
-      );
+      const response = await Axios.get("http://localhost:5000/api/users/");
       setUsers(response.data);
       setLoading(false);
     };

@@ -3,7 +3,7 @@ import { userModel as users } from "../models/userModel.js";
 import mongoose from "mongoose";
 
 // @desc    Get all users
-// @route   GET /api/version/users
+// @route   GET /api/users
 // @access  Private
 const getUsers = asyncHandler(async (req, res) => {
   console.log("Henter brukere");
@@ -59,11 +59,11 @@ const setUser = asyncHandler(async (req, res) => {
 // @access  Private
 const signupUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  try{
+  try {
     const user = await users.signup(email, password);
-    res.status(200).json({ email, user })
+    res.status(200).json({ email, user });
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
 });
 
