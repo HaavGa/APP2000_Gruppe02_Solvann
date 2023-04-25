@@ -6,11 +6,16 @@ import Axios from "axios";
 const Admin = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  let response;
 
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
-      const response = await Axios.get("http://localhost:5000/api/users/");
+      if (import.meta.env.DEV) {
+        response = await Axios.get("http://localhost:5000/api/users/");
+      } else {
+        response = await Axios.get("https://solvann.cyclic.app/api/users/");
+      }
       setUsers(response.data);
       setLoading(false);
     };

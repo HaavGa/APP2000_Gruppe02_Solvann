@@ -48,10 +48,12 @@ const SignupForm = () => {
     // må sjekke om eposten allerede finnes i db
     const data = ({ firstName, lastName, email, password } = values);
     try {
-      Axios.post("http://localhost:5000/api/users/", data);
-      console.log("POST user");
       if (import.meta.env.DEV) {
+        Axios.post("http://localhost:5000/api/users/", data);
+        console.log("POST user");
         console.log(data);
+      } else {
+        Axios.post("https://solvann.cyclic.app/api/users/");
       }
     } catch (err) {
       console.log(err);
