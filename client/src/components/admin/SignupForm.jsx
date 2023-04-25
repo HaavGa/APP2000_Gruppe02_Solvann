@@ -45,16 +45,13 @@ const SignupForm = () => {
     },
   });
   const submitHandler = (values) => {
+    const baseUrl = import.meta.env.DEV
+      ? "http://localhost:5000/api/users/"
+      : "https://solvann.cyclic.app/api/users/";
     // må sjekke om eposten allerede finnes i db
     const data = ({ firstName, lastName, email, password } = values);
     try {
-      if (import.meta.env.DEV) {
-        axios.post("http://localhost:5000/api/users/", data);
-        console.log("POST user");
-        console.log(data);
-      } else {
-        axios.post("https://solvann.cyclic.app/api/users/", data);
-      }
+      axios.post(`${baseUrl}`, data);
     } catch (err) {
       console.log(err);
     }
