@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { userModel as users } from "../models/userModel.js";
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt';
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -58,14 +59,38 @@ const setUser = asyncHandler(async (req, res) => {
 // @route   POST /api/version/users/signup/
 // @access  Private
 const signupUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await users.signup(email, password);
-    res.status(200).json({ email, user });
+  const { firstName, lastName, password, email } = req.body;
+  try{
+    const user = await users.signup( firstName, lastName, password, email );
+    res.status(200).json({ firstName, lastName, password, email })
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
+
+// @desc    Authenticate a user
+// @route   GET /api/users/login/
+// @access  Public
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  
+  const user = await users.findOne({ email });
+  if(user && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+      note: "Det funka..."
+    })
+  }
+  else {
+    res.status(400);
+    throw new Error('Invalid email or password');
+  }
+
+  res.json({message: 'Login user'});
+});
+
 
 // @desc    Update user
 // @route   PUT /api/version/users/:id
@@ -108,6 +133,7 @@ export {
   getUsers,
   getUserById,
   getUserByUsername,
+  loginUser,
   setUser,
   updateUser,
   deleteUser,
