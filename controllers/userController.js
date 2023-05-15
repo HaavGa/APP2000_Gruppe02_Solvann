@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
 
 // @desc    Get all users
-// @route   GET /api/version/users
+// @route   GET /api/users
 // @access  Private
 const getUsers = asyncHandler(async (req, res) => {
   console.log("Henter brukere");
@@ -64,14 +64,13 @@ const signupUser = asyncHandler(async (req, res) => {
     const user = await users.signup( firstName, lastName, password, email );
     res.status(200).json({ firstName, lastName, password, email })
   } catch (error) {
-    res.status(400).json({ error: error.message })
+    res.status(400).json({ error: error.message });
   }
 });
 
 // @desc    Authenticate a user
 // @route   GET /api/users/login/
 // @access  Public
-
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   
