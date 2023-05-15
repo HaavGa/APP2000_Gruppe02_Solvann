@@ -6,12 +6,13 @@ import {
   getUsers,
   getUserById,
   getUserByUsername,
+  loginUser,
   setUser,
   updateUser,
   deleteUser,
 } from "../controllers/userController.js";
 
-// /api/version/users
+// /api/users
 
 router.route("/")
   .get(getUsers)
@@ -24,5 +25,9 @@ router.route("/id/:id")
 
 router.route("/username/")
   .get(getUserByUsername);
+
+  // /api/users/login
+  router.route("/login/")
+    .post(loginUser);
 
 export default router;
