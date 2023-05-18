@@ -1,17 +1,13 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    // this takes in our URI
     const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(
-      `MongoDB connected: ${conn.connection.host}`.cyan.underline
-    );
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.log(error);
-    // Exit'er med status 1 ved feil.
+    console.error(`Error: ${error.message}`);
     process.exit(1);
   }
 };
 
-export { connectDB };
+export default connectDB;
