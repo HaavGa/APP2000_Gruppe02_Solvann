@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
@@ -45,24 +45,21 @@ const SignupForm = () => {
     },
   });
   const submitHandler = (values) => {
+    const baseUrl = import.meta.env.DEV
+      ? "http://localhost:5000/api/users/"
+      : "https://solvann.cyclic.app/api/users/";
     // må sjekke om eposten allerede finnes i db
     const data = ({ firstName, lastName, email, password } = values);
     try {
-      Axios.post("http://localhost:5000/api/users/", data);
-      console.log("POST user");
-      if (import.meta.env.DEV) {
-        console.log(data);
-      }
+      axios.post(`${baseUrl}`, data);
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div className="mx-auto w-11/12 rounded-lg bg-white p-12">
-      <h1 className="text-xl font-semibold">
-        Heisann, vennligst lag en bruker slik at du får tilgang til Solvann.
-      </h1>
+    <div className="w-1/3 rounded-lg bg-white p-12">
+      <h1 className="text-xl font-semibold">Legg til bruker til Solvann</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6">
         <div className="flex justify-between gap-3">
           <span className="w-1/2">
