@@ -1,141 +1,121 @@
-import asyncHandler from "express-async-handler";
-import { userModel as users } from "../models/userModel.js";
-import mongoose from "mongoose";
-import bcrypt from 'bcrypt';
+import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
+import generateToken from '../utils/generateToken.js';
 
-// @desc    Get all users
-// @route   GET /api/version/users
-// @access  Private
-const getUsers = asyncHandler(async (req, res) => {
-  console.log("Henter brukere");
-  const usersFound = await users.find({}).sort({ username: 1 }); //
-  return res.status(200).json(usersFound);
-});
-
-// @desc    Get single user
-// @route   GET /api/version/users/:id
-// @access  Private
-
-const getUserById = async (req, res) => {
-  console.log(`Henter bruker med id: ${req.params.id}`);
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(404).json({ error: "No such user" });
-  }
-  const userFound = await users.findById(req.params.id).sort({
-    createdAt: -1,
-  });
-
-  res.status(200).json(userFound);
-};
-
-const getUserByUsername = async (req, res) => {
-  console.log("Getting user by username.");
-
-  if (!req.body.username) {
-    res.status(400);
-    throw new Error("Please add a username field.");
-  }
-
-  const user = await users.findOne({ username: req.body.username });
-
-  if (!user) {
-    return res.status(404).json({ error: "No such user" });
-  }
-
-  res.status(200).json(user);
-};
-
-// @desc    Set user
-// @route   POST /api/version/users/
-// @access  Private
-const setUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  const newUser = req.body;
-  await users.create(newUser);
-  res.status(200).json(newUser);
-});
-
-// @desc    signup user
-// @route   POST /api/version/users/signup/
-// @access  Private
-const signupUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, password, email } = req.body;
-  try{
-    const user = await users.signup( firstName, lastName, password, email );
-    res.status(200).json({ firstName, lastName, password, email })
-  } catch (error) {
-    res.status(400).json({ error: error.message })
-  }
-});
-
-// @desc    Authenticate a user
-// @route   GET /api/users/login/
+// @desc    Auth user & get token
+// @route   POST /api/users/auth
 // @access  Public
-
-const loginUser = asyncHandler(async (req, res) => {
+const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  
-  const user = await users.findOne({ email });
-  if(user && (await bcrypt.compare(password, user.password))) {
+
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    generateToken(res, user._id);
+
     res.json({
-      _id: user.id,
+      _id: user._id,
       name: user.name,
       email: user.email,
-      note: "Det funka..."
-    })
-  }
-  else {
-    res.status(400);
+    });
+  } else {
+    res.status(401);
     throw new Error('Invalid email or password');
   }
-
-  res.json({message: 'Login user'});
 });
 
+// @desc    Register a new user
+// @route   POST /api/users
+// @access  Public
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
 
-// @desc    Update user
-// @route   PUT /api/version/users/:id
-// @access  Private
-const updateUser = asyncHandler(async (req, res) => {
-  console.log("Oppdaterer bruker");
-  const userFound = await users.findById(req.params.id);
-  if (!userFound) {
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
     res.status(400);
-    throw new Error({ Error: "User not found." });
+    throw new Error('User already exists');
   }
-  const updatedUser = await users.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+
+  if (user) {
+    generateToken(res, user._id);
+
+    res.status(201).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
+  }
+});
+
+// @desc    Logout user / clear cookie
+// @route   POST /api/users/logout
+// @access  Public
+const logoutUser = (req, res) => {
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+
+    if (req.body.password) {
+      user.password = req.body.password;
     }
-  );
 
-  res.status(200).json({ updatedUser });
-});
+    const updatedUser = await user.save();
 
-// @desc    Delete goal
-// @route   DELETE /api/version/users
-// @access  Private
-const deleteUser = asyncHandler(async (req, res) => {
-  const userFound = await users.findById(req.params.id);
-  if (!userFound) {
-    res.status(400);
-    throw new Error({ Error: "User not found." });
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
   }
-
-  await userFound.remove();
-
-  res.status(200).json({ id: req.params.id });
 });
-
 export {
-  signupUser,
-  getUsers,
-  getUserById,
-  getUserByUsername,
-  loginUser,
-  setUser,
-  updateUser,
-  deleteUser,
+  authUser,
+  registerUser,
+  logoutUser,
+  getUserProfile,
+  updateUserProfile,
 };
