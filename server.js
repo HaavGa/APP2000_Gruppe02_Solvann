@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import waterLevelRoutes from "./routes/waterLevelRoutes.js";
-import mongoose from "mongoose";
 
 const port = process.env.PORT || 5000;
 
@@ -19,6 +18,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 mongoose.set("strictQuery", false);
+mongoose.set("strictQuery", false);
 connectDB();
 app.use(cors());
 app.use(express.static(path.join(__dirname, "./client/dist")));
@@ -28,7 +28,7 @@ app.get("*", (req, res) => {
 
 
 connectDB();
-mongoose.set("strictQuery", false);
+
 
 const app = express();
 

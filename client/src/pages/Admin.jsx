@@ -11,11 +11,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
-      if (import.meta.env.DEV) {
-        response = await Axios.get("http://localhost:5000/api/users/");
-      } else {
-        response = await Axios.get("https://solvann.cyclic.app/api/users/");
-      }
+      const response = await Axios.get("https://solvann.cyclic.app/api/users/");
       setUsers(response.data);
       setLoading(false);
     };
