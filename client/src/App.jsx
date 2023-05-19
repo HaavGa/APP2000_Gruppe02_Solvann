@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
@@ -6,6 +6,7 @@ import Grafer from "./pages/Grafer";
 import Rapporter from "./pages/Rapporter";
 import Minside from "./pages/MinSide";
 import ErrorPage from "./pages/ErrorPage";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/grafer" element={<Grafer />} />
           <Route path="/rapporter" element={<Rapporter />} />
