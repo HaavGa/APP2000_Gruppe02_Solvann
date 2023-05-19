@@ -13,10 +13,11 @@ const Admin = () => {
     const fetchUsers = async () => {
       setLoading(true);
       const response = await Axios.get(
-        // "https://solvann.cyclic.app/api/users/"
+        "https://solvann.cyclic.app/api/users/"
         //! Kommenter ut ved development:
-        "http://localhost:5000/api/users"
+        // "http://localhost:5000/api/users"
       );
+
       setUsers(response.data);
       setLoading(false);
     };

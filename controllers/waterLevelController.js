@@ -81,6 +81,7 @@ const fetchWaterLevel = asyncHandler(async (req, res) => {
     throw new Error("No waterlevel.");
   }
   await waterLevel.create(lastMeasurement);
+  res.status(200);
 });
 
 // fetchWaterLevel();

@@ -1,114 +1,144 @@
-import asyncHandler from "express-async-handler";
-import { userModel as users } from "../models/userModel.js";
-import mongoose from "mongoose";
+import asyncHandler from 'express-async-handler';
+import User from '../models/userModel.js';
+import generateToken from '../utils/generateToken.js';
 
-// @desc    Get all users
-// @route   GET /api/users
-// @access  Private
 const getUsers = asyncHandler(async (req, res) => {
   console.log("Henter brukere");
-  const usersFound = await users.find({}).sort({ username: 1 }); //
+  const usersFound = await User.find({}).sort({ username: 1 }); //
   return res.status(200).json(usersFound);
 });
 
-// @desc    Get single user
-// @route   GET /api/version/users/:id
-// @access  Private
-
-const getUserById = async (req, res) => {
-  console.log(`Henter bruker med id: ${req.params.id}`);
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return res.status(404).json({ error: "No such user" });
-  }
-  const userFound = await users.findById(req.params.id).sort({
-    createdAt: -1,
-  });
-
-  res.status(200).json(userFound);
-};
-
-const getUserByUsername = async (req, res) => {
-  console.log("Getting user by username.");
-
-  if (!req.body.username) {
-    res.status(400);
-    throw new Error("Please add a username field.");
-  }
-
-  const user = await users.findOne({ username: req.body.username });
-
-  if (!user) {
-    return res.status(404).json({ error: "No such user" });
-  }
-
-  res.status(200).json(user);
-};
-
-// @desc    Set user
-// @route   POST /api/version/users/
-// @access  Private
-const setUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  const newUser = req.body;
-  await users.create(newUser);
-  res.status(200).json(newUser);
-});
-
-// @desc    signup user
-// @route   POST /api/version/users/signup/
-// @access  Private
-const signupUser = asyncHandler(async (req, res) => {
+// @desc    Auth user & get token
+// @route   POST /api/users/auth
+// @access  Public
+const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  try {
-    const user = await users.signup(email, password);
-    res.status(200).json({ email, user });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+
+  const user = await User.findOne({ email });
+
+
+  if (user && (await user.matchPassword(password))) {
+    generateToken(res, user._id, user.isAdmin);           // Kan eventuelt lagre et clearance level: int istede for boolean for å ha flere nivåer med sikkerhet.
+
+    res.json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(401);
+    throw new Error('Invalid email or password');
   }
 });
 
-// @desc    Update user
-// @route   PUT /api/version/users/:id
-// @access  Private
-const updateUser = asyncHandler(async (req, res) => {
-  console.log("Oppdaterer bruker");
-  const userFound = await users.findById(req.params.id);
-  if (!userFound) {
+// @desc    Register a new user
+// @route   POST /api/users
+// @access  Public
+const registerUser = asyncHandler(async (req, res) => {
+  const { firstName, lastName, email, password, isAdmin } = req.body;
+
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
     res.status(400);
-    throw new Error({ Error: "User not found." });
+    throw new Error('User already exists');
   }
-  const updatedUser = await users.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
+  
+  const user = await User.create({
+    firstName,
+    lastName,
+    email,
+    password,
+    isAdmin,
+  });
+  
+
+  if (user) {
+    generateToken(res, user._id, user.isAdmin);
+
+    res.status(201).json({
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
+  }
+});
+
+// @desc    Logout user / clear cookie
+// @route   POST /api/users/logout
+// @access  Public
+const logoutUser = (req, res) => {
+  res.cookie('jwt', '', { 
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
+// @desc    Get user profile
+// @route   GET /api/users/profile
+// @access  Private
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      firstName: user.name,
+      lastName:user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ email });
+
+  if (user) {
+    user.firstName = req.body.firstName || user.firstName;
+    user.lastName = req.body.lastName || user.lastName;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin || user.isAdmin;
+    
+
+    if (!req.body.password === "") {
+      user.password = req.body.password;
     }
-  );
 
-  res.status(200).json({ updatedUser });
-});
+    const updatedUser = await user.save();
 
-// @desc    Delete goal
-// @route   DELETE /api/version/users
-// @access  Private
-const deleteUser = asyncHandler(async (req, res) => {
-  const userFound = await users.findById(req.params.id);
-  if (!userFound) {
-    res.status(400);
-    throw new Error({ Error: "User not found." });
+    res.json({
+      _id: updatedUser._id,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
   }
-
-  await userFound.remove();
-
-  res.status(200).json({ id: req.params.id });
 });
 
 export {
-  signupUser,
-  getUsers,
-  getUserById,
-  getUserByUsername,
-  setUser,
-  updateUser,
-  deleteUser,
+  authUser,
+  registerUser,
+  logoutUser,
+  getUserProfile,
+  updateUserProfile,
+  getUsers
 };

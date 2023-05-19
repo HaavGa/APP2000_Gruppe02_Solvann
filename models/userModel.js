@@ -1,25 +1,28 @@
 import mongoose from "mongoose";
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
-const Schema = mongoose.Schema;
-
-const userSchema = new Schema(
+const userSchema = mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: [true, "Please add a first name."],
+      required: true,
     },
     lastName: {
       type: String,
-      required: [true, "Please add a last name."],
+      required: true,
     },
     email: {
       type: String,
-      required: [true, "Please add an email."],
+      required: true,
+      unique: true,
     },
     password: {
       type: String,
-      required: [true, "Please add a password."],
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false
     },
   },
   {
@@ -27,20 +30,21 @@ const userSchema = new Schema(
   }
 );
 
-// static signup method
-userSchema.statics.signup = async function (email, password) {
-  const exists = await this.findOne({ email });
-  if(exists){
-    throw Error('Email already in use');
+// Match user entered password to hashed password in database
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
+// Encrypt password using bcrypt
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
   }
 
   const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
-  const user = await this.create({ email, password: hash });
+const User = mongoose.model('User', userSchema);
 
-  return user;
-
-}
-
-export const userModel = mongoose.model("user", userSchema);
+export default User;

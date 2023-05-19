@@ -1,37 +1,37 @@
-import express from "express";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import cors from "cors";
-import { connectDB } from "./config/db.js";
-import { errorHandler } from "./middleware/errorMiddleware.js";
-import userRoutes from "./routes/userRoutes.js";
-import waterLevelRoutes from "./routes/waterLevelRoutes.js";
-import path from "path";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
+import path from 'path';
+import express from 'express';
+import dotenv from 'dotenv';
 dotenv.config();
+import connectDB from './config/db.js';
+import cookieParser from 'cookie-parser';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
+import userRoutes from './routes/userRoutes.js';
+import waterLevelRoutes from "./routes/waterLevelRoutes.js";
+import cors from "cors";
 
-const app = express();
-app.use(cors());
+const port = process.env.PORT || 5000;
 
-mongoose.set("strictQuery", false);
 connectDB();
 
+const app = express();
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
-app.use(errorHandler);
+app.use(cors());
+app.use(cookieParser());
 
-// husk å oppdatere
 app.use("/api/users", userRoutes);
 app.use("/api/water", waterLevelRoutes);
 
-app.use(express.static(path.join(__dirname, "./client/dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./client/dist/index.html"));
-});
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, './client/dist')));
 
-const port = process.env.PORT || 5000;
+app.get('*', (req, res) =>
+  res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
+);
+
+app.use(notFound);
+app.use(errorHandler);
+
 app.listen(port, () => console.log(`Server started on port ${port}`));
