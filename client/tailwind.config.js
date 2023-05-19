@@ -4,6 +4,11 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx,vue,html}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        login: "url('./src/images/waves.jpg')",
+      },
+    },
   },
+  plugins: [require("@tailwindcss/forms")],
 };

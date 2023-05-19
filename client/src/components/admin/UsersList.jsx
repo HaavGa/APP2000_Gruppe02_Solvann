@@ -2,7 +2,7 @@ import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import Spinner from "../Spinner";
 
-const UsersList = ({ users, loading }) => {
+const UsersList = ({ users, loading, updateUser }) => {
   const [pageNumber, setPageNumber] = useState(0);
 
   const usersPerPage = 5;
@@ -115,6 +115,7 @@ const UsersList = ({ users, loading }) => {
                     type="button"
                     data-modal-toggle="user-modal"
                     className="inline-flex items-center rounded-lg bg-gray-200 py-2 px-3 text-center text-sm font-medium text-gray-700 transition-all hover:scale-[1.02] hover:bg-gray-300 hover:text-gray-900"
+                    onClick={updateUser}
                   >
                     <svg
                       className="mr-2 h-5 w-5"

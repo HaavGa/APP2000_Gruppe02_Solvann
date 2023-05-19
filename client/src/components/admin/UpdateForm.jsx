@@ -12,7 +12,6 @@ const SignupForm = () => {
       lastName: "",
       email: "",
       password: "",
-      confirmPassword: "",
       admin: "",
     },
 
@@ -34,9 +33,6 @@ const SignupForm = () => {
         .minUppercase(1, "Passordet må inneholde minst en stor bokstav")
         .minNumbers(1, "Passordet må inneholde minst ett tall")
         .minSymbols(1, "Passordet må inneholde minst ett symbol"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Passordene stemmer ikke")
-        .required("Vennligst bekreft passordet"),
     }),
 
     // submit form
@@ -58,7 +54,7 @@ const SignupForm = () => {
 
   return (
     <div className="w-1/3 rounded-lg bg-white p-12">
-      <h1 className="text-xl font-semibold">Legg til bruker til Solvann</h1>
+      <h1 className="text-xl font-semibold">Oppdater bruker</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6">
         <div className="flex justify-between gap-3">
           <span className="w-1/2">
@@ -158,29 +154,6 @@ const SignupForm = () => {
             <div className="mb-6"></div>
           )}
         </div>
-        <label
-          htmlFor="confirmPassword"
-          className="mt-2 block text-xs font-semibold uppercase text-gray-600"
-        >
-          Bekreft passord
-        </label>
-        <input
-          id="confirmPassword"
-          type="password"
-          name="confirmPassword"
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          placeholder="********"
-          className="input mt-2"
-          onBlur={formik.handleBlur}
-        />
-        <div className="text-xs text-red-400">
-          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-            formik.errors.confirmPassword
-          ) : (
-            <div className="mb-4"></div>
-          )}
-        </div>
         <div className="flex items-center space-x-2">
           <label
             htmlFor="admin"
@@ -198,7 +171,7 @@ const SignupForm = () => {
           />
         </div>
         <button type="submit" className="btn w-full bg-black hover:bg-gray-900">
-          Registrer
+          Oppdater
         </button>
       </form>
     </div>
