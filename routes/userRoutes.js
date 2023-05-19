@@ -14,7 +14,7 @@ const router = express.Router();
 router.route('/')
   .post(registerUser)
   .get(getUsers);
-router.post('/auth', protect, authUser);
+router.post('/auth', authUser);
 router.post('/logout', logoutUser);
 router
   .route('/profile')
