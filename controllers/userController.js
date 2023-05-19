@@ -18,7 +18,7 @@ const authUser = asyncHandler(async (req, res) => {
 
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id, user.isAdmin);           // Kan eventuelt lagre et clearance level: int istede for boolean for å ha flere nivåer med sikkerhet.
+    generateToken(res, user._id, user.isAdmin);
 
     res.json({
       _id: user._id,
