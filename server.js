@@ -7,24 +7,9 @@ import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import waterLevelRoutes from "./routes/waterLevelRoutes.js";
+import cors from "cors";
 
 const port = process.env.PORT || 5000;
-
-/*
-import mongoose from "mongoose";
-import cors from "cors";
-import colors from "colors";
-import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-mongoose.set("strictQuery", false);
-connectDB();
-app.use(cors());
-app.use(express.static(path.join(__dirname, "./client/dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./client/dist/index.html"));
-});*/
-
 
 connectDB();
 
@@ -34,6 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors());
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
@@ -45,15 +31,6 @@ app.use(express.static(path.join(__dirname, './client/dist')));
 app.get('*', (req, res) =>
   res.sendFile(path.resolve(__dirname, 'client', 'dist', 'index.html'))
 );
-
-/*
-if (process.env.NODE_ENV === 'production') {
-  
-} else {
-  app.get('/', (req, res) => {
-    res.send('API is running....');
-  });
-}*/
 
 app.use(notFound);
 app.use(errorHandler);

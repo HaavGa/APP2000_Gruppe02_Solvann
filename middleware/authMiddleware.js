@@ -3,9 +3,8 @@ import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
 
 const protect = asyncHandler(async (req, res, next) => {
-  let token;
-
-  token = req.cookies.jwt;
+  
+  const token = req.cookies.jwt;
 
   if (token) {
     try {
@@ -25,4 +24,16 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-export { protect };
+const userIsAdmin = asyncHandler(async(req, res, next) => {
+
+  isAdmin = req.body.isAdmin;
+
+  if(!isAdmin){
+    res.status(401);
+    throw new Error('Not authorized, not admin');
+  }
+
+  next();
+})
+
+export { protect, userIsAdmin };
