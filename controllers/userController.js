@@ -18,14 +18,12 @@ const authUser = asyncHandler(async (req, res) => {
 
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id, user.isAdmin);
-
+    generateToken(res, user._id);
     res.json({
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      isAdmin: user.isAdmin,
     });
   } else {
     res.status(401);
@@ -37,7 +35,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password, isAdmin } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -51,19 +49,17 @@ const registerUser = asyncHandler(async (req, res) => {
     lastName,
     email,
     password,
-    isAdmin,
   });
   
 
   if (user) {
-    generateToken(res, user._id, user.isAdmin);
+    generateToken(res, user._id);
 
     res.status(201).json({
       _id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      isAdmin: user.isAdmin,
     });
   } else {
     res.status(400);
@@ -94,7 +90,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
       firstName: user.name,
       lastName:user.name,
       email: user.email,
-      isAdmin: user.isAdmin,
     });
   } else {
     res.status(404);
@@ -112,7 +107,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.firstName = req.body.firstName || user.firstName;
     user.lastName = req.body.lastName || user.lastName;
     user.email = req.body.email || user.email;
-    user.isAdmin = req.body.isAdmin || user.isAdmin;
     
 
     if (!req.body.password === "") {
@@ -126,7 +120,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
     });
   } else {
     res.status(404);
