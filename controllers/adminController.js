@@ -17,25 +17,28 @@ const getAdmin = asyncHandler(async (req, res) => {
 });
 
 const makeAdmin = asyncHandler(async (req, res) => {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
+    
+    const { id } = req.body;
+    console.log(id);
+    const user = await User.findById({ _id: id });
+    console.log(user);
 
     if(!user){
         res.status(400).json({ Error: "Could not find user."});
         throw new Error("Could not find user.");
     }
 
-    const admin = await Admin.findOne({ _id: user._id });
+    const admin = await Admin.findOne({ userId: user.id });
 
     if(admin){
         res.status(400).json({ msg: "User is already admin."});
         throw new Error("User is already admin.")
     }
-
+    
     const newAdmin = await Admin.create({
-        userId: user.id,
+        userId: user._id,
     })
-
+    
     res.status(200).json({ userId: newAdmin.userId });
 
 });
