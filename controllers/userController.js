@@ -8,7 +8,7 @@ const getUsers = asyncHandler(async (req, res) => {
 });
 
 const getUserId = asyncHandler(async (req, res) => {
-  const email = req.params.wl;
+  const email = req.body.email;
   const userFound = await User.findOne({ email: email });
   if(!userFound){
     res.status(404);

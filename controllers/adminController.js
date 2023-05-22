@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 
 const getAdmin = asyncHandler(async (req, res) => {
     const id = req.params.id;
-    const adminFound = await findOne({ id })
+    const adminFound = await Admin.findOne({ id })
 
     if(!adminFound){
         res.status(404).json({ isAdmin: false});
