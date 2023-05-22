@@ -89,7 +89,7 @@ const UsersList = ({ users, loading, updateUser }) => {
                     src="https://demos.creative-tim.com/soft-ui-flowbite/images/users/neil-sims.png"
                     alt="Neil Sims avatar"
                   />
-                  <div className="text-sm font-normal text-gray-500">
+                  <div className="text-left text-sm font-normal text-gray-500">
                     <div className="text-base font-semibold text-gray-900">
                       {firstName} {lastName}
                     </div>
