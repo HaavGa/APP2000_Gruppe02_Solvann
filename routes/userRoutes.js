@@ -12,17 +12,18 @@ import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/new')
-  .post(protect, isAdmin, registerUser);
-router.route('/:email')
-  .get(protect, isAdmin, getUserId);
-router.route('/all')
-  .get(protect, isAdmin, getUsers);
+
 router.post('/auth', authUser);
+router.route('/new')
+  .post(registerUser);
+router.route('/:email')
+  .get(getUserId);
+router.route('/all')
+  .get(getUsers);
 router.post('/logout', logoutUser);
 router
   .route('/profile')
-  .get(protect, getUserProfile)             // hvordan skal jeg gjøre så kun brukeren det gjelder og admin har tilgang til denne??
-  .put(protect, isAdmin, updateUserProfile);
+  .get(getUserProfile)             // hvordan skal jeg gjøre så kun brukeren det gjelder og admin har tilgang til denne??
+  .put(updateUserProfile);
 
 export default router;
