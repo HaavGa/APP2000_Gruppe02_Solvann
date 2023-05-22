@@ -7,6 +7,17 @@ const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json(usersFound);
 });
 
+const getUserId = asyncHandler(async (req, res) => {
+  const email = req.params.email;
+  const userFound = await User.findOne({ email: email });
+  if(!userFound){
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  res.status(200).json({ id: userFound.id });
+
+});
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
 // @access  Public
@@ -66,6 +77,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
   
 });
+
+
 
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
@@ -129,6 +142,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 export {
+  getUserId,
   authUser,
   registerUser,
   logoutUser,

@@ -5,14 +5,18 @@ import {
   logoutUser,
   getUserProfile,
   updateUserProfile,
-  getUsers
+  getUsers,
+  getUserId
 } from '../controllers/userController.js';
 import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/')
-  .post(protect, isAdmin, registerUser)
+router.route('/{id}')
+  .post(protect, isAdmin, registerUser);
+router.route('/{email}')
+  .get(protect, isAdmin, getUserId)
+router.route('/all')
   .get(protect, isAdmin, getUsers);
 router.post('/auth', authUser);
 router.post('/logout', logoutUser);
