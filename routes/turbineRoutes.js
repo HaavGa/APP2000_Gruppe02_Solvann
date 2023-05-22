@@ -1,15 +1,15 @@
 import express from 'express';
 import {
-    changeTurbineState, 
-    turnOffAll,
+    setTurbine, 
+    setAll,
 } from '../controllers/turbineController.js';
-import { protect, userIsAdmin } from '../middleware/authMiddleware.js';
+import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.route('/')
-    .post(changeTurbineState);
-router.route('/off')
-    .post(turnOffAll)
+    .post(protect, setTurbine);
+router.route('/all')
+    .post(protect, setAll)
 
 export default router;

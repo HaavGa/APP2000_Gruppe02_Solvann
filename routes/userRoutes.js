@@ -7,18 +7,18 @@ import {
   updateUserProfile,
   getUsers
 } from '../controllers/userController.js';
-import { protect, userIsAdmin } from '../middleware/authMiddleware.js';
+import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.route('/')
-  .post(registerUser)
-  .get(getUsers);
+  .post(protect, isAdmin, registerUser)
+  .get(protect, isAdmin, getUsers);
 router.post('/auth', authUser);
 router.post('/logout', logoutUser);
 router
   .route('/profile')
-  .get(protect, getUserProfile)
-  .put(protect, updateUserProfile);
+  .get(protect, getUserProfile)             // hvordan skal jeg gjøre så kun brukeren det gjelder og admin har tilgang til denne??
+  .put(protect, isAdmin, updateUserProfile);
 
 export default router;

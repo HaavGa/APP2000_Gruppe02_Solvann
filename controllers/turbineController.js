@@ -4,12 +4,6 @@ import Turbine from "../models/turbineModel.js";
 import Axios from "axios";
 import jwt from "jsonwebtoken";
 
-const getUsers = asyncHandler(async (req, res) => {
-  console.log("Henter brukere");
-  const usersFound = await User.find({}).sort({ username: 1 }); //
-  return res.status(200).json(usersFound);
-});
-
 const turbines = [
     "f6730322-fac6-405c-a754-04313942bc31",
     "77234f52-a0b3-4dae-9cc5-99b8c7361a5c",
@@ -22,29 +16,18 @@ const turbines = [
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
 // @access  Public
-const changeTurbineState = asyncHandler(async (req, res) => {
+const setTurbine = asyncHandler(async (req, res) => {
 
-  const token = req.cookies.jwt;
-	let userId
-
-	if (token) {
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-			userId = decoded.userId;
-		} 
-		catch (error) {
-      res.status(401).json({Error: "Not Authorized, token failed."});
-      throw new Error("Not authorized, token failed");
-    }
-  } 
-	else {
-    res.status(401).json({Error: "Not Authorized, no token."});
-    throw new Error("Not authorized, no token");
+  const userId = req.user.id;
+  
+	if (!userId) {
+    res.status(401).json({ Error: "Not authorized, no userId."});
+      throw new Error("Not authorized, no userId.");
   }
 
   // hente id
   const turbineId = turbines[req.body.turbineNr - 1];
-  const { capacityUsage } = req.body;
+  const capacityUsage = req.body.capacityUsage;
 
   const url = `https://solvann.azurewebsites.net/api/Turbines/${ turbineId }?capacityUsage=${capacityUsage}`;
   const config = {
@@ -80,26 +63,15 @@ const changeTurbineState = asyncHandler(async (req, res) => {
 	}
 });
 
-const turnOffAll = asyncHandler(async (req, res) => {
-
-	const token = req.cookies.jwt;
-	let userId;
-
-	if (token) {
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-			userId = decoded.userId;
-		} 
-		catch (error) {
-      res.status(401).json({ Error: "Not authorized, token failed"});
-      throw new Error("Not authorized, token failed.");
-    }
-  } 
-	else {
-    res.status(401).json({ Error: "Not authorized, no token."});
-    throw new Error("Not authorized, no token");
+const setAll = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+  
+	if (!userId) {
+    res.status(401).json({ Error: "Not authorized, no userId."});
+      throw new Error("Not authorized, no userId.");
   }
 
+  // autensisering mot solvann sitt API
   const config = {
     headers: {
       GroupId: process.env.SOLVANN_USER,
@@ -107,17 +79,19 @@ const turnOffAll = asyncHandler(async (req, res) => {
     },
   };
 
-	const capacityUsage = 0;
+	const capacityUsage = req.body.capacityUsage;
 
-  for(let i = 0; i < 6; i++){
+  // slår av alle seks turbiner
+  for(let i = 0; i < turbines.length; i++){
     const statusChange = await Axios.put(
     	`https://solvann.azurewebsites.net/api/Turbines/${ turbines[i] }?capacityUsage=${ capacityUsage }`,
     	{}, 
     	config
   	);
-
+    
+    // Kode for å logge dette i databasen
 		const turbine = await Turbine.create({
-			turbineNr: i,
+			turbineNr: (i+1),
 			capacityUsage: capacityUsage,
 			userId: userId,
 		});
@@ -131,6 +105,6 @@ const turnOffAll = asyncHandler(async (req, res) => {
 });
 
 export { 
-    changeTurbineState,
-    turnOffAll
+    setTurbine,
+    setAll
 };

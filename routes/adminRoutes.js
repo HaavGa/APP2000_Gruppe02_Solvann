@@ -1,12 +1,15 @@
 import express from 'express';
 import {
-    makeAdmin
+    makeAdmin,
+    makeNotAdmin,
 } from '../controllers/adminController.js';
-import { protect, userIsAdmin } from '../middleware/authMiddleware.js';
+import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/')
-    .post(makeAdmin);
+router.route('/new')
+    .post(protect, isAdmin, makeAdmin);
+router.route('/remove')
+    .post(protect, isAdmin, makeNotAdmin);
     
 export default router;

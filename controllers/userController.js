@@ -3,9 +3,8 @@ import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 
 const getUsers = asyncHandler(async (req, res) => {
-  console.log("Henter brukere");
   const usersFound = await User.find({}).sort({ username: 1 }); //
-  return res.status(200).json(usersFound);
+  res.status(200).json(usersFound);
 });
 
 // @desc    Auth user & get token
@@ -52,19 +51,20 @@ const registerUser = asyncHandler(async (req, res) => {
   });
   
 
-  if (user) {
-    generateToken(res, user._id);
-
-    res.status(201).json({
-      _id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-    });
-  } else {
+  if (!user) {
     res.status(400);
     throw new Error('Invalid user data');
   }
+
+  generateToken(res, user._id);
+
+  res.status(201).json({
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+  });
+  
 });
 
 // @desc    Logout user / clear cookie
@@ -84,17 +84,18 @@ const logoutUser = (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
-  if (user) {
-    res.json({
-      _id: user._id,
-      firstName: user.name,
-      lastName:user.name,
-      email: user.email,
-    });
-  } else {
+  if(!user){
     res.status(404);
     throw new Error('User not found');
   }
+
+  res.status(200).json({
+    _id: user._id,
+    firstName: user.name,
+    lastName:user.name,
+    email: user.email,
+  });
+
 });
 
 // @desc    Update user profile
@@ -103,28 +104,28 @@ const getUserProfile = asyncHandler(async (req, res) => {
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
-  if (user) {
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.email = req.body.email || user.email;
-    
-
-    if (!req.body.password === "") {
-      user.password = req.body.password;
-    }
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      email: updatedUser.email,
-    });
-  } else {
+  if(!user){
     res.status(404);
     throw new Error('User not found');
   }
+    
+  user.firstName = req.body.firstName || user.firstName;
+  user.lastName = req.body.lastName || user.lastName;
+  user.email = req.body.email || user.email;
+    
+
+  if (!req.body.password === "") {
+    user.password = req.body.password;
+  }
+
+  const updatedUser = await user.save();
+
+  res.status(200).json({
+    id: updatedUser._id,
+    firstName: updatedUser.firstName,
+    lastName: updatedUser.lastName,
+    email: updatedUser.email,
+  });
 });
 
 export {
