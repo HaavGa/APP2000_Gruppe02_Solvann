@@ -2,6 +2,7 @@ import express from 'express';
 import {
     setTurbine, 
     setAll,
+    getAll,
 } from '../controllers/turbineController.js';
 import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
@@ -11,5 +12,6 @@ router.route('/')
     .post(protect, setTurbine);
 router.route('/all')
     .post(protect, isAdmin, setAll)
+    .get(protect, getAll);
 
 export default router;

@@ -4,6 +4,15 @@ import Turbine from "../models/turbineModel.js";
 import Axios from "axios";
 import jwt from "jsonwebtoken";
 
+const getAll = asyncHandler(async (req, res) => {
+  const changeLog = await Turbine.findOne({});
+  if(!changeLog){
+    res.status(404);
+    throw new Error("No logs found");
+  }
+  res.status(200).json(changeLog);
+});
+
 const turbines = [
     "f6730322-fac6-405c-a754-04313942bc31",
     "77234f52-a0b3-4dae-9cc5-99b8c7361a5c",
@@ -106,5 +115,6 @@ const setAll = asyncHandler(async (req, res) => {
 
 export { 
     setTurbine,
-    setAll
+    setAll,
+    getAll,
 };
