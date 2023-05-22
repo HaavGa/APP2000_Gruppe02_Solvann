@@ -1,29 +1,59 @@
+import axios from "axios";
+import { useFormik } from "formik";
 import logo from "../images/solvann-logo.png";
 
 const Login = () => {
+  // formik logikk
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+
+    // submit form
+    onSubmit: (values) => {
+      submitHandler(values);
+    },
+  });
+  const submitHandler = (values) => {
+    const baseUrl = "http:localhost:5000/api/users/auth";
+    const data = values;
+    try {
+      console.log(data);
+      axios.post(`${baseUrl}`, data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="flex h-screen w-full items-center justify-center bg-login bg-cover bg-no-repeat">
-      <div className="max-sm:px-8 rounded-xl bg-gray-800 bg-opacity-50 px-16 py-10 shadow-lg backdrop-blur-md">
+      <div className="max-sm:px-8 rounded-xl bg-gray-800/50 px-16 py-10 shadow-lg backdrop-blur-md">
         <div className="text-white">
           <div className="mb-8 flex flex-col items-center">
             <img src={logo} className="w-24" alt="solvann-logo" />
             <h1 className="mt-4 text-2xl">Solvann</h1>
           </div>
-          <form action="#">
+          <form onSubmit={formik.handleSubmit}>
             <div className="mb-4 text-lg">
               <input
+                id="email"
                 className="rounded-3xl border-none bg-orange-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
                 type="text"
-                name="name"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                name="email"
                 placeholder="id@email.com"
               />
             </div>
 
             <div className="mb-4 text-lg">
               <input
+                id="password"
                 className="rounded-3xl border-none bg-orange-400 bg-opacity-50 px-6 py-2 text-center text-inherit placeholder-slate-200 shadow-lg outline-none backdrop-blur-md"
+                value={formik.values.password}
+                onChange={formik.handleChange}
                 type="Password"
-                name="name"
+                name="password"
                 placeholder="*********"
               />
             </div>

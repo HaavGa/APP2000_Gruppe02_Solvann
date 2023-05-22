@@ -26,15 +26,14 @@ const Admin = () => {
 
   const updateUser = () => {
     setUpdatingUser(true);
-    return true;
   };
 
   return (
     <div className="h-screen bg-gray-700 py-5 text-center">
       <div className="mt-10 flex gap-2 ">
         <UsersList users={users} loading={loading} updateUser={updateUser} />
-        {updateUser && <SignupForm />}
-        {!updateUser && <UpdateForm />}
+        {!updatingUser && <SignupForm />}
+        {updatingUser && <UpdateForm />}
       </div>
     </div>
   );

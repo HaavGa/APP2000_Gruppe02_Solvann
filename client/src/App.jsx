@@ -1,12 +1,14 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Admin from "./pages/Admin";
-import Grafer from "./pages/Grafer";
-import Rapporter from "./pages/Rapporter";
-import Minside from "./pages/MinSide";
-import ErrorPage from "./pages/ErrorPage";
-import Login from "./pages/Login";
+import {
+  Admin,
+  ErrorPage,
+  Grafer,
+  Home,
+  Login,
+  MinSide,
+  Rapporter,
+} from "./pages/index";
 
 function App() {
   return (
@@ -19,7 +21,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/grafer" element={<Grafer />} />
           <Route path="/rapporter" element={<Rapporter />} />
-          <Route path="/minside" element={<Minside />} />
+          <Route path="/minside" element={<MinSide />} />
           <Route path="/*" element={<ErrorPage />} />
         </Routes>
       </div>

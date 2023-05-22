@@ -13,7 +13,7 @@ const SignupForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      admin: "",
+      isAdmin: "",
     },
 
     // validere form
@@ -41,13 +41,14 @@ const SignupForm = () => {
 
     // submit form
     onSubmit: (values, { resetForm }) => {
+      console.log(values);
       submitHandler(values);
       resetForm(values);
     },
   });
   const submitHandler = (values) => {
-    const baseUrl = "https://solvann.cyclic.app/api/users/";
-    const data = ({ firstName, lastName, email, password, admin } = values);
+    const baseUrl = "/api/users/";
+    const data = ({ firstName, lastName, email, password, isAdmin } = values);
     try {
       console.log(data);
       axios.post(`${baseUrl}`, data);
@@ -183,15 +184,15 @@ const SignupForm = () => {
         </div>
         <div className="flex items-center space-x-2">
           <label
-            htmlFor="admin"
+            htmlFor="isAdmin"
             className="mt-2 inline text-xs font-semibold uppercase text-gray-600"
           >
             Administrator:
           </label>
           <input
-            id="admin"
+            id="isAdmin"
             type="checkbox"
-            name="admin"
+            name="isAdmin"
             value={false}
             onChange={formik.handleChange}
             className="mt-2 h-5 w-5 rounded-md"
