@@ -14,16 +14,10 @@ const router = express.Router();
 
 
 router.post('/auth', authUser);
-router.route('/new')
-  .post(registerUser);
-router.route('/:email')
-  .get(getUserId);
-router.route('/all')
-  .get(getUsers);
+router.route('/new').post(registerUser);
+router.route('/').get(getUserId);
+router.route('/all').post(getUsers);
 router.post('/logout', logoutUser);
-router
-  .route('/profile')
-  .get(getUserProfile)             // hvordan skal jeg gjøre så kun brukeren det gjelder og admin har tilgang til denne??
-  .put(updateUserProfile);
+router.route('/profile').get(getUserProfile).put(updateUserProfile);
 
 export default router;

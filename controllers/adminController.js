@@ -6,11 +6,11 @@ import Axios from "axios";
 import jwt from "jsonwebtoken";
 
 const getAdmin = asyncHandler(async (req, res) => {
-    const id = req.params.id;
-    const adminFound = await Admin.findOne({ id })
+    const { id } = req.params;
+    const adminFound = await Admin.findOne({ userId: id })
 
     if(!adminFound){
-        res.status(404).json({ isAdmin: false});
+        res.status(200).json({ isAdmin: false});
     }
 
     res.status(200).json({ isAdmin: true });
