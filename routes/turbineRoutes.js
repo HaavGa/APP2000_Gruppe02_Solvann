@@ -10,6 +10,6 @@ const router = express.Router();
 router.route('/')
     .post(protect, setTurbine);
 router.route('/all')
-    .post(protect, setAll)
+    .post(protect, isAdmin, setAll)
 
 export default router;

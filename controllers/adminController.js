@@ -5,6 +5,17 @@ import Turbine from "../models/turbineModel.js";
 import Axios from "axios";
 import jwt from "jsonwebtoken";
 
+const getAdmin = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const adminFound = await findOne({ id })
+
+    if(!adminFound){
+        res.status(404).json({ isAdmin: false});
+    }
+
+    res.status(200).json({ isAdmin: true });
+});
+
 const makeAdmin = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
