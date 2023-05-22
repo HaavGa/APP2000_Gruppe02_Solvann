@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import waterLevelRoutes from "./routes/waterLevelRoutes.js";
+import turbineRoutes from "./routes/turbineRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import cors from "cors";
 
 const port = process.env.PORT || 5000;
@@ -23,6 +25,8 @@ app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
 app.use("/api/water", waterLevelRoutes);
+app.use("/api/turbine", turbineRoutes);
+app.use("/api/admin", adminRoutes)
 
 const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, './client/dist')));
