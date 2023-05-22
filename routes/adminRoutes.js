@@ -8,7 +8,7 @@ import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/{id}')
+router.route('/:id')
     .get(getAdmin);
 router.route('/new')
     .post(protect, isAdmin, makeAdmin);
