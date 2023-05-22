@@ -5,7 +5,7 @@ import Axios from "axios";
 import jwt from "jsonwebtoken";
 
 const getAll = asyncHandler(async (req, res) => {
-  const changeLog = await Turbine.findOne({});
+  const changeLog = await Turbine.find({});
   if(!changeLog){
     res.status(404);
     throw new Error("No logs found");
