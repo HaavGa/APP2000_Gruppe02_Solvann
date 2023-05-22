@@ -57,7 +57,8 @@ const makeNotAdmin = asyncHandler(async (req, res) => {
     res.status(200).json({ removedAdmin });
 });
 
-export { 
+export {
+    getAdmin,
     makeAdmin,
     makeNotAdmin,
 };
