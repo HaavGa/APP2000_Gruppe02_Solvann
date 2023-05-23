@@ -2,17 +2,11 @@ import express from "express";
 const router = express.Router();
 import { protect, isAdmin } from '../middleware/authMiddleware.js';
 import {
-  getWaterLevel,
-  setWaterLevel,
-  updateWaterLevel,
-  deleteWaterLevel,
   fetchWaterLevel,
+  noe
 } from "../controllers/waterLevelController.js";
 
-router.route("/").get(getWaterLevel).post(setWaterLevel);
-router.route("/last").get(fetchWaterLevel);
-router.route("/:id", protect, isAdmin)
-  .patch(updateWaterLevel)
-  .delete(deleteWaterLevel);
+router.route('/last').get(fetchWaterLevel);
+router.route('/noe').get(noe);
 
 export default router;
