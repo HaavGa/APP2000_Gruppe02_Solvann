@@ -40,7 +40,7 @@ const authUser = asyncHandler(async (req, res) => {
   if (user && (await user.matchPassword(password))) {
     generateToken(res, user._id);
     res.json({
-      _id: user._id,
+      id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -108,6 +108,7 @@ const logoutUser = (req, res) => {
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
+
   if(!user){
     res.status(404);
     throw new Error('User not found');
@@ -125,9 +126,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
-const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findOne({ email });
+const updateUser = asyncHandler(async (req, res) => {
 
+  const user = await User.findById({ _id: req.body.id });
   if(!user){
     res.status(404);
     throw new Error('User not found');
@@ -138,7 +139,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   user.email = req.body.email || user.email;
     
 
-  if (!req.body.password === "") {
+  if (!req.body.password) {
     user.password = req.body.password;
   }
 
@@ -159,6 +160,6 @@ export {
   registerUser,
   logoutUser,
   getUserProfile,
-  updateUserProfile,
+  updateUser,
   getUsers
 };

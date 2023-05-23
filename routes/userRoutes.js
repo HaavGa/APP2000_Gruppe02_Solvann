@@ -4,7 +4,7 @@ import {
   registerUser,
   logoutUser,
   getUserProfile,
-  updateUserProfile,
+  updateUser,
   getUsers,
   getUser,
   getUserId,
@@ -19,6 +19,6 @@ router.post('/auth', authUser);
 router.route('/new').post(registerUser);
 router.route('/all').get(getUsers);
 router.post('/logout', logoutUser);
-router.route('/profile').get(getUserProfile).put(updateUserProfile);
+router.route('/profile').get(getUserProfile).patch(updateUser);
 
 export default router;
