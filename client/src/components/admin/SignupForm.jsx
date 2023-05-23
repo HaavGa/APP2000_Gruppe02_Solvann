@@ -47,10 +47,9 @@ const SignupForm = () => {
     },
   });
   const submitHandler = (values) => {
-    const baseUrl = "/api/users/";
+    const baseUrl = "https://solvann.cyclic.app/api/users/";
     const data = ({ firstName, lastName, email, password, isAdmin } = values);
     try {
-      console.log(data);
       axios.post(`${baseUrl}`, data);
     } catch (err) {
       console.log(err);
