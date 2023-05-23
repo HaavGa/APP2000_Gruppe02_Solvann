@@ -12,12 +12,8 @@ const noe = asyncHandler(async (req, res) => {
     },
   };
 
-  const groupState = await Axios.get(
-    getGroupStateURL, 
-    {}, 
-    config,
-
-  ).catch((err) => console.log(err));
+  const groupState = await Axios.get(getGroupStateURL, {}, config)
+    .catch((err) => console.log(err));
 
 
 
@@ -31,7 +27,7 @@ const noe = asyncHandler(async (req, res) => {
 
   // forutse periode med antatt lav strømpris?
 
-  // regne ut hvor lang tid det vil ta før man når øvre eller nedre grense.
+  // regne ut når man treffer øvre eller nedre grense ved current flow rate.
 
   //if(natt && høyStrømpris && over35m )
 
