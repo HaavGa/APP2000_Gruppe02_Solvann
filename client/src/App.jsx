@@ -9,19 +9,32 @@ import {
   MinSide,
   Rapporter,
 } from "./pages/index";
+import { useIsAuthenticated } from "react-auth-kit";
 
 function App() {
+  const isAuthenticated = useIsAuthenticated();
   return (
     <>
-      <Navbar />
+      {isAuthenticated() && <Navbar />}
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/grafer" element={<Grafer />} />
-          <Route path="/rapporter" element={<Rapporter />} />
-          <Route path="/minside" element={<MinSide />} />
+          <Route path="/" element={isAuthenticated() ? <Home /> : <Login />} />
+          <Route
+            path="/admin"
+            element={isAuthenticated() ? <Admin /> : <Login />}
+          />
+          <Route
+            path="/grafer"
+            element={isAuthenticated() ? <Grafer /> : <Login />}
+          />
+          <Route
+            path="/rapporter"
+            element={isAuthenticated() ? <Rapporter /> : <Login />}
+          />
+          <Route
+            path="/minside"
+            element={isAuthenticated() ? <MinSide /> : <Login />}
+          />
           <Route path="/*" element={<ErrorPage />} />
         </Routes>
       </div>
