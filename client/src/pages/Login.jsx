@@ -22,6 +22,8 @@ const Login = () => {
     const data = values;
     try {
       const response = await axios.post(`${baseUrl}`, data);
+      console.log(window.location.hostname);
+      console.log(import.meta.env.PROD);
 
       signIn({
         token: response.data.token,
