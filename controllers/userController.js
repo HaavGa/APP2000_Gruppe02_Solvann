@@ -4,7 +4,17 @@ import generateToken from '../utils/generateToken.js';
 
 const getUsers = asyncHandler(async (req, res) => {
   const usersFound = await User.find({}).sort({ username: 1 }); //
+  
   res.status(200).json(usersFound);
+});
+
+const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById({ _id: req.body.id });
+  if(!user){
+    res.status(404);
+    throw new Error("User not found.");
+  }
+  res.status(200).json(user);
 });
 
 const getUserId = asyncHandler(async (req, res) => {
@@ -144,6 +154,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 export {
   getUserId,
+  getUser,
   authUser,
   registerUser,
   logoutUser,
