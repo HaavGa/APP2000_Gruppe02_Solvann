@@ -4,7 +4,7 @@ import Axios from "axios";
 
 const noe = asyncHandler(async (req, res) => {
 
-  const getGroupStateURL = "https://solvann.azurewebsites.net/api/GroupState";
+  const url = "https://solvann.azurewebsites.net/api/GroupState";
   const config = {
     headers: {
       GroupId: process.env.SOLVANN_USER,
@@ -12,10 +12,9 @@ const noe = asyncHandler(async (req, res) => {
     },
   };
 
-  const groupState = await Axios.get(getGroupStateURL, {}, config)
+  // endre status
+  const groupState = await Axios.get(url, {}, config)
     .catch((err) => console.log(err));
-
-
 
   res.status(200).json(groupState);
 
