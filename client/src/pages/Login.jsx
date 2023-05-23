@@ -18,9 +18,11 @@ const Login = () => {
     },
   });
   const submitHandler = async (values) => {
-    const baseUrl = "https:solvann.cyclic.app/api/users/auth";
+    const baseUrl = "https://solvann.cyclic.app/api/users/auth";
     const data = values;
     try {
+      console.log(import.meta.env.PROD);
+      console.log(window.location.hostname);
       const response = await axios.post(`${baseUrl}`, data);
 
       signIn({
