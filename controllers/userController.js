@@ -23,7 +23,8 @@ const getUser = asyncHandler(async (req, res) => {
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
-    email: user.email
+    email: user.email,
+    isAdmin: user.isAdmin,
 });
 });
 
@@ -54,6 +55,7 @@ const authUser = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      isAdmin: user.isAdmin,
       token: res.token
     });
   } else {
@@ -66,7 +68,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, isAdmin } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -80,6 +82,7 @@ const registerUser = asyncHandler(async (req, res) => {
     lastName,
     email,
     password,
+    isAdmin,
   });
   
 
@@ -95,6 +98,7 @@ const registerUser = asyncHandler(async (req, res) => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
+    isAdmin: user.isAdmin,
   });
   
 });
@@ -129,6 +133,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
     firstName: user.name,
     lastName:user.name,
     email: user.email,
+    isAdmin: user.isAdmin,
   });
 
 });
@@ -147,6 +152,7 @@ const updateUser = asyncHandler(async (req, res) => {
   user.firstName = req.body.firstName || user.firstName;
   user.lastName = req.body.lastName || user.lastName;
   user.email = req.body.email || user.email;
+  user.isAdmin = req.body.isAdmin || user.isAdmin;
     
 
   if (req.body.password) {
@@ -160,6 +166,7 @@ const updateUser = asyncHandler(async (req, res) => {
     firstName: updatedUser.firstName,
     lastName: updatedUser.lastName,
     email: updatedUser.email,
+    isAdmin: updatedUser.isAdmin,
   });
 });
 

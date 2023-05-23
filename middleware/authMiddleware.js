@@ -26,11 +26,8 @@ const protect = asyncHandler(async (req, res, next) => {
 });
 
 const isAdmin = asyncHandler(async(req, res, next) => {
-  
-  const userId = req.user.id;
-  const admin = await Admin.findOne({ userId })
 
-  if(!admin){
+  if(!req.user.isAdmin){
     res.status(401);
     throw new Error('Not authorized, not admin');
   }
