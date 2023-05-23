@@ -5,7 +5,12 @@ import generateToken from '../utils/generateToken.js';
 const getUsers = asyncHandler(async (req, res) => {
   const usersFound = await User.find({}).sort({ username: 1 }); //
   
-  res.status(200).json(usersFound);
+  res.status(200).json({
+    id: usersFound.id,
+    firstName: usersFound.firstName,
+    lastName: usersFound.lastName,
+    email: usersFound.email
+});
 });
 
 const getUser = asyncHandler(async (req, res) => {
@@ -14,7 +19,12 @@ const getUser = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found.");
   }
-  res.status(200).json(user);
+  res.status(200).json({
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email
+});
 });
 
 const getUserId = asyncHandler(async (req, res) => {
