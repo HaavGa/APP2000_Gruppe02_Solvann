@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import SignupForm from "../components/admin/SignupForm";
 import UpdateForm from "../components/admin/UpdateForm";
 import UsersList from "../components/admin/UsersList";
-import Axios from "axios";
+import axios from "axios";
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
@@ -12,12 +12,9 @@ const Admin = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
-      const response = await Axios.get(
-        "https://solvann.cyclic.app/api/users/"
-        //! Kommenter ut ved development:
-        // "http://localhost:5000/api/users"
+      const response = await axios.get(
+        "https://solvann.cyclic.app/api/users/all"
       );
-
       setUsers(response.data);
       setLoading(false);
     };
