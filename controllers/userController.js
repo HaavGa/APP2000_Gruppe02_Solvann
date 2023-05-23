@@ -3,14 +3,14 @@ import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
 
 const getUsers = asyncHandler(async (req, res) => {
-  const usersFound = await User.find({}).sort({ username: 1 }); //
+  const usersFound = await User.find({}).sort({ username: 1 }).select('-password');
   
-  res.status(200).json({
-    id: usersFound.id,
-    firstName: usersFound.firstName,
-    lastName: usersFound.lastName,
-    email: usersFound.email
-});
+  if(!usersFound){
+    res.status(404);
+    throw new Error('Users not found.');
+  }
+
+  res.status(200).json(usersFound);
 });
 
 const getUser = asyncHandler(async (req, res) => {
