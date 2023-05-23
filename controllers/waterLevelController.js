@@ -2,67 +2,72 @@ import asyncHandler from "express-async-handler";
 import { waterLevelModel as waterLevel } from "../models/waterLevelModel.js";
 import Axios from "axios";
 
-// @desc    Get all measurements of water level
-// @route   GET /api/version/waterLevel/
-// @access  Private
-const getWaterLevel = asyncHandler(async (req, res) => {
-  console.log("Henter alle målinger");
-  const waterLevelFound = await waterLevel
-    .find({})
-    .sort({ createdAt: -1 });
-  res.status(200).json(waterLevelFound);
-});
+const noe = asyncHandler(async (req, res) => {
 
-// @desc    Set measurement
-// @route   POST /api/version/waterLevel/
-// @access  Private
-const setWaterLevel = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  const getGroupStateURL = "https://solvann.azurewebsites.net/api/GroupState";
+  const config = {
+    headers: {
+      GroupId: process.env.SOLVANN_USER,
+      GroupKey: process.env.SOLVANN_PASSWORD,
+    },
+  };
 
-  const newWaterLevel = req.body;
+  const groupState = await Axios.get(
+    getGroupStateURL, 
+    {}, 
+    config,
 
-  if (!newWaterLevel.level) {
-    res.status(400);
-    throw new Error("Please add water level.");
+  ).catch((err) => console.log(err));
+
+
+
+  res.status(200).json(groupState);
+
+  // strømpris er høy && vannstand er høy 
+  // -> blast ut
+
+  // strømpris er lav && vannstand er lav
+  // -> blast inn
+
+  // forutse periode med antatt lav strømpris?
+
+  // regne ut hvor lang tid det vil ta før man når øvre eller nedre grense.
+
+  //if(natt && høyStrømpris && over35m )
+
+
+/*
+  {
+    sun24: [
+      verdiTime1,
+      verdiTime2,
+      ...
+      verdiTime24
+    ],
+    power24: [
+      verdiTime1,
+      verdiTime2,
+      ...
+      verdiTime24
+    ],
+    waterlevel24: [
+      verdiTime1,
+      verdiTime2,
+      ...
+      verdiTime24
+    ],
+    moneyEarned: Number,
+    enviromentalCorst: Number,
+    waterLevelChange: Number,
+    flowRate: Number
   }
-  await waterLevel.create(newWaterLevel);
-  res.status(200).json(newWaterLevel);
+
+*/
+
 });
 
-// @desc    Update measurement
-// @route   FETCH /api/version/waterLevel/:id
-// @access  Private
-const updateWaterLevel = asyncHandler(async (req, res) => {
-  console.log("Oppdaterer måling.");
-  if (!(await waterLevel.findById(req.params.id))) {
-    res.status(400);
-    throw new Error("Measurement not found.");
-  }
-  const updatedWaterLevel = await waterLevel.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-    }
-  );
 
-  res.status(200).json({ updateWaterLevel });
-});
 
-// @desc    Delete measurement
-// @route   DELETE /api/version/waterLevel/:id
-// @access  Private
-const deleteWaterLevel = asyncHandler(async (req, res) => {
-  const waterLevelFound = await waterLevel.findById(req.params.id);
-  if (!waterLevelFound) {
-    res.status(400);
-    throw new Error("User not found.");
-  }
-
-  await waterLevelFound.remove();
-
-  res.status(200).json({ id: req.params.id });
-});
 
 // @desc    Fetch measurement
 // @route   GET /api/water/last
@@ -84,12 +89,7 @@ const fetchWaterLevel = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: "ok" });
 });
 
-// fetchWaterLevel();
-
 export {
-  getWaterLevel,
-  setWaterLevel,
-  updateWaterLevel,
-  deleteWaterLevel,
   fetchWaterLevel,
+  noe,
 };
