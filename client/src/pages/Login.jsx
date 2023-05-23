@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import logo from "../images/solvann-logo.png";
+import { useSignIn } from "react-auth-kit";
 
 const Login = () => {
+  const signIn = useSignIn();
   // formik logikk
   const formik = useFormik({
     initialValues: {
@@ -15,12 +17,18 @@ const Login = () => {
       submitHandler(values);
     },
   });
-  const submitHandler = (values) => {
-    const baseUrl = "http:localhost:5000/api/users/auth";
+  const submitHandler = async (values) => {
+    const baseUrl = "https:solvann.cyclic.app/api/users/auth";
     const data = values;
     try {
-      console.log(data);
-      axios.post(`${baseUrl}`, data);
+      const response = await axios.post(`${baseUrl}`, data);
+
+      signIn({
+        token: response.data.token,
+        expiresIn: 3600,
+        tokenType: "Bearer",
+        authState: { _id: response.data._id },
+      });
     } catch (err) {
       console.log(err);
     }
