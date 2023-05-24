@@ -114,20 +114,18 @@ const UsersList = ({ users, loading, updateUser, deleteUser }) => {
               </tbody>
             );
           })}
-        <div className="flex justify-center">
-          <div className="absolute bottom-14">
-            <ReactPaginate
-              previousLabel="←"
-              nextLabel="→"
-              pageCount={pageCount}
-              onPageChange={changePage}
-              containerClassName="paginationBtns"
-              previousClassName="prevBtn"
-              nextClassName="nextBtn"
-              activeClassName="activeBtn"
-              disabledClassName="disabledBtn"
-            />
-          </div>
+        <div className="flex justify-center pt-10">
+          <ReactPaginate
+            previousLabel="←"
+            nextLabel="→"
+            pageCount={pageCount}
+            onPageChange={changePage}
+            containerClassName="paginationBtns"
+            previousClassName="prevBtn"
+            nextClassName="nextBtn"
+            activeClassName="activeBtn"
+            disabledClassName="disabledBtn"
+          />
         </div>
       </div>
     </table>

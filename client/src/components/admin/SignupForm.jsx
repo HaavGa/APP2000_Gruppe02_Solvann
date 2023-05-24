@@ -25,7 +25,7 @@ const SignupForm = () => {
         .max(20, "Etternavnet må være på mindre enn 20 bokstaver")
         .required("Vennligst skriv inn etternavnet"),
       email: Yup.string()
-        .matches("/[a-zA-Z]+@solvann.no/", "Ikke gyldig solvann-adresse")
+        .matches(/[a-zA-Z]+@solvann.no/, "Ikke gyldig solvann-adresse")
         .required("Vennligst skriv inn eposten"),
       password: Yup.string()
         .required("Vennligst skriv inn passordet")

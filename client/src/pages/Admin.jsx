@@ -38,19 +38,17 @@ const Admin = () => {
     }
   };
 
-  // const deleteUser = async (_id) => {
-  //   console.log(_id);
-  //   try {
-  //     await axios.delete("https://solvann.cyclic.app/api/users/delete", {
-  //       id: _id,
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
-
   const deleteUser = async (_id) => {
-    console.log(`${_id} is deleted`);
+    console.log(_id);
+    setLoadingEdit(true);
+    try {
+      await axios.delete("https://solvann.cyclic.app/api/users/delete", {
+        id: _id,
+      });
+      setLoadingEdit(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
