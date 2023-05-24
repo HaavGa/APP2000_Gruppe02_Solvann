@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply h-full;
+}
+
 .btn {
   @apply mt-6 self-center rounded-lg px-5 py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:shadow-none focus:outline-none;
 }
