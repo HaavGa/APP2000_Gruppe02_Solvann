@@ -17,15 +17,20 @@ const getUsers = asyncHandler(async (req, res) => {
 // @route   DELETE /api/version/users
 // @access  Private
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.body.id);
+  const user = await User.findById({ _id: req.params.id });
   if (!user) {
-    res.status(400);
+    res.status(404);
     throw new Error({ Error: "User not found." });
   }
 
-  await user.remove();
+  const userDeleted = await user.remove();
 
-  res.status(200).json( user ).select('-password');
+  if (!userDeleted) {
+    res.status(404);
+    throw new Error({ Error: "User could not be deleted." });
+  }
+
+  res.status(200).json(userDeleted);
 });
 
 const getUser = asyncHandler(async (req, res) => {
