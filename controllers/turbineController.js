@@ -38,7 +38,7 @@ const setTurbine = asyncHandler(async (req, res) => {
   const turbineId = turbines[req.body.turbineNr - 1];
   const capacityUsage = req.body.capacityUsage;
 
-  const url = `https://solvann.azurewebsites.net/api/Turbines/${ turbineId }?capacityUsage=${capacityUsage}`;
+  const url = `https://solvann.azurewebsites.net/api/Turbines/${ turbineId }?capacityUsage=${ capacityUsage }`;
   const config = {
     headers: {
       GroupId: process.env.SOLVANN_USER,
@@ -49,7 +49,8 @@ const setTurbine = asyncHandler(async (req, res) => {
   // endre status
   const statusChange = await Axios.put(url, {}, config)
     .catch((err) => console.log(err));
-
+  console.log(statusChange)
+  
   // lagre ny status i db og hvem som har endra.
 	const turbine = await Turbine.create({
 		turbineNr: req.body.turbineNr,
