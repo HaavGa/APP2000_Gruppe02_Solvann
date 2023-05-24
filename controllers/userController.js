@@ -13,6 +13,21 @@ const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json(usersFound);
 });
 
+// @desc    Delete goal
+// @route   DELETE /api/version/users
+// @access  Private
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.body.id);
+  if (!user) {
+    res.status(400);
+    throw new Error({ Error: "User not found." });
+  }
+
+  await user.remove();
+
+  res.status(200).json({ user }).select('-password');
+});
+
 const getUser = asyncHandler(async (req, res) => {
   const user = await User.findById({ _id: req.body.id });
   if(!user){
@@ -172,6 +187,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
 export {
   getUserId,
+  deleteUser,
   getUser,
   authUser,
   registerUser,
