@@ -2,19 +2,30 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
+import Spinner from "../Spinner";
 YupPassword(Yup);
 
-const SignupForm = () => {
-  // formik logikk
+const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
+  if (loadingEdit) {
+    return (
+      <div className="flex w-[28rem] items-center justify-center bg-gray-700 text-white">
+        <Spinner />
+      </div>
+    );
+  }
+
+  const { id, firstName, lastName, email, password, confirmPassword } =
+    savedValues;
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      admin: "",
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      newEmail: email,
+      newPassword: password,
+      confirmNewPassword: confirmPassword,
     },
-
+    enableReinitialize: true,
     // validere form
     validationSchema: Yup.object({
       firstName: Yup.string()
@@ -23,37 +34,43 @@ const SignupForm = () => {
       lastName: Yup.string()
         .max(20, "Etternavnet må være på mindre enn 20 bokstaver")
         .required("Vennligst skriv inn etternavnet"),
-      email: Yup.string()
+      newEmail: Yup.string()
         .email("Ugyldig epostadresse")
-        .required("Vennligst skriv inn eposten"),
-      password: Yup.string()
-        .required("Vennligst skriv inn passordet")
+        .required("Vennligst skriv inn epost"),
+      newPassword: Yup.string()
         .min(10, "Passordet må inneholde minst 10 tegn")
         .minLowercase(1, "Passordet må inneholde minst en liten bokstav")
         .minUppercase(1, "Passordet må inneholde minst en stor bokstav")
         .minNumbers(1, "Passordet må inneholde minst ett tall")
         .minSymbols(1, "Passordet må inneholde minst ett symbol"),
+      confirmNewPassword: Yup.string().oneOf(
+        [Yup.ref("newPassword"), null],
+        "Passordene stemmer ikke"
+      ),
     }),
 
     // submit form
     onSubmit: (values, { resetForm }) => {
       submitHandler(values);
       resetForm(values);
+      setUpdateForm(false);
     },
   });
   const submitHandler = (values) => {
-    const baseUrl = "https://solvann.cyclic.app/api/users/";
-    const data = ({ firstName, lastName, email, password, admin } = values);
     try {
-      console.log(data);
-      axios.post(`${baseUrl}`, data);
+      const baseUrl = "https://solvann.cyclic.app/api/users/profile";
+      // const data = ({ id, firstName, lastName, newEmail, newPassword } =
+      //   values);
+      console.log(values);
+
+      axios.patch(`${baseUrl}`, values);
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div className="w-1/3 rounded-lg bg-white p-12">
+    <div className="w-[28rem] rounded-lg bg-white p-12">
       <h1 className="text-xl font-semibold">Oppdater bruker</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6">
         <div className="flex justify-between gap-3">
@@ -109,49 +126,73 @@ const SignupForm = () => {
           </span>
         </div>
         <label
-          htmlFor="email"
+          htmlFor="newEmail"
           className="mt-2 block text-xs font-semibold uppercase text-gray-600"
         >
-          E-post
+          Ny e-post
         </label>
         <input
-          id="email"
+          id="newEmail"
           type="email"
-          name="email"
-          value={formik.values.email}
+          name="newEmail"
+          value={formik.values.newEmail}
           onChange={formik.handleChange}
           placeholder="john.doe@company.com"
           className="input mt-2"
           onBlur={formik.handleBlur}
         />
         <div className="text-xs text-red-400">
-          {formik.touched.email && formik.errors.email ? (
-            formik.errors.email
+          {formik.touched.newEmail && formik.errors.newEmail ? (
+            formik.errors.newEmail
           ) : (
             <div className="mb-6"></div>
           )}
         </div>
         <label
-          htmlFor="password"
+          htmlFor="newPassword"
           className="mt-2 block text-xs font-semibold uppercase text-gray-600"
         >
-          Passord
+          Nytt passord
         </label>
         <input
-          id="password"
+          id="newPassword"
           type="password"
-          name="password"
-          value={formik.values.password}
+          name="newPassword"
+          value={formik.values.newPassword}
           onChange={formik.handleChange}
           placeholder="********"
           className="input mt-2"
           onBlur={formik.handleBlur}
         />
         <div className="text-xs text-red-400">
-          {formik.touched.password && formik.errors.password ? (
-            formik.errors.password
+          {formik.touched.newPassword && formik.errors.newPassword ? (
+            formik.errors.newPassword
           ) : (
             <div className="mb-6"></div>
+          )}
+        </div>
+        <label
+          htmlFor="confirmNewPassword"
+          className="mt-2 block text-xs font-semibold uppercase text-gray-600"
+        >
+          Bekreft nytt passord
+        </label>
+        <input
+          id="confirmNewPassword"
+          type="newPassword"
+          name="confirmNewPassword"
+          value={formik.values.confirmNewPassword}
+          onChange={formik.handleChange}
+          placeholder="********"
+          className="input mt-2"
+          onBlur={formik.handleBlur}
+        />
+        <div className="text-xs text-red-400">
+          {formik.touched.confirmNewPassword &&
+          formik.errors.confirmNewPassword ? (
+            formik.errors.confirmNewPassword
+          ) : (
+            <div className="mb-4"></div>
           )}
         </div>
         <div className="flex items-center space-x-2">
@@ -178,4 +219,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default UpdateForm;
