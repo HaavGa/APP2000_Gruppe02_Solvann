@@ -25,7 +25,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
   await user.remove();
 
-  res.status(200).json({ user }).select('-password');
+  res.status(200).json( user ).select('-password');
 });
 
 const getUser = asyncHandler(async (req, res) => {
