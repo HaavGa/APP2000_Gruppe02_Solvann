@@ -25,7 +25,7 @@ const SignupForm = () => {
         .max(20, "Etternavnet må være på mindre enn 20 bokstaver")
         .required("Vennligst skriv inn etternavnet"),
       email: Yup.string()
-        .email("Ugyldig epostadresse")
+        .matches(/[a-zA-Z]+@solvann.no/, "Ikke gyldig solvann-adresse")
         .required("Vennligst skriv inn eposten"),
       password: Yup.string()
         .required("Vennligst skriv inn passordet")
@@ -47,7 +47,7 @@ const SignupForm = () => {
     },
   });
   const submitHandler = (values) => {
-    const baseUrl = "https://solvann.cyclic.app/api/users/";
+    const baseUrl = "https://solvann.cyclic.app/api/users/new";
     const data = ({ firstName, lastName, email, password, isAdmin } = values);
     try {
       axios.post(`${baseUrl}`, data);
@@ -57,7 +57,7 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="w-1/3 rounded-lg bg-white p-12">
+    <div className="w-[28rem] rounded-lg bg-white p-12">
       <h1 className="text-xl font-semibold">Legg til bruker til Solvann</h1>
       <form onSubmit={formik.handleSubmit} className="mt-6">
         <div className="flex justify-between gap-3">
