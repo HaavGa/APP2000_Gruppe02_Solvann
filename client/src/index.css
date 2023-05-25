@@ -115,3 +115,35 @@ body {
     opacity: 0;
   }
 }
+
+@keyframes clockwiseSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes antiClockwiseSpin {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.clockwise-spin {
+  animation-duration: 9s;
+  animation-iteration-count: infinite;
+  animation-name: clockwiseSpin;
+  animation-timing-function: linear;
+}
+
+.anticlockwise-spin {
+  animation-duration: 9s;
+  animation-iteration-count: infinite;
+  animation-name: antiClockwiseSpin;
+  animation-timing-function: linear;
+}

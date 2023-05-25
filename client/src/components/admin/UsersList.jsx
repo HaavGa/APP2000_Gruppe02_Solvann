@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import Spinner from "../Spinner";
+import UserSilhouette from "../../images/user-sihouette.png";
 
 const UsersList = ({ users, loading, updateUser, deleteUser }) => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -48,9 +49,9 @@ const UsersList = ({ users, loading, updateUser, deleteUser }) => {
                   <td className="flex items-center whitespace-nowrap p-4">
                     <div className="flex items-center space-x-4">
                       <img
-                        className="h-8 w-8 rounded"
-                        src="https://demos.creative-tim.com/soft-ui-flowbite/images/users/neil-sims.png"
-                        alt="Neil Sims avatar"
+                        className="h-8 w-8 rounded outline outline-2"
+                        src={UserSilhouette}
+                        alt="Profilbilde"
                       />
                       <div className="text-left text-sm font-normal text-gray-500">
                         <div className="text-base font-semibold text-gray-900">

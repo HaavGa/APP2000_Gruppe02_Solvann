@@ -13,7 +13,7 @@ const SignupForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      isAdmin: "",
+      isAdmin: false,
     },
 
     // validere form
@@ -47,9 +47,10 @@ const SignupForm = () => {
     },
   });
   const submitHandler = (values) => {
-    const baseUrl = "https://solvann.cyclic.app/api/users/new";
+    const baseUrl = "https://solvann.cyclic.app/api/users/";
     const data = ({ firstName, lastName, email, password, isAdmin } = values);
     try {
+      console.log(isAdmin);
       axios.post(`${baseUrl}`, data);
     } catch (err) {
       console.log(err);
@@ -74,7 +75,7 @@ const SignupForm = () => {
               name="firstName"
               value={formik.values.firstName}
               onChange={formik.handleChange}
-              placeholder="John"
+              placeholder="Ola"
               className="input mt-2"
               onBlur={formik.handleBlur}
             />
@@ -99,7 +100,7 @@ const SignupForm = () => {
               name="lastName"
               value={formik.values.lastName}
               onChange={formik.handleChange}
-              placeholder="Doe"
+              placeholder="Nordmann"
               className="input mt-2"
               onBlur={formik.handleBlur}
             />
@@ -124,7 +125,7 @@ const SignupForm = () => {
           name="email"
           value={formik.values.email}
           onChange={formik.handleChange}
-          placeholder="john.doe@company.com"
+          placeholder="onordmann@solvann.no"
           className="input mt-2"
           onBlur={formik.handleBlur}
         />
@@ -192,7 +193,7 @@ const SignupForm = () => {
             id="isAdmin"
             type="checkbox"
             name="isAdmin"
-            value={false}
+            value={formik.values.isAdmin}
             onChange={formik.handleChange}
             className="mt-2 h-5 w-5 rounded-md"
           />
