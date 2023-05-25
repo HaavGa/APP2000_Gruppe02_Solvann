@@ -290,11 +290,11 @@ const reservoarStatus = asyncHandler(async (req, res) => {
   res.status(200).json({
     turbineState: [
       turbineStates.data[0].capacityUsage,
-      turbineStates.data[0].capacityUsage,
-      turbineStates.data[0].capacityUsage,
-      turbineStates.data[0].capacityUsage,
-      turbineStates.data[0].capacityUsage,
-      turbineStates.data[0].capacityUsage,
+      turbineStates.data[1].capacityUsage,
+      turbineStates.data[2].capacityUsage,
+      turbineStates.data[3].capacityUsage,
+      turbineStates.data[4].capacityUsage,
+      turbineStates.data[5].capacityUsage,
     ],
     money: groupState.data.money,
     waterLevel: groupState.data.waterLevel,
