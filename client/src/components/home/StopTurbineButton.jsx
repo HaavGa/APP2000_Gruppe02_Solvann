@@ -4,7 +4,7 @@ const StopTurbineButton = ({ setDisableCard }) => {
       onClick={() => {
         setDisableCard(true);
       }}
-      className="w-full rounded-lg border-2 border-red-500 bg-red-200 py-1 text-xl hover:bg-red-300"
+      className="w-full rounded-lg border-2 border-gray-500 bg-gray-300 py-1 text-xl font-semibold text-red-700 hover:bg-gray-400"
     >
       Stop
     </button>
