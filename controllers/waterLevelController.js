@@ -1,9 +1,19 @@
 import asyncHandler from "express-async-handler";
 import WaterLevel from "../models/waterLevelModel.js";
+import Solar from "../models/solarModel.js";
 import Axios from "axios";
+import { json } from "express";
 
 const log2Hour = asyncHandler(async (req, res) => 
 {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      GroupId: process.env.SOLVANN_USER,
+      GroupKey: process.env.SOLVANN_PASSWORD,
+    }
+  };
+
   const groupState = await Axios.get(
     'https://solvann.azurewebsites.net/api/GroupState',
     config, 
@@ -22,38 +32,23 @@ const log2Hour = asyncHandler(async (req, res) =>
     }
   });
 
+  const vannstand = groupState.data.waterLevel;
+  
+  console.log(getDateTime()[0]);
 
-  const tidspunkt = new Date()
-  const year = tidspunkt.getFullYear()
-  const month = tidspunkt.getMonth();
-  const dogn = tidspunkt.getDate()
-
-  const vannstand = groupState.data.waterLevel
-  const dato = `${year} ${month} ${dogn}`;
-  const time = tidspunkt.getHours();
-
-  const user = await WaterLevel.create({
-    vannstand,
-    dato,
-    time,
+  const maling = await WaterLevel.create({
+    waterLevel: vannstand,
   });
 
+  if(!maling){
+    res.status(400).json({ msg: "Kunne ikke laste opp verdien til databasen!" });
+    throw new Error('Kunne ikke laste opp verdien til databasen!');
+  }
+
+  res.status(200).json(maling);
 });
-
-
 
 const log24Hour = asyncHandler(async (req, res) => {
-
-  // hente ut liste over solcelle prod med 24 elementer
-
-// summere og dele på antall for gjennomsnitt
-
-// lagre 1 verdi i databasen som er gjennomsnittling solcelleprod det døgnet. +timestamp
-
-  const solar = await Solar.save();
-});
-
-const noe = asyncHandler(async (req, res) => {
 
   const config = {
     headers: {
@@ -62,6 +57,157 @@ const noe = asyncHandler(async (req, res) => {
       GroupKey: process.env.SOLVANN_PASSWORD,
     }
   };
+
+  const solarAll = await Axios.get(
+    'https://solvann.azurewebsites.net/api/Solar/all',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
+  let sum = 0;
+
+  const solardata = solarAll.data;
+  const lastValue = solardata.length-1;
+
+  for(let i = 0; i < 24; i++)
+    sum += solardata[lastValue-i];
+  
+  const avg = sum/24.0;
+
+  const solar = await Solar.create({
+    avgOutput: avg,
+  });
+
+  if(!solar){
+    res.status(400).json({ msg: "Kunne ikke laste opp verdien til databasen!"});
+    throw new Error('Kunne ikke laste opp verdien til databasen!');
+  }
+
+  res.status(200).json(solar);
+
+});
+
+const reservoarStatus = asyncHandler(async (req, res) => {
+
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      GroupId: process.env.SOLVANN_USER,
+      GroupKey: process.env.SOLVANN_PASSWORD,
+    }
+  };
+
+  const turbineStates = await Axios.get(
+    'https://solvann.azurewebsites.net/api/Turbines',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+  
+
+  const groupState = await Axios.get(
+    'https://solvann.azurewebsites.net/api/GroupState',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
+  const powerPriceAll = await Axios.get(
+    'https://solvann.azurewebsites.net/api/PowerPrice/all',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
+  const waterInflux = await Axios.get(
+    'https://solvann.azurewebsites.net/api/WaterInflux',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
+
+  res.status(200).json({
+    turbineState: [
+      turbineStates.data[0].capacityUsage,
+      turbineStates.data[1].capacityUsage,
+      turbineStates.data[2].capacityUsage,
+      turbineStates.data[3].capacityUsage,
+      turbineStates.data[4].capacityUsage,
+      turbineStates.data[5].capacityUsage,
+    ],
+    money: groupState.data.money,
+    waterLevel: groupState.data.waterLevel,
+    environmentCost: groupState.data.environmentCost,
+    power: turbineStates.data[0].capacityUsage * 41.4 * 1.3, // kWh/s
+    
+    waterInflux: waterInflux.data,
+    //solar: getMalinger(solarAll.data),
+    powerPrice: getMalinger(powerPriceAll.data),
+
+  });
+
+});
+
+const noe = asyncHandler(async (req, res) => {
+
+  
   
   /*
   
@@ -235,132 +381,6 @@ const noe = asyncHandler(async (req, res) => {
 */
 });
 
-
-
-const reservoarStatus = asyncHandler(async (req, res) => {
-
-  const config = {
-    headers: {
-      Accept: 'application/json',
-      GroupId: process.env.SOLVANN_USER,
-      GroupKey: process.env.SOLVANN_PASSWORD,
-    }
-  };
-
-  const turbineStates = await Axios.get(
-    'https://solvann.azurewebsites.net/api/Turbines',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
-  
-
-  const groupState = await Axios.get(
-    'https://solvann.azurewebsites.net/api/GroupState',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
-
-  const powerPriceAll = await Axios.get(
-    'https://solvann.azurewebsites.net/api/PowerPrice/all',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
-  
-  const solarAll = await Axios.get(
-    'https://solvann.azurewebsites.net/api/Solar/all',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
-
-  const waterInfluxAll = await Axios.get(
-    'https://solvann.azurewebsites.net/api/WaterInflux',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
-
-
-  res.status(200).json({
-    turbineState: [
-      turbineStates.data[0].capacityUsage,
-      turbineStates.data[1].capacityUsage,
-      turbineStates.data[2].capacityUsage,
-      turbineStates.data[3].capacityUsage,
-      turbineStates.data[4].capacityUsage,
-      turbineStates.data[5].capacityUsage,
-    ],
-    money: groupState.data.money,
-    waterLevel: groupState.data.waterLevel,
-    environmentCost: groupState.data.environmentCost,
-    power: turbineStates.data[0].capacityUsage * 41.4 * 1.3, // kWh/s
-    
-    waterInflux: waterInfluxAll.data,
-    solar: getMalinger(solarAll.data),
-    powerPrice: getMalinger(powerPriceAll.data),
-
-  });
-
-});
-
 function getMalinger (array) {
 
   const timer = new Date().getHours();
@@ -389,7 +409,21 @@ function getMalinger (array) {
 
   return output;
 }
+function getDateTime() {
+  const tidspunkt = new Date();
+  const year = tidspunkt.getFullYear();
+  const month = tidspunkt.getMonth();
+  const dogn = tidspunkt.getDate();
 
+  const dato = `${year} ${month} ${dogn}`;
+  const time = tidspunkt.getHours();
+  const output = [
+    dato,
+    time
+  ];
+
+  return output
+}
 
 
 
@@ -418,4 +452,6 @@ export {
   fetchWaterLevel,
   reservoarStatus,
   noe,
+  log2Hour,
+  log24Hour,
 }
