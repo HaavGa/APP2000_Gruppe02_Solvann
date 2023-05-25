@@ -300,10 +300,10 @@ const reservoarStatus = asyncHandler(async (req, res) => {
     waterLevel: groupState.data.waterLevel,
     environmentCost: groupState.data.environmentCost,
     power: turbineStates.data[0].capacityUsage * 41.4 * 1.3, // kWh/s
-    //powerPrice: powerPriceAll.data,
-    //solar: solarAll.data,
+    powerPrice: powerPriceAll.data[solarAll.data.length-1],
+    solar: solarAll.data[solarAll.data.length-1],
     waterInflux: waterInfluxAll.data[waterInfluxAll.data.length-1],
-    
+
 
   });
 
