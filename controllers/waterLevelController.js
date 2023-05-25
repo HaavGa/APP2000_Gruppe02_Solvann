@@ -4,8 +4,9 @@ import Solar from "../models/solarModel.js";
 import Axios from "axios";
 import { json } from "express";
 
-const test = asyncHandler(async (req, res) => {
-  res.status(200).json({ msg: "hallo" });
+const test = asyncHandler(async (req, res) => 
+{ 
+  res.status(200).json({ msg: "hei" });
 });
 
 const log2Hour = asyncHandler(async (req, res) => 
