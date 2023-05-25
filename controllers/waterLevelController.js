@@ -4,13 +4,35 @@ import Solar from "../models/solarModel.js";
 import Axios from "axios";
 import { json } from "express";
 
-const test = asyncHandler(async (req, res) => 
-{ 
-  res.status(200).json({ msg: "hei" });
+const updateView = asyncHandler(async (req, res) => { 
+
+   /*
+  - vannstand
+  - pengertjent
+  - miljøkostnader
+
+  - nyeste waterinlux
+  
+  - power out - power: turbineStates.data[0].capacityUsage * 41.4 * 1.3, // kWh/s
+
+  -solarArray
+  -vannstandArray
+  -PowerpriceArray
+  */
+
+
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      GroupId: process.env.SOLVANN_USER,
+      GroupKey: process.env.SOLVANN_PASSWORD,
+    }
+  };
+
+
 });
 
-const log2Hour = asyncHandler(async (req, res) => 
-{
+const log2Hour = asyncHandler(async (req, res) => {
   const config = {
     headers: {
       Accept: 'application/json',
@@ -46,6 +68,22 @@ const log2Hour = asyncHandler(async (req, res) =>
   if(!maling){
     res.status(400).json({ msg: "Kunne ikke laste opp verdien til databasen!" });
     throw new Error('Kunne ikke laste opp verdien til databasen!');
+  }
+  const url = "https://solvann.cyclic.app/api/turbine/all";
+
+  if(vannstand > 32.5){
+    await Axios.post(
+      url, 
+      { capacityUsage: 0.08 }, 
+      config
+      ).catch((err) => console.log(err));
+  }
+  else{
+    await Axios.post(
+      url,
+      { capacityUsage: -0.08}, 
+      config)
+      .catch((err) => console.log(err));
   }
 
   res.status(200).json(maling);
@@ -102,7 +140,9 @@ const log24Hour = asyncHandler(async (req, res) => {
 
 });
 
-const reservoarStatus = asyncHandler(async (req, res) => {
+const loadReservoar = asyncHandler(async (req, res) => {
+
+ 
 
   const config = {
     headers: {
@@ -130,7 +170,6 @@ const reservoarStatus = asyncHandler(async (req, res) => {
     }
   });
   
-
   const groupState = await Axios.get(
     'https://solvann.azurewebsites.net/api/GroupState',
     config, 
@@ -149,8 +188,10 @@ const reservoarStatus = asyncHandler(async (req, res) => {
     }
   });
 
-  const powerPriceAll = await Axios.get(
-    'https://solvann.azurewebsites.net/api/PowerPrice/all',
+
+
+  const solarAll = await Axios.get(
+    'https://solvann.azurewebsites.net/api/Solar/all',
     config, 
   )
   .catch(function (error) {
@@ -185,6 +226,36 @@ const reservoarStatus = asyncHandler(async (req, res) => {
     }
   });
 
+  const powerPriceAll = await Axios.get(
+    'https://solvann.azurewebsites.net/api/PowerPrice/all',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+   /*
+  - henter turbinstatus
+  - vannstand
+  - pengertjent
+  - miljøkostnader
+  - nyeste waterinlux
+
+  -solarArray
+  -vannstandArray
+  -PowerpriceArray
+  */
+  
+
 
   res.status(200).json({
     turbineState: [
@@ -195,13 +266,12 @@ const reservoarStatus = asyncHandler(async (req, res) => {
       turbineStates.data[4].capacityUsage,
       turbineStates.data[5].capacityUsage,
     ],
-    money: groupState.data.money,
     waterLevel: groupState.data.waterLevel,
+    money: groupState.data.money,
     environmentCost: groupState.data.environmentCost,
-    power: turbineStates.data[0].capacityUsage * 41.4 * 1.3, // kWh/s
     
     waterInflux: waterInflux.data,
-    //solar: getMalinger(solarAll.data),
+    solar: getMalinger(solarAll.data),
     powerPrice: getMalinger(powerPriceAll.data),
 
   });
@@ -291,15 +361,12 @@ const noe = asyncHandler(async (req, res) => {
 
 
   // Ved samme trend (lik waterInflux og flowRate) vil reservoaret nå øvre/nedre grense om x min.
-
+  
 
 
   // spørre om bruker vil avbryte automatisk endring av turbinstatus ved overstigning av optimal vannstand
 
 
-
-
-  // fortelle om de kan forvente nedgang eller økning i strømpris
 
 
 
@@ -338,22 +405,6 @@ const noe = asyncHandler(async (req, res) => {
   // vannstand er waterLevel fra groupstate * 1 000 0000 m^3
   // Det står at hver turbin kan ta imot 41.4 m^3/s. regner da med at vanntapet i reservoaret fra en turbin er 41.4m^3/s
   // vanntapet fra alle turbiner på maks kapasitet er 41.4m^3/s * 6 = 248.4 m^3/s
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*
   {
@@ -428,9 +479,6 @@ function getDateTime() {
   return output
 }
 
-
-
-
 // @desc    Fetch measurement
 // @route   GET /api/water/last
 // @access  Private
@@ -453,9 +501,8 @@ const fetchWaterLevel = asyncHandler(async (req, res) => {
 
 export {
   fetchWaterLevel,
-  reservoarStatus,
+  loadReservoar,
   noe,
   log2Hour,
   log24Hour,
-  test,
 }
