@@ -16,7 +16,7 @@ const Toggle = ({ disableCard, enabled, setEnabled }) => {
         className={`${enabled ? "bg-yellow-500" : "bg-purple-500"}
                         relative inline-flex h-[28px] w-[52px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 ${
                           disableCard
-                            ? "pointer-events-none bg-gray-700/70"
+                            ? " pointer-events-none bg-gray-700/70"
                             : null
                         }`}
       >
