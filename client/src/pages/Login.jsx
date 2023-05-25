@@ -2,23 +2,30 @@ import axios from "axios";
 import { useFormik } from "formik";
 import logo from "../images/solvann-logo.png";
 import { useSignIn } from "react-auth-kit";
+import * as Yup from "yup";
+import YupPassword from "yup-password";
+import { useEffect, useState } from "react";
+YupPassword(Yup);
 
 const Login = () => {
   const signIn = useSignIn();
+  const [error, setError] = useState("");
+
   // formik logikk
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-
     // submit form
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       submitHandler(values);
+      resetForm(values);
     },
   });
+
   const submitHandler = async (values) => {
-    const baseUrl = "https://solvann.cyclic.app/api/users/auth";
+    const baseUrl = "https://solvann.cyclic.app/api/users/login";
     const data = values;
     try {
       console.log(import.meta.env.PROD);
@@ -32,6 +39,7 @@ const Login = () => {
         authState: { _id: response.data._id },
       });
     } catch (err) {
+      setError("Feil brukernavn eller passord!");
       console.log(err);
     }
   };
@@ -44,6 +52,8 @@ const Login = () => {
             <h1 className="mt-4 text-2xl">Solvann</h1>
           </div>
           <form onSubmit={formik.handleSubmit}>
+            <div className="my-3 text-center text-red-400">{error}</div>
+
             <div className="mb-4 text-lg">
               <input
                 id="email"

@@ -12,14 +12,13 @@ const Admin = () => {
   const [savedValues, setSavedValues] = useState(null);
 
   useEffect(() => {
-    (async () => {
+    const fetchUsers = async () => {
       setLoading(true);
-      const response = await axios.get(
-        "https://solvann.cyclic.app/api/users/all"
-      );
+      const response = await axios.get("https://solvann.cyclic.app/api/users/");
       setUsers(response.data);
       setLoading(false);
-    })();
+    };
+    fetchUsers();
   }, []);
 
   const updateUser = async (_id) => {
@@ -28,9 +27,10 @@ const Admin = () => {
     setLoadingEdit(true);
     try {
       const response = await axios.patch(
-        "https://solvann.cyclic.app/api/users/profile",
+        "https://solvann.cyclic.app/api/users/",
         { id: _id }
       );
+      console.log(response.data);
       setSavedValues(response.data);
       setLoadingEdit(false);
     } catch (err) {
@@ -40,19 +40,18 @@ const Admin = () => {
 
   const deleteUser = async (_id) => {
     console.log(_id);
-    setLoadingEdit(true);
     try {
-      await axios.delete("https://solvann.cyclic.app/api/users/delete", {
-        id: _id,
-      });
-      setLoadingEdit(false);
+      const response = await axios.delete(
+        `https://solvann.cyclic.app/api/users/${_id}`
+      );
+      console.log(response);
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.message);
     }
   };
 
   return (
-    <div className="bg-gray-700 py-3 text-center">
+    <div className="h-screen bg-gray-700 py-3 text-center">
       <div className="mt-10 flex justify-center gap-2 ">
         <UsersList
           users={users}

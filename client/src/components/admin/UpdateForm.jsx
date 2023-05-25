@@ -14,7 +14,7 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
     );
   }
 
-  const { id, firstName, lastName, email, password, confirmPassword } =
+  const { id, firstName, lastName, email, password, confirmPassword, isAdmin } =
     savedValues;
   const formik = useFormik({
     initialValues: {
@@ -24,6 +24,7 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
       newEmail: email,
       newPassword: password,
       confirmNewPassword: confirmPassword,
+      isAdmin: isAdmin,
     },
     enableReinitialize: true,
     // validere form
@@ -58,9 +59,7 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
   });
   const submitHandler = (values) => {
     try {
-      const baseUrl = "https://solvann.cyclic.app/api/users/profile";
-      // const data = ({ id, firstName, lastName, newEmail, newPassword } =
-      //   values);
+      const baseUrl = "https://solvann.cyclic.app/api/users/";
       console.log(values);
 
       axios.patch(`${baseUrl}`, values);
@@ -206,7 +205,7 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
             id="admin"
             type="checkbox"
             name="admin"
-            value={false}
+            value={formik.values.isAdmin}
             onChange={formik.handleChange}
             className="mt-2 h-5 w-5 rounded-md"
           />
