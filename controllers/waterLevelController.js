@@ -1,6 +1,57 @@
 import asyncHandler from "express-async-handler";
-import { waterLevelModel as waterLevel } from "../models/waterLevelModel.js";
+import WaterLevel from "../models/waterLevelModel.js";
 import Axios from "axios";
+
+const log2Hour = asyncHandler(async (req, res) => 
+{
+  const groupState = await Axios.get(
+    'https://solvann.azurewebsites.net/api/GroupState',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
+
+  const tidspunkt = new Date()
+  const year = tidspunkt.getFullYear()
+  const month = tidspunkt.getMonth();
+  const dogn = tidspunkt.getDate()
+
+  const vannstand = groupState.data.waterLevel
+  const dato = `${year} ${month} ${dogn}`;
+  const time = tidspunkt.getHours();
+
+  const user = await WaterLevel.create({
+    vannstand,
+    dato,
+    time,
+  });
+
+});
+
+
+
+const log24Hour = asyncHandler(async (req, res) => {
+
+  // hente ut liste over solcelle prod med 24 elementer
+
+// summere og dele på antall for gjennomsnitt
+
+// lagre 1 verdi i databasen som er gjennomsnittling solcelleprod det døgnet. +timestamp
+
+  const solar = await Solar.save();
+});
 
 const noe = asyncHandler(async (req, res) => {
 
@@ -182,8 +233,9 @@ const noe = asyncHandler(async (req, res) => {
   }
 
 */
-
 });
+
+
 
 const reservoarStatus = asyncHandler(async (req, res) => {
 
@@ -269,7 +321,7 @@ const reservoarStatus = asyncHandler(async (req, res) => {
   });
 
   const waterInfluxAll = await Axios.get(
-    'https://solvann.azurewebsites.net/api/WaterInflux/all',
+    'https://solvann.azurewebsites.net/api/WaterInflux',
     config, 
   )
   .catch(function (error) {
@@ -300,14 +352,46 @@ const reservoarStatus = asyncHandler(async (req, res) => {
     waterLevel: groupState.data.waterLevel,
     environmentCost: groupState.data.environmentCost,
     power: turbineStates.data[0].capacityUsage * 41.4 * 1.3, // kWh/s
-    powerPrice: powerPriceAll.data[solarAll.data.length-1],
-    solar: solarAll.data[solarAll.data.length-1],
-    waterInflux: waterInfluxAll.data[waterInfluxAll.data.length-1],
-
+    
+    waterInflux: waterInfluxAll.data,
+    solar: getMalinger(solarAll.data),
+    powerPrice: getMalinger(powerPriceAll.data),
 
   });
 
 });
+
+function getMalinger (array) {
+
+  const timer = new Date().getHours();
+  const modulo = timer % 2;
+  const startTime = timer - modulo
+  const startverdi = array.length-1 - modulo;
+  const antMaling = startTime / 2 + 12;
+
+  let tidspunkt = startTime;
+  let output = [];
+
+  for(let i = 0; i < antMaling; i++)
+  {
+    //const time = tidspunkt
+    const maling = array[startverdi-i*2]
+    
+    output.push({
+      tidspunkt,
+      maling
+    })
+    
+    tidspunkt -= 2;
+    if(tidspunkt < 0)
+      tidspunkt = 24;
+  }
+
+  return output;
+}
+
+
+
 
 
 // @desc    Fetch measurement
@@ -332,6 +416,6 @@ const fetchWaterLevel = asyncHandler(async (req, res) => {
 
 export {
   fetchWaterLevel,
-  noe,
   reservoarStatus,
-};
+  noe,
+}

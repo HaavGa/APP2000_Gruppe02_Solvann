@@ -9,6 +9,6 @@ import {
 
 router.route('/last').get(fetchWaterLevel);
 router.route('/noe').get(noe);
-router.route('/').get(reservoarStatus)
+router.route('/').get(reservoarStatus);
 
 export default router;

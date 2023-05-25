@@ -71,7 +71,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   DELETE /api/version/users
 // @access  Private
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById({ _id: req.params.id });
+  const user = await User.findById({ _id: req.params.id }).select('-password');
   if (!user) {
     res.status(404);
     throw new Error({ Error: "User not found." });
