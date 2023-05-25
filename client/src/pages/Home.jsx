@@ -50,12 +50,12 @@ const Home = () => {
     },
   ];
 
-  // useEffect(() => {
-  //   const waterLevel = setInterval(() => {
-  //     setWaterLevel(getWaterLevel());
-  //   }, 3000);
-  //   return () => clearInterval(waterLevel);
-  // }, [waterLevel]);
+  useEffect(() => {
+    const waterLevel = setInterval(() => {
+      setWaterLevel(getWaterLevel());
+    }, 3000);
+    return () => clearInterval(waterLevel);
+  }, [waterLevel]);
   return (
     <div className="flex h-screen bg-gray-700">
       <div className="grid grid-cols-2 py-6">
