@@ -1,16 +1,20 @@
 import mongoose from "mongoose";
 
-const Schema = mongoose.Schema;
-
-const waterLevelSchema = new Schema({
-  level: {
+const waterLevelSchema = mongoose.Schema({
+  waterLevel: {
     type: Number,
     required: [true, "Please add water level."],
   },
+  dato: {
+    type: String,
+    required: [true, "Vennligst fyll ut dato. [yyyy m(m) d(d)]"],
+  },
   time: {
-    type: Date,
-    default: Date.now,
+    type: Number,
+    required: [true, "Vennligst fyll inn time"],
   },
 });
 
-export const waterLevelModel = mongoose.model("waterlevel", waterLevelSchema);
+const WaterLevel = mongoose.model("WaterLevel", waterLevelSchema);
+
+export default WaterLevel;
