@@ -4,6 +4,10 @@ import Solar from "../models/solarModel.js";
 import Axios from "axios";
 import { json } from "express";
 
+const test = asyncHandler(async (req, res) => {
+  res.status(200).json({ msg: "hallo" });
+});
+
 const log2Hour = asyncHandler(async (req, res) => 
 {
   const config = {
@@ -33,8 +37,6 @@ const log2Hour = asyncHandler(async (req, res) =>
   });
 
   const vannstand = groupState.data.waterLevel;
-  
-  console.log(getDateTime()[0]);
 
   const maling = await WaterLevel.create({
     waterLevel: vannstand,
@@ -454,4 +456,5 @@ export {
   noe,
   log2Hour,
   log24Hour,
+  test,
 }

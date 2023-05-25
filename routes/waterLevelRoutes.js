@@ -7,6 +7,7 @@ import {
   reservoarStatus,
   log2Hour,
   log24Hour,
+  test,
 } from "../controllers/waterLevelController.js";
 
 router.route('/last').get(fetchWaterLevel);
@@ -16,5 +17,7 @@ router.route('/log2Hour')
   .get(log2Hour);
 router.route('/log24Hour')
   .get(log24Hour);
+router.route('/test')
+  .get(test)
 
 export default router;
