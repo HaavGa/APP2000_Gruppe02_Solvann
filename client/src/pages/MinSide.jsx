@@ -9,7 +9,7 @@ const MinSide = () => {
       <h1 className="text-4xl">Min side</h1>
       <Link to="/">
         <button
-          className="mt-10 rounded-lg bg-red-600 p-2"
+          className="btn bg-red-600 hover:bg-red-700"
           onClick={() => signOut()}
         >
           Logg ut
