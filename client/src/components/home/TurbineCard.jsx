@@ -1,16 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Toggle from "./Toggle";
 import StopTurbineButton from "./StopTurbineButton";
 import StartActionButton from "./StartActionButton";
-import Turbine from "./Turbine";
-import { string } from "yup";
 
 const TurbineCard = ({ id, status, load, powerOut }) => {
   const [pump, setPump] = useState(true);
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
+  const [msg, setMsg] = useState("");
 
   const handleChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
@@ -26,17 +25,28 @@ const TurbineCard = ({ id, status, load, powerOut }) => {
     // const baseUrl = "https://solvann.cyclic.app/api/users/";
     // try {
     //   console.log(values);
-    //   axios.patch(`${baseUrl}`, values);
+    //   axios.post(`${baseUrl}`, values);
     // } catch (err) {
     //   console.log(err);
     // }
   };
 
+  // useEffect(() => {
+  //   const msgInterval = setInterval(async () => {
+  //     const response = await axios.get(
+  //       "https://solvann.cyclic.app/api/water/test"
+  //     );
+  //     setMsg(response.data.msg);
+  //   }, 10000);
+  //   return () => clearInterval(msgInterval);
+  // }, [msg]);
+
   return (
     <div className="w-72">
-      <div className="my-3 flex justify-center">
+      {/* <div className="my-3 flex justify-center">
         <Turbine status={status} />
-      </div>
+      </div> */}
+      {console.log(msg)}
       <div className="flex">
         <div className="relative rounded-xl bg-white shadow-xl">
           {disableCard ? (

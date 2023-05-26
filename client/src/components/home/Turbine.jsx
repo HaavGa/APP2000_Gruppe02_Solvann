@@ -1,4 +1,4 @@
-import TurbineImg from "../../images/turbine.png";
+import TurbineImg from "../../images/turbine2.png";
 const Turbine = () => {
   return (
     <>

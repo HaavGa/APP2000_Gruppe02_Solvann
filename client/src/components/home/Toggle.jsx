@@ -6,14 +6,14 @@ const Toggle = ({ disableCard, enabled, setEnabled }) => {
     <div className=" flex items-center justify-between gap-3 py-3 text-lg">
       <h2>{enabled ? "Pumpe ut:" : "Slippe inn:"}</h2>
       {enabled ? (
-        <BsArrowRight className={"text-3xl text-yellow-500"} />
+        <BsArrowRight className={"text-3xl"} />
       ) : (
-        <BsArrowLeft className={"text-3xl text-purple-500"} />
+        <BsArrowLeft className={"text-3xl"} />
       )}
       <Switch
         checked={enabled}
         onChange={setEnabled}
-        className={`${enabled ? "bg-yellow-500" : "bg-purple-500"}
+        className={`${enabled ? "bg-cyan-700" : "bg-fuchsia-700"}
                         relative inline-flex h-[28px] w-[52px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 ${
                           disableCard
                             ? " pointer-events-none bg-gray-700/70"
