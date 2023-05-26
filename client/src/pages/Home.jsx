@@ -4,6 +4,7 @@ import WaterReservoirCard from "../components/home/WaterReservoirCard";
 import Turbine from "../components/home/Turbine";
 import WaterReservoir from "../components/home/WaterReservoir";
 import { useState, useEffect } from "react";
+import PopoverChangeLoad from "../components/home/PopoverChangeLoad";
 
 const Home = () => {
   const [waterLevel, setWaterLevel] = useState(0);
@@ -50,12 +51,12 @@ const Home = () => {
     },
   ];
 
-  useEffect(() => {
-    const waterLevel = setInterval(() => {
-      setWaterLevel(getWaterLevel());
-    }, 3000);
-    return () => clearInterval(waterLevel);
-  }, [waterLevel]);
+  // useEffect(() => {
+  //   const waterLevel = setInterval(() => {
+  //     setWaterLevel(getWaterLevel());
+  //   }, 3000);
+  //   return () => clearInterval(waterLevel);
+  // }, [waterLevel]);
   return (
     <div className="flex h-screen bg-gray-700">
       <div className="grid grid-cols-2 py-6">

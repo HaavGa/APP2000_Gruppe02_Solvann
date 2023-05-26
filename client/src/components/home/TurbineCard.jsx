@@ -4,14 +4,14 @@ import { useFormik } from "formik";
 import Toggle from "./Toggle";
 import StopTurbineButton from "./StopTurbineButton";
 import StartActionButton from "./StartActionButton";
+import PopoverChangeLoad from "./PopoverChangeLoad";
 
 const TurbineCard = ({ id, status, load, powerOut }) => {
   const [pump, setPump] = useState(true);
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
-  const [msg, setMsg] = useState("");
 
-  const handleChange = (e) => {
+  const allowNumbers = (e) => {
     const value = e.target.value.replace(/\D/g, "");
     setNumber(value);
   };
@@ -46,7 +46,6 @@ const TurbineCard = ({ id, status, load, powerOut }) => {
       {/* <div className="my-3 flex justify-center">
         <Turbine status={status} />
       </div> */}
-      {console.log(msg)}
       <div className="flex">
         <div className="relative rounded-xl bg-white shadow-xl">
           {disableCard ? (
@@ -76,14 +75,14 @@ const TurbineCard = ({ id, status, load, powerOut }) => {
                 {status > 0 ? "Positiv" : status < 0 ? "Negative" : "Stop"}
               </p>
               <h2>Load:</h2>
-              <form onSubmit={handleSubmit} className="text-right">
+              {/* <form onSubmit={handleSubmit} className="text-right">
                 <input
                   id="load"
                   name="load"
                   className="w-8 rounded-md border-2 border-black text-center"
                   value={number}
                   maxLength={2}
-                  onChange={handleChange}
+                  onChange={allowNumbers}
                 />{" "}
                 %
                 <button
@@ -92,7 +91,8 @@ const TurbineCard = ({ id, status, load, powerOut }) => {
                 >
                   Lagre
                 </button>
-              </form>
+              </form> */}
+              <PopoverChangeLoad number={number} allowNumbers={allowNumbers} />
               <h2>Power out:</h2>
               <p className="text-right">{powerOut} MWh/s</p>
             </div>
