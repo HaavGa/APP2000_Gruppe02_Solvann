@@ -1,6 +1,6 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import logo from "../images/solvann-logo.png";
-import { UserIcon } from "@heroicons/react/24/outline";
+import { HiOutlineUser } from "react-icons/hi";
 
 export default function Navbar() {
   return (
@@ -34,7 +34,7 @@ export default function Navbar() {
           Admin
         </CustomLink>
         <CustomImg to="minside">
-          <UserIcon className="h-9 w-9 p-1" />
+          <HiOutlineUser className="h-9 w-9 p-1 stroke-1" />
         </CustomImg>
       </ul>
     </nav>
@@ -66,8 +66,8 @@ function CustomImg({ to, children, ...props }) {
     <li
       className={
         isActive
-          ? "rounded-full ring-2 ring-amber-500"
-          : "rounded-full ring-1 ring-white hover:rounded-full hover:ring-2"
+          ? "rounded-full ring-[2.5px] ring-amber-500"
+          : "rounded-full ring-[1.5px] ring-white hover:rounded-full hover:ring-2"
       }
     >
       <Link to={to} {...props}>
