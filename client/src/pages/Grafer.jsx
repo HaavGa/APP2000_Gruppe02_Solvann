@@ -1,6 +1,5 @@
 import WaterChart from "../components/charts/WaterChart";
 import PowerpriceChart from "../components/charts/PowerpriceChart";
-import WeekPicker from "../components/WeekPicker";
 
 const Grafer = () => {
   return (
@@ -16,11 +15,9 @@ const Grafer = () => {
         </button>
       </div> */}
       <div className="pt-5">
-        <WeekPicker />
         <WaterChart />
       </div>
       <div className="pt-5">
-        <WeekPicker />
         <PowerpriceChart />
       </div>
     </div>

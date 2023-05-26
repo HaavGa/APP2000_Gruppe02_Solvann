@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
-import Spinner from "../Spinner";
-import UserSilhouette from "../../images/user-sihouette.png";
+import Spinner from "../Spinner"
+import { ImUserTie } from "react-icons/im"
 
 const UsersList = ({ users, loading, updateUser, deleteUser }) => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -48,11 +48,7 @@ const UsersList = ({ users, loading, updateUser, deleteUser }) => {
                 <tr className=" hover:bg-gray-100">
                   <td className="flex items-center whitespace-nowrap p-4">
                     <div className="flex items-center space-x-4">
-                      <img
-                        className="h-8 w-8 rounded outline outline-2"
-                        src={UserSilhouette}
-                        alt="Profilbilde"
-                      />
+                      <ImUserTie className="h-8 w-8 rounded outline outline-2" />
                       <div className="text-left text-sm font-normal text-gray-500">
                         <div className="text-base font-semibold text-gray-900">
                           {firstName} {lastName}
