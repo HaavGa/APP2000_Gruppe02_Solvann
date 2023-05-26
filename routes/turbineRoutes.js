@@ -8,9 +8,8 @@ import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
+router.post('/:turbinNr', protect, setTurbine)
 router.route('/')
-    .post(protect, setTurbine);
-router.route('/all')
     .post(protect, isAdmin, setAll)
     .get(protect, getAll);
 
