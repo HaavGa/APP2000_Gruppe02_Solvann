@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import WaterLevel from "../models/waterLevelModel.js";
 import Solar from "../models/solarModel.js";
 import Axios from "axios";
-import { json } from "express";
+import generateToken from '../utils/generateToken.js';
 
 const updateView = asyncHandler(async (req, res) => { 
 
@@ -18,6 +18,8 @@ const updateView = asyncHandler(async (req, res) => {
   -solarArray
   -vannstandArray
   -PowerpriceArray
+
+  -beregne hvor lang tid det vil ta før vannstanden er under optimal grense
   */
 
 
@@ -33,6 +35,7 @@ const updateView = asyncHandler(async (req, res) => {
 });
 
 const log2Hour = asyncHandler(async (req, res) => {
+
   const config = {
     headers: {
       Accept: 'application/json',
@@ -69,21 +72,31 @@ const log2Hour = asyncHandler(async (req, res) => {
     res.status(400).json({ msg: "Kunne ikke laste opp verdien til databasen!" });
     throw new Error('Kunne ikke laste opp verdien til databasen!');
   }
-  const url = "https://solvann.cyclic.app/api/turbine/all";
+
+  generateToken(res, "646ff8f1b8ccc41f8446ecfd");
+
+  const configSolvann = {
+    headers: {
+      Accept: 'application/json',
+      Cookie: `jwt=${res.token}`,
+    }
+  };
+  
+  const urlBouvet = "https://solvann.cyclic.app/api/turbine/all";
 
   if(vannstand > 32.5){
     await Axios.post(
-      url, 
+      urlBouvet, 
       { capacityUsage: 0.08 }, 
-      config
+      configSolvann,
       ).catch((err) => console.log(err));
   }
   else{
     await Axios.post(
-      url,
+      urlBouvet,
       { capacityUsage: -0.08}, 
-      config)
-      .catch((err) => console.log(err));
+      configSolvann
+      ).catch((err) => console.log(err));
   }
 
   res.status(200).json(maling);
