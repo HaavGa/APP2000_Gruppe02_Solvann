@@ -22,6 +22,7 @@ const updateView = asyncHandler(async (req, res) => {
   -beregne hvor lang tid det vil ta før vannstanden er under optimal grense
   */
 
+  const thisMakes100 = 100;
 
   const config = {
     headers: {
