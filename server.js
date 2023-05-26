@@ -9,7 +9,7 @@ import {
   errorHandler,
 } from "./middleware/errorMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
-import reservoarRoutes from "./routes/reservoarRoutes.js";
+import reservoarRoutes from "./routes/reservoirRoutes.js";
 import turbineRoutes from "./routes/turbineRoutes.js";
 import cors from "cors";
 
@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRoutes);
-app.use("/api/reservoar", reservoarRoutes);
+app.use("/api/reservoir", reservoarRoutes);
 app.use("/api/turbine", turbineRoutes);
 
 const __dirname = path.resolve();

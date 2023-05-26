@@ -6,7 +6,7 @@ import {
   log24Hour,
   updateGrafer,
   updateHjem,
-} from "../controllers/reservoarController.js";
+} from "../controllers/reservoirController.js";
 
 router.get('/updateHome', updateHjem);
 router.get('/updateGraphs', updateGrafer);
