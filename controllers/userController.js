@@ -37,7 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    res.status(400).json({ msg: "Bruker finnes fra før." });
+    res.status(400).json({ error: "Bruker finnes fra før." });
     throw new Error('User already exists');
   }
   
