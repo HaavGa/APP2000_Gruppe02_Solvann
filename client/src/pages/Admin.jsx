@@ -36,11 +36,12 @@ const Admin = () => {
       );
       console.log(response.data);
       setSavedValues(response.data);
+      console.log(savedValues);
       setLoadingEdit(false);
     } catch (err) {
       console.log(err.data.message);
     }
-    await fetchUsers();
+    () => fetchUsers();
   };
 
   const deleteUser = async (_id) => {
@@ -53,7 +54,7 @@ const Admin = () => {
     } catch (err) {
       console.log(err.response.data.message);
     }
-    await fetchUsers();
+    () => fetchUsers();
   };
 
   return (
@@ -65,7 +66,7 @@ const Admin = () => {
           updateUser={updateUser}
           deleteUser={deleteUser}
         />
-        {!updateForm && <SignupForm />}
+        {!updateForm && <SignupForm fetchUsers={fetchUsers} />}
         {savedValues && updateForm && (
           <UpdateForm
             loadingEdit={loadingEdit}
