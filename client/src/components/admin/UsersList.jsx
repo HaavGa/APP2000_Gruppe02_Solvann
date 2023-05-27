@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 import Spinner from "../Spinner"
 import { ImUserTie } from "react-icons/im"
 
-const UsersList = ({ users, loading, updateUser, deleteUser }) => {
+const UsersList = ({ users, isLoading, updateUser, deleteUser }) => {
   const [pageNumber, setPageNumber] = useState(0);
 
   const usersPerPage = 5;
@@ -14,7 +14,7 @@ const UsersList = ({ users, loading, updateUser, deleteUser }) => {
     setPageNumber(selected);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex w-[38rem] items-center justify-center">
         <Spinner />

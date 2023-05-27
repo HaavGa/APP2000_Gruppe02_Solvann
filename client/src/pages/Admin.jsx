@@ -6,17 +6,17 @@ import axios from "axios";
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [updateForm, setUpdateForm] = useState(false);
   const [savedValues, setSavedValues] = useState(null);
 
   const fetchUsers = async () => {
-    setLoading(true);
+    setIsLoading(true);
     try {
       const response = await axios.get("https://solvann.cyclic.app/api/users/");
       setUsers(response.data);
-      setLoading(false);
+      setIsLoading(false);
     } catch (err) {
       console.log(err.response.data.message);
     }
@@ -61,7 +61,7 @@ const Admin = () => {
       <div className="mt-10 flex justify-center gap-2 ">
         <UsersList
           users={users}
-          loading={loading}
+          isLoading={isLoading}
           updateUser={updateUser}
           deleteUser={deleteUser}
         />
