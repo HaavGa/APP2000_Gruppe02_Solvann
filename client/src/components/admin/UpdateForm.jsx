@@ -26,12 +26,12 @@ const UpdateForm = ({
       id: id,
       firstName: firstName,
       lastName: lastName,
-      newEmail: email,
-      newPassword: password,
-      confirmNewPassword: confirmPassword,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
       isAdmin: isAdmin,
     },
-    enableReinitialize: true,
+    // enableReinitialize: true,
     // validere form
     validationSchema: Yup.object({
       firstName: Yup.string()
@@ -40,16 +40,16 @@ const UpdateForm = ({
       lastName: Yup.string()
         .max(20, "Etternavnet må være på mindre enn 20 bokstaver")
         .required("Vennligst skriv inn etternavnet"),
-      newEmail: Yup.string()
+      email: Yup.string()
         .email("Ugyldig epostadresse")
         .required("Vennligst skriv inn epost"),
-      newPassword: Yup.string()
+      password: Yup.string()
         .min(10, "Passordet må inneholde minst 10 tegn")
         .minLowercase(1, "Passordet må inneholde minst en liten bokstav")
         .minUppercase(1, "Passordet må inneholde minst en stor bokstav")
         .minNumbers(1, "Passordet må inneholde minst ett tall")
         .minSymbols(1, "Passordet må inneholde minst ett symbol"),
-      confirmNewPassword: Yup.string().oneOf(
+      confirmPassword: Yup.string().oneOf(
         [Yup.ref("newPassword"), null],
         "Passordene stemmer ikke"
       ),
@@ -60,7 +60,6 @@ const UpdateForm = ({
       submitHandler(values);
       resetForm(values);
       setUpdateForm(false);
-      fetchUsers();
     },
   });
   const submitHandler = (values) => {
@@ -73,6 +72,7 @@ const UpdateForm = ({
     } catch (err) {
       console.log(err);
     }
+    () => fetchUsers();
   };
 
   return (
