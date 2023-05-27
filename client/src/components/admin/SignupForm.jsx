@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useFormik } from "formik";
+import { useState } from "react";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 YupPassword(Yup);
 
 const SignupForm = () => {
+  const [error, setError] = useState("");
   // formik logikk
   const formik = useFormik({
     initialValues: {
@@ -41,7 +43,6 @@ const SignupForm = () => {
 
     // submit form
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
       submitHandler(values);
       resetForm(values);
     },
@@ -53,7 +54,8 @@ const SignupForm = () => {
       console.log(isAdmin);
       axios.post(`${baseUrl}`, data);
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.message);
+      setError(err.response.data.message);
     }
   };
 
@@ -198,6 +200,7 @@ const SignupForm = () => {
             className="mt-2 h-5 w-5 rounded-md"
           />
         </div>
+        <div className="my-3 text-center text-red-400">{error}</div>
         <button type="submit" className="btn w-full bg-black hover:bg-gray-900">
           Registrer
         </button>

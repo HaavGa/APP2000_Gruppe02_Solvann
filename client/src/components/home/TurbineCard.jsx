@@ -6,22 +6,33 @@ import StopTurbineButton from "./StopTurbineButton";
 import StartActionButton from "./StartActionButton";
 import PopoverChangeLoad from "./PopoverChangeLoad";
 
-const TurbineCard = ({ id, status, load, powerOut }) => {
+const TurbineCard = ({ turbinNr, status, powerOut }) => {
   const [pump, setPump] = useState(true);
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
+  const [load, setLoad] = useState(0);
+  // const [msg, setMsg] = useState("");
 
   const allowNumbers = (e) => {
     const value = e.target.value.replace(/\D/g, "");
-    setNumber(value);
+    if (value >= 100) {
+      setNumber(100);
+    } else {
+      setNumber(value);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setNumber("");
-    const number1 = +number;
-    console.log(typeof number1);
-    console.log(number1);
+    if (number !== "") {
+      const number1 = +number;
+      console.log(number1);
+      setLoad(number1);
+    } else {
+      console.log("ingen tall");
+      return;
+    }
     // const baseUrl = "https://solvann.cyclic.app/api/users/";
     // try {
     //   console.log(values);
@@ -42,59 +53,47 @@ const TurbineCard = ({ id, status, load, powerOut }) => {
   // }, [msg]);
 
   return (
-    <div className="w-72">
-      {/* <div className="my-3 flex justify-center">
-        <Turbine status={status} />
-      </div> */}
-      <div className="flex">
-        <div className="relative rounded-xl bg-white shadow-xl">
+    <div>
+      <div className="flex justify-center">
+        <div className="relative h-80 w-64 rounded-xl bg-white shadow-xl">
           {disableCard ? (
-            <div className="absolute flex h-full w-full flex-col items-center justify-center bg-gray-700/90">
+            <div className="absolute z-20 flex h-full w-full flex-col items-center justify-center bg-gray-700/90">
               <StartActionButton
                 setDisableCard={setDisableCard}
                 text={"Pump ut"}
-                color={"yellow"}
-                func={() => setPump(true)}
+                color={"blue"}
+                startStopPump={() => setPump(true)}
               />
               <StartActionButton
                 setDisableCard={setDisableCard}
                 text={"Slipp inn"}
-                color={`purple`}
-                func={() => setPump(false)}
+                color={"orange"}
+                startStopPump={() => setPump(false)}
               />
             </div>
           ) : null}
-          <div className="p-4">
+          <div className="space-y-[1.5rem] p-4">
             <h1 className="text-center text-2xl font-bold text-gray-700">
-              Turbine #{id}
+              Turbin #{turbinNr}
             </h1>
-            <div className="mb-4 mt-2 h-[2px] w-full bg-gray-700"></div>
-            <div className="grid grid-cols-2 grid-rows-3 gap-y-1 text-lg">
-              <h2>Status:</h2>
-              <p className="text-right">
-                {status > 0 ? "Positiv" : status < 0 ? "Negative" : "Stop"}
-              </p>
+            <div className="h-[2px] w-full -translate-y-3 bg-gray-700"></div>
+            <div className="grid grid-cols-2 gap-y-1 text-lg">
               <h2>Load:</h2>
-              {/* <form onSubmit={handleSubmit} className="text-right">
-                <input
-                  id="load"
-                  name="load"
-                  className="w-8 rounded-md border-2 border-black text-center"
-                  value={number}
-                  maxLength={2}
-                  onChange={allowNumbers}
-                />{" "}
-                %
-                <button
-                  className="ml-1 rounded-md border-2 border-black px-1 hover:bg-gray-200"
-                  type="submit"
-                >
-                  Lagre
-                </button>
-              </form> */}
-              <PopoverChangeLoad number={number} allowNumbers={allowNumbers} />
-              <h2>Power out:</h2>
-              <p className="text-right">{powerOut} MWh/s</p>
+              <div className="flex items-center justify-between">
+                <div className="translate-x-3 text-xl">{load}</div>
+                <div className="z-10 translate-y-1">
+                  <PopoverChangeLoad
+                    number={number}
+                    allowNumbers={allowNumbers}
+                    handleSubmit={handleSubmit}
+                    disableCard={disableCard}
+                    load={load}
+                    setLoad={setLoad}
+                  />
+                </div>
+              </div>
+              <h2 className="pt-1">Power out:</h2>
+              <p className="pt-1 text-right">{powerOut} MWh/s</p>
             </div>
             <Toggle
               enabled={pump}

@@ -71,7 +71,6 @@ const UsersList = ({ users, loading, updateUser, deleteUser }) => {
                   <td className="space-x-2 whitespace-nowrap p-4 lg:p-5">
                     <button
                       type="button"
-                      data-modal-toggle="user-modal"
                       className="inline-flex items-center rounded-lg bg-gray-200 py-2 px-3 text-center text-sm font-medium text-gray-700 transition-all hover:scale-[1.02] hover:bg-gray-300 hover:text-gray-900"
                       onClick={() => updateUser(_id)}
                     >
@@ -92,7 +91,6 @@ const UsersList = ({ users, loading, updateUser, deleteUser }) => {
                     </button>
                     <button
                       type="button"
-                      data-modal-toggle="delete-user-modal"
                       className="inline-flex items-center rounded-lg bg-red-500 py-2 px-3 text-center text-sm font-medium text-white shadow-md shadow-gray-300 transition-transform hover:scale-[1.02] hover:bg-red-600"
                       onClick={() => deleteUser(_id)}
                     >

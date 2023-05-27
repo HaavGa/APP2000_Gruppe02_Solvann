@@ -4,12 +4,12 @@ import { UserIcon } from "@heroicons/react/24/outline";
 
 export default function Navbar() {
   return (
-    <nav className="flex h-28 bg-gray-800 px-8 text-white">
+    <nav className="flex h-28 bg-bg-nav px-8 text-white">
       <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
         <div className="flex items-center gap-4">
           <Link to="/">
             <img
-              className="h-16 w-auto lg:block"
+              className="h-16 w-auto translate-y-3 translate-x-3 scale-[2] lg:block"
               src={logo}
               alt="Solvann logo"
             />
@@ -47,9 +47,7 @@ function CustomLink({ to, children, ...props }) {
   return (
     <li
       className={
-        isActive
-          ? "rounded-xl text-amber-400"
-          : "hover:rounded-xl hover:bg-gray-700"
+        isActive ? "rounded-xl text-logo" : "hover:rounded-xl hover:bg-gray-700"
       }
     >
       <Link to={to} {...props}>
