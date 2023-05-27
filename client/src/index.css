@@ -2,8 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --color-bg-nav: 215 28% 17%;
+    --color-bg-main: 217 19% 27%;
+    --color-login-text: 0 0% 100%;
+    --color-logo: 37, 89%, 54%;
+    --color-login-input: 202, 48%, 26%;
+    --color-login-input-light: 189, 100%, 26%;
+    --color-let-in: 37, 89%, 54%;
+    --color-pump-out: 206, 85%, 52%;
+  }
+}
+
 body {
-  @apply h-full;
+  @apply h-full bg-bg-main;
 }
 
 .btn {
@@ -116,24 +129,6 @@ body {
   }
 }
 
-@keyframes clockwiseSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes antiClockwiseSpin {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
-  }
-}
-
 .clockwise-spin {
   animation-duration: 9s;
   animation-iteration-count: infinite;
@@ -146,4 +141,11 @@ body {
   animation-iteration-count: infinite;
   animation-name: antiClockwiseSpin;
   animation-timing-function: linear;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px --color-login-input inset !important;
 }

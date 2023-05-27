@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -44,7 +44,6 @@ const WaterChart = () => {
     labels,
     datasets: [
       {
-        label: "Meter",
         data: [],
         borderColor: "#334155",
         backgroundColor: "#fbbf24",
@@ -53,37 +52,32 @@ const WaterChart = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const waterData = await Axios.get(
+    const interval = setInterval(async () => {
+      const response = await axios.get(
         "https://solvann.azurewebsites.net/api/WaterInflux/all"
       );
+      const data = response.data.slice(0, labels.length);
+      const oldData = response.data.slice(labels.length, labels.length * 2);
       setChartData({
         labels,
         datasets: [
           {
-            label: "Meter",
-            data: [
-              30.7, 39.2, 31.2, 38.5, 39.9, 33.1, 37.9, 30.7, 39.2, 32.7, 36.4,
-              27.3, 29.3, 30.5,
-            ], //funker ikke med waterData.data
-            borderColor: "gray",
-            backgroundColor: "gray",
-            borderDash: [5, 5],
+            data: [...data],
+            borderColor: "black",
+            backgroundColor: "red",
           },
           {
             label: "Meter",
-            data: [
-              40.7, 44.2, 35.2, 28.5, 40.9, 25.1, 40.9, 25.7, 29.2, 28.7, 26.4,
-              30.3,
-            ], //funker ikke med waterData.data
+            data: [...oldData], //funker ikke med waterData.data
             borderColor: "#334155",
-            backgroundColor: "#fbbf24",
+            backgroundColor: "#334155",
+            borderDash: [5, 5],
           },
         ],
       });
-    };
-    fetchData();
-  }, []);
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [chartData]);
 
   return (
     <div className="mx-auto mt-8 flex h-auto w-2/4 justify-center rounded-lg bg-white">
@@ -151,8 +145,6 @@ const styling = {
       //     weight: 'bold',
       //   },
       // },
-      min: 20,
-      max: 50,
       title: {
         display: true,
         text: "Meter",

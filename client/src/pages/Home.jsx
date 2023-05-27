@@ -5,48 +5,43 @@ import Turbine from "../components/home/Turbine";
 import WaterReservoir from "../components/home/WaterReservoir";
 import { useState, useEffect } from "react";
 import PopoverChangeLoad from "../components/home/PopoverChangeLoad";
+import WaterChart from "../components/charts/WaterChart";
 
 const Home = () => {
   const [waterLevel, setWaterLevel] = useState(0);
   const getWaterLevel = () => {
-    return Math.floor(Math.random() * 100);
+    return Math.floor(Math.random() * 50);
   };
 
   const testArr = [
     {
-      id: 1,
+      turbinNr: 1,
       status: 1,
-      load: 40,
       powerOut: 30,
     },
     {
-      id: 2,
+      turbinNr: 2,
       status: 0,
-      load: 60,
       powerOut: 20,
     },
     {
-      id: 3,
+      turbinNr: 3,
       status: -1,
-      load: 90,
       powerOut: 80,
     },
     {
-      id: 4,
+      turbinNr: 4,
       status: 1,
-      load: 40,
       powerOut: 30,
     },
     {
-      id: 5,
+      turbinNr: 5,
       status: 0,
-      load: 60,
       powerOut: 20,
     },
     {
-      id: 6,
+      turbinNr: 6,
       status: -0.7,
-      load: 90,
       powerOut: 80,
     },
   ];
@@ -58,27 +53,27 @@ const Home = () => {
   //   return () => clearInterval(waterLevel);
   // }, [waterLevel]);
   return (
-    <div className="flex h-screen bg-gray-700">
-      <div className="grid grid-cols-2 py-6">
-        <div className="mb-10 flex -translate-x-40 -translate-y-10 flex-col items-center justify-center gap-y-5">
+    <div className="relative flex h-screen overflow-y-hidden bg-bg-main">
+      <div className="mx-auto grid grid-rows-2 gap-x-32 p-10">
+        <div className="row-span-2 flex flex-col items-center space-y-5">
           <WaterReservoir waterLevel={waterLevel} />
           <WaterReservoirCard waterLevel={waterLevel} />
         </div>
-        <div>
-          <div className="grid -translate-x-20 grid-cols-3 gap-10">
-            {testArr.map(({ id, status, load, powerOut }) => (
-              <TurbineCard
-                key={id}
-                id={id}
-                status={status}
-                load={load}
-                powerOut={powerOut}
-              />
-            ))}
-          </div>
+        <div className="col-span-2 col-start-2 grid grid-cols-3 gap-5">
+          {testArr.map(({ turbinNr, status, load, powerOut }) => (
+            <TurbineCard
+              key={turbinNr}
+              turbinNr={turbinNr}
+              status={status}
+              load={load}
+              powerOut={powerOut}
+            />
+          ))}
         </div>
-        {/* <StopButton /> */}
       </div>
+      {/* <div className="absolute z-10">
+        <StopButton />
+      </div> */}
     </div>
   );
 };

@@ -11,13 +11,18 @@ const Admin = () => {
   const [updateForm, setUpdateForm] = useState(false);
   const [savedValues, setSavedValues] = useState(null);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
       const response = await axios.get("https://solvann.cyclic.app/api/users/");
       setUsers(response.data);
       setLoading(false);
-    };
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  };
+
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -34,8 +39,9 @@ const Admin = () => {
       setSavedValues(response.data);
       setLoadingEdit(false);
     } catch (err) {
-      console.log(err);
+      console.log(err.data.message);
     }
+    fetchUsers();
   };
 
   const deleteUser = async (_id) => {
@@ -48,6 +54,7 @@ const Admin = () => {
     } catch (err) {
       console.log(err.response.data.message);
     }
+    fetchUsers();
   };
 
   return (

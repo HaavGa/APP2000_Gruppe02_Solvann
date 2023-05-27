@@ -13,10 +13,10 @@ const Toggle = ({ disableCard, enabled, setEnabled }) => {
       <Switch
         checked={enabled}
         onChange={setEnabled}
-        className={`${enabled ? "bg-cyan-700" : "bg-fuchsia-700"}
+        className={`${enabled ? "bg-pump-out" : "bg-let-in"}
                         relative inline-flex h-[28px] w-[52px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 ${
                           disableCard
-                            ? " pointer-events-none bg-gray-700/70"
+                            ? "pointer-events-none bg-gray-700/70"
                             : null
                         }`}
       >
