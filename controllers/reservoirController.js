@@ -71,12 +71,12 @@ const updateGrafer = asyncHandler(async (req, res) =>
   });
   //------------ WaterlevelArray --------------
 
-  const waterlevelAll = await WaterLevel.find({});
+  const waterlevelAll = await WaterLevel.find({}).sort({ date: -1 });
 
   let waterLevels = [];
   let tidspunkt = 0;
 
-  for(let i = waterlevelAll.length-1; i>= 0; i--)
+  for(let i = 0; i< waterlevelAll.length-1; i++)
   {
     tidspunkt = waterlevelAll[i].date.getHours();
     const maling = waterlevelAll[i].waterLevel;
@@ -101,6 +101,7 @@ const updateGrafer = asyncHandler(async (req, res) =>
 
 const updateHjem = asyncHandler(async (req, res) => 
 {
+  //---------- Config -------------------
   const config = 
   {
     headers: {
@@ -236,22 +237,8 @@ const updateHjem = asyncHandler(async (req, res) =>
     }
 
   }
-
   
-  /*
-  - vannstand
-  - pengertjent
-  - miljøkostnader
-
-  - nyeste waterinlux
-  - total endring i vannstand
-
-  -solarArray
-  -PowerpriceArray
-
-  -beregne hvor lang tid det vil ta før vannstanden er under optimal grense
-  */
-
+  //---------------Send--------------------
   res.status(200).json({
     vannstand: groupState.data.waterLevel,
     pengerTjent: groupState.data.money,

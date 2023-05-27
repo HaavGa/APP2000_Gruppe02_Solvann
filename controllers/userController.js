@@ -55,7 +55,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid user data');
   }
 
-  generateToken(res, user._id);
+  generateToken(res, user._id, user.isAdmin);
 
   res.status(201).json({
     _id: user._id,
@@ -100,7 +100,7 @@ const authUser = asyncHandler(async (req, res) => {
 
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
+    generateToken(res, user._id, user.isAdmin);
     res.json({
       id: user._id,
       firstName: user.firstName,
@@ -120,7 +120,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @access  Private
 const updateUser = asyncHandler(async (req, res) => {
 
-  const user = await User.findById({ _id: req.body.id });
+  const user = await User.findById({ _id: req.params.id });
   if(!user){
     res.status(404);
     throw new Error('User not found');
