@@ -32,8 +32,7 @@ const Admin = () => {
     setLoadingEdit(true);
     try {
       const response = await axios.patch(
-        "https://solvann.cyclic.app/api/users/",
-        { id: _id }
+        `https://solvann.cyclic.app/api/users/${_id}`
       );
       console.log(response.data);
       setSavedValues(response.data);
@@ -41,7 +40,7 @@ const Admin = () => {
     } catch (err) {
       console.log(err.data.message);
     }
-    fetchUsers();
+    await fetchUsers();
   };
 
   const deleteUser = async (_id) => {
@@ -54,7 +53,7 @@ const Admin = () => {
     } catch (err) {
       console.log(err.response.data.message);
     }
-    fetchUsers();
+    await fetchUsers();
   };
 
   return (
