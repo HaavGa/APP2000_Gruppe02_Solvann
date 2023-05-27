@@ -22,8 +22,8 @@ const Admin = () => {
     }
   };
 
-  useEffect(async () => {
-    await fetchUsers();
+  useEffect(() => {
+    fetchUsers();
   }, []);
 
   const updateUser = async (_id) => {
