@@ -71,6 +71,7 @@ const Admin = () => {
             loadingEdit={loadingEdit}
             setUpdateForm={setUpdateForm}
             savedValues={savedValues}
+            fetchUsers={fetchUsers}
           />
         )}
       </div>
