@@ -5,7 +5,12 @@ import YupPassword from "yup-password";
 import Spinner from "../Spinner";
 YupPassword(Yup);
 
-const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
+const UpdateForm = ({
+  loadingEdit,
+  savedValues,
+  setUpdateForm,
+  fetchUsers,
+}) => {
   if (loadingEdit) {
     return (
       <div className="flex w-[28rem] items-center justify-center bg-gray-700 text-white">
@@ -55,11 +60,13 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
       submitHandler(values);
       resetForm(values);
       setUpdateForm(false);
+      fetchUsers();
     },
   });
   const submitHandler = (values) => {
     try {
-      const baseUrl = "https://solvann.cyclic.app/api/users/";
+      const { id } = values;
+      const baseUrl = `https://solvann.cyclic.app/api/users/${id}`;
       console.log(values);
 
       axios.patch(`${baseUrl}`, values);
