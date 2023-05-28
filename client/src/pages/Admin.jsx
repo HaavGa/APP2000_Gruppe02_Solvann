@@ -4,12 +4,16 @@ import UpdateForm from "../components/admin/UpdateForm";
 import UsersList from "../components/admin/UsersList";
 import axios from "axios";
 
-const Admin = () => {
+const Admin = ({ auth }) => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [updateForm, setUpdateForm] = useState(false);
   const [savedValues, setSavedValues] = useState(null);
+
+  console.log(auth().firstName);
+  console.log(auth().lastName);
+  console.log(auth().email);
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -18,7 +22,8 @@ const Admin = () => {
       setUsers(response.data);
       setIsLoading(false);
     } catch (err) {
-      console.log(err.response.data.message);
+      // console.log(err.response.data.message);
+      console.log(err);
     }
   };
 

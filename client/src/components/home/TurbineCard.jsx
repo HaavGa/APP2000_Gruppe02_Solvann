@@ -5,11 +5,25 @@ import StopTurbineButton from "./StopTurbineButton";
 import StartActionButton from "./StartActionButton";
 import PopoverChangeLoad from "./PopoverChangeLoad";
 
-const TurbineCard = ({ id, turbinNr, powerOut, capacityUsage, config }) => {
-  const [pump, setPump] = useState(true);
+const TurbineCard = ({
+  id,
+  turbinNr,
+  capacityUsage,
+  config,
+  powerOut,
+  setPowerOut,
+}) => {
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
+  const [enabled, setEnabled] = useState(false);
+  const [turbineState, setTurbineState] = useState(0);
   const [load, setLoad] = useState(0);
+
+  const MAX_FLOWRATE = 41.4;
+  const POWER_PER_CUBIC_METER = 1.3;
+
+  setPowerOut((1 * MAX_FLOWRATE * POWER_PER_CUBIC_METER).toFixed(2));
+  // hardkodet enn så lenge
 
   const allowNumbers = (e) => {
     const value = e.target.value.replace(/\D/g, "");
@@ -18,22 +32,25 @@ const TurbineCard = ({ id, turbinNr, powerOut, capacityUsage, config }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoad(capacityUsage * 100);
+    setLoad(capacityUsage);
     setNumber("");
-    let newCapacityUsage;
-    if (number !== "") {
-      newCapacityUsage = +number;
-      console.log(newCapacityUsage);
-    } else {
-      console.log("ingen tall");
-      return;
-    }
+    const newCapacityUsage = +number;
     const baseUrl = `https://solvann.azurewebsites.net/api/Turbines/${id}?capacityUsage=${newCapacityUsage}`;
     try {
       axios.put(`${baseUrl}`, {}, config);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const turbineStatusChange = (capacityUsage) => {
+    const baseUrl = `https://solvann.cyclic.app/api/turbine/${turbinNr}`;
+    try {
+      axios.post(`${baseUrl}`, { capacityUsage: capacityUsage }, config);
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(`TurbinNr: ${turbinNr} capacity usage: ${capacityUsage}`);
   };
 
   // useEffect(() => {
@@ -56,13 +73,17 @@ const TurbineCard = ({ id, turbinNr, powerOut, capacityUsage, config }) => {
                 setDisableCard={setDisableCard}
                 text={"Pump ut"}
                 color={"blue"}
-                startStopPump={() => setPump(true)}
+                setTurbineState={setTurbineState}
+                capacityUsage={1}
+                turbineStatusChange={turbineStatusChange}
               />
               <StartActionButton
                 setDisableCard={setDisableCard}
                 text={"Slipp inn"}
                 color={"orange"}
-                startStopPump={() => setPump(false)}
+                setTurbineState={setTurbineState}
+                capacityUsage={-1}
+                turbineStatusChange={turbineStatusChange}
               />
             </div>
           ) : null}
@@ -81,7 +102,6 @@ const TurbineCard = ({ id, turbinNr, powerOut, capacityUsage, config }) => {
                     allowNumbers={allowNumbers}
                     handleSubmit={handleSubmit}
                     disableCard={disableCard}
-                    load={load}
                     setLoad={setLoad}
                   />
                 </div>
@@ -90,13 +110,20 @@ const TurbineCard = ({ id, turbinNr, powerOut, capacityUsage, config }) => {
               <p className="pt-1 text-right">{powerOut} MWh/s</p>
             </div>
             <Toggle
-              enabled={pump}
-              setEnabled={setPump}
+              enabled={enabled}
+              setEnabled={setEnabled}
               disableCard={disableCard}
+              turbineState={turbineState}
+              setTurbineState={setTurbineState}
             />
 
             <div className="mt-3 flex justify-center">
-              <StopTurbineButton setDisableCard={setDisableCard} />
+              <StopTurbineButton
+                setDisableCard={setDisableCard}
+                setTurbineState={setTurbineState}
+                capacityUsage={0}
+                turbineStatusChange={turbineStatusChange}
+              />
             </div>
           </div>
         </div>

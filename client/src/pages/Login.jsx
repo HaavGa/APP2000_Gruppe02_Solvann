@@ -46,7 +46,7 @@ const Login = () => {
           lastName: response.data.lastName,
           isAdmin: response.data.isAdmin,
           email: response.data.email,
-          token: response.data.token,
+          // token: response.data.token,
         },
       });
     } catch (err) {
