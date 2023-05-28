@@ -5,7 +5,12 @@ import YupPassword from "yup-password";
 import Spinner from "../Spinner";
 YupPassword(Yup);
 
-const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
+const UpdateForm = ({
+  loadingEdit,
+  savedValues,
+  setUpdateForm,
+  fetchUsers,
+}) => {
   if (loadingEdit) {
     return (
       <div className="flex w-[28rem] items-center justify-center bg-gray-700 text-white">
@@ -21,12 +26,12 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
       id: id,
       firstName: firstName,
       lastName: lastName,
-      newEmail: email,
-      newPassword: password,
-      confirmNewPassword: confirmPassword,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
       isAdmin: isAdmin,
     },
-    enableReinitialize: true,
+    // enableReinitialize: true,
     // validere form
     validationSchema: Yup.object({
       firstName: Yup.string()
@@ -35,16 +40,16 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
       lastName: Yup.string()
         .max(20, "Etternavnet må være på mindre enn 20 bokstaver")
         .required("Vennligst skriv inn etternavnet"),
-      newEmail: Yup.string()
+      email: Yup.string()
         .email("Ugyldig epostadresse")
         .required("Vennligst skriv inn epost"),
-      newPassword: Yup.string()
+      password: Yup.string()
         .min(10, "Passordet må inneholde minst 10 tegn")
         .minLowercase(1, "Passordet må inneholde minst en liten bokstav")
         .minUppercase(1, "Passordet må inneholde minst en stor bokstav")
         .minNumbers(1, "Passordet må inneholde minst ett tall")
         .minSymbols(1, "Passordet må inneholde minst ett symbol"),
-      confirmNewPassword: Yup.string().oneOf(
+      confirmPassword: Yup.string().oneOf(
         [Yup.ref("newPassword"), null],
         "Passordene stemmer ikke"
       ),
@@ -59,13 +64,15 @@ const UpdateForm = ({ loadingEdit, savedValues, setUpdateForm }) => {
   });
   const submitHandler = (values) => {
     try {
-      const baseUrl = "https://solvann.cyclic.app/api/users/";
+      const { id } = values;
+      const baseUrl = `https://solvann.cyclic.app/api/users/${id}`;
       console.log(values);
 
       axios.patch(`${baseUrl}`, values);
     } catch (err) {
       console.log(err);
     }
+    () => fetchUsers();
   };
 
   return (

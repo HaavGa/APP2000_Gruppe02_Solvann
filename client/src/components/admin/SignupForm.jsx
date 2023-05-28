@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import YupPassword from "yup-password";
 YupPassword(Yup);
 
-const SignupForm = () => {
+const SignupForm = ({ fetchUsers }) => {
   const [error, setError] = useState("");
   // formik logikk
   const formik = useFormik({
@@ -57,6 +57,7 @@ const SignupForm = () => {
       console.log(err.response.data.message);
       setError(err.response.data.message);
     }
+    () => fetchUsers();
   };
 
   return (
