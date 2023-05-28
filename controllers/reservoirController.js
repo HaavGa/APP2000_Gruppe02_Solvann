@@ -89,6 +89,13 @@ const updateGrafer = asyncHandler(async (req, res) =>
       maling
     })
   }
+  //---------------buy/sell--------------------
+  // Tips på når det lønner seg å selge kraft. Vi har gått ut ifra at etterspørsel henger
+  // sammen med strømpris fordi dette er den eneste måten vi kan måle det på.
+  /*
+  const avgPowerPrice = 515; // [NOK/MWh]
+  const sellsolar = solarAll.data[solarAll.data.length-1] > avgPowerPrice * 1.1; // hvis strømpris er 10% over gjennomsnittet
+*/
 
   // -------------- Send -------------------
   res.status(200).json({
@@ -184,7 +191,6 @@ const updateHjem = asyncHandler(async (req, res) =>
   
   // Hvor mye vann som går ut av reservoaret på en time.
   const totalChange = (waterInflux.data + waterOut) * 3600 ;
-
   const m3WaterInReservoar = groupState.data.waterLevel * 1000000;
 
   let outputTimeRemaining = [];
@@ -472,8 +478,7 @@ const noe = asyncHandler(async (req, res) => {
   // om trenden i strømpris vil vare.
 
 
-  // å kjøpe strøm nå for å selge til gjennomsnittpris vil lønne seg.
-  //const buy = solarAll.data[0] > 
+  
 
   // sell
 

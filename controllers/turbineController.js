@@ -17,16 +17,16 @@ const turbines = [
 // @route   POST /api/users/auth
 // @access  Public
 const setTurbine = asyncHandler(async (req, res) => {
-
   const userId = req.user.id;
   
 	if (!userId) {
     res.status(401).json({ Error: "Not authorized, no userId."});
       throw new Error("Not authorized, no userId.");
   }
-
+ 
   // hente id
-  const turbineId = turbines[req.body.turbineNr - 1];
+  const turbineNr = req.params.turbineNr;
+  const turbineId = turbines[turbineNr - 1];
   const capacityUsage = req.body.capacityUsage;
 
   const url = `https://solvann.azurewebsites.net/api/Turbines/${ turbineId }?capacityUsage=${ capacityUsage }`;
@@ -40,18 +40,17 @@ const setTurbine = asyncHandler(async (req, res) => {
   // endre status
   const statusChange = await Axios.put(url, {}, config)
     .catch((err) => console.log(err));
-  console.log(statusChange)
   
   // lagre ny status i db og hvem som har endra.
 	const turbine = await Turbine.create({
-		turbineNr: req.body.turbineNr,
+		turbineNr: turbineNr,
 		capacityUsage: capacityUsage,
 		userId: userId,
 	});
   
   if(statusChange){
 		if(turbine){
-			res.status(200).json({ msg: `Turbine ${ req.body.turbineNr }: ${ capacityUsage }`});
+			res.status(200).json({ msg: `Turbine ${ turbineNr }: ${ capacityUsage }`});
 		}
 		else{
 			res.status(400).json({ Error: "Status changed, but there were problems logging the changes."});
