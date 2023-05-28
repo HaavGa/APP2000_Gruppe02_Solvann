@@ -4,7 +4,7 @@ import Solar from "../models/solarModel.js";
 import Axios from "axios";
 import generateToken from '../utils/generateToken.js';
 
-const updateGrafer = asyncHandler(async (req, res) => 
+const updateGraphs = asyncHandler(async (req, res) => 
 {
   const config = 
   {
@@ -92,21 +92,41 @@ const updateGrafer = asyncHandler(async (req, res) =>
   //---------------buy/sell--------------------
   // Tips på når det lønner seg å selge kraft. Vi har gått ut ifra at etterspørsel henger
   // sammen med strømpris fordi dette er den eneste måten vi kan måle det på.
-  /*
+
+  // OBS! Her har jeg satt grenser og tall selv. Dette kan alltids justeres og er blitt satt
+  // kun som eksempel.
+  
   const avgPowerPrice = 515; // [NOK/MWh]
-  const sellsolar = solarAll.data[solarAll.data.length-1] > avgPowerPrice * 1.1; // hvis strømpris er 10% over gjennomsnittet
-*/
+  const powerThreshold = 1.1; 
+  const maxSolarProduction = 20; // [kWh / s]
+  const highWaterLevel = 33; // [m]
+
+  const powerPriceNow = powerPriceAll.data[powerPriceAll.data.length-1];
+  const solarProdNow = solarAll.data[solarAll.data.length-1]
+  const waterLevelNow = groupState.data.waterLevel;
+
+  // Selge
+  const sellPowerPrice = powerPriceNow > avgPowerPrice * powerThreshold; // hvis strømpris er 10% over gjennomsnittet
+  const sellSolar = solarProdNow < maxSolarProduction / 2;  // hvis solcellene produserer under 50% av maks kapasitet.
+  const sellWaterLevel = waterLevelNow > highWaterLevel; // Er det mye vann i reservoiret.
+  
+  // Kjøpe
+  const buyPowerPrice = powerPriceNow < avgPowerPrice * powerThreshold // hvis strømpris er 10% under gjennosnittet.
+  const buySolar = solarProdNow > maxSolarProduction / 4 * 3; // Hvis solcellene produserer over 75% av maks kapasitet
+  const buyWaterLevel = waterLevelNow < highWaterLevel;
 
   // -------------- Send -------------------
   res.status(200).json({
     vannstand: groupState.data.waterLevel,
+    sell: sellPowerPrice&&sellSolar&&sellWaterLevel,
+    buy: buyPowerPrice&&buySolar&&buyWaterLevel,
     vannstandArray: waterlevelAll,
     solar: getMeasurements(solarAll.data),
     powerPrice: getMeasurements(powerPriceAll.data),
   });
 });
 
-const updateHjem = asyncHandler(async (req, res) => 
+const updateHome = asyncHandler(async (req, res) => 
 {
   //---------- Config -------------------
   const config = 
@@ -478,18 +498,14 @@ const noe = asyncHandler(async (req, res) => {
   // om trenden i strømpris vil vare.
 
 
-  
-
-  // sell
 
   
-  // spørre om bruker vil avbryte automatisk endring av turbinstatus ved overstigning av optimal vannstand
+  //! spørre om bruker vil avbryte automatisk endring av turbinstatus ved overstigning av optimal vannstand
 
 
 
   // penger som blir tjent akkurat nå ved gitt strømpris. Her må jeg ta hensyn til slitasjen.
 
-  
 
 
   //res.status(200).json(turbineStates.data[0].capacityUsage);
@@ -526,6 +542,6 @@ const noe = asyncHandler(async (req, res) => {
 export {
   log2Hour,
   log24Hour,
-  updateGrafer,
-  updateHjem,
+  updateGraphs,
+  updateHome,
 }
