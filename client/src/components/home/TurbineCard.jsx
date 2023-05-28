@@ -1,45 +1,39 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
-import { useFormik } from "formik";
+import { useState } from "react";
 import Toggle from "./Toggle";
 import StopTurbineButton from "./StopTurbineButton";
 import StartActionButton from "./StartActionButton";
 import PopoverChangeLoad from "./PopoverChangeLoad";
 
-const TurbineCard = ({ turbinNr, status, powerOut }) => {
+const TurbineCard = ({ id, turbinNr, powerOut, capacityUsage, config }) => {
   const [pump, setPump] = useState(true);
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
   const [load, setLoad] = useState(0);
-  // const [msg, setMsg] = useState("");
 
   const allowNumbers = (e) => {
     const value = e.target.value.replace(/\D/g, "");
-    if (value >= 100) {
-      setNumber(100);
-    } else {
-      setNumber(value);
-    }
+    value >= 100 ? setNumber(100) : setNumber(value);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoad(capacityUsage * 100);
     setNumber("");
+    let newCapacityUsage;
     if (number !== "") {
-      const number1 = +number;
-      console.log(number1);
-      setLoad(number1);
+      newCapacityUsage = +number;
+      console.log(newCapacityUsage);
     } else {
       console.log("ingen tall");
       return;
     }
-    // const baseUrl = "https://solvann.cyclic.app/api/users/";
-    // try {
-    //   console.log(values);
-    //   axios.post(`${baseUrl}`, values);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    const baseUrl = `https://solvann.azurewebsites.net/api/Turbines/${id}?capacityUsage=${newCapacityUsage}`;
+    try {
+      axios.put(`${baseUrl}`, {}, config);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // useEffect(() => {
@@ -80,7 +74,7 @@ const TurbineCard = ({ turbinNr, status, powerOut }) => {
             <div className="grid grid-cols-2 gap-y-1 text-lg">
               <h2>Load:</h2>
               <div className="flex items-center justify-between">
-                <div className="translate-x-3 text-xl">{load}</div>
+                <div className={"translate-x-1 text-xl"}>{load}</div>
                 <div className="z-10 translate-y-1">
                   <PopoverChangeLoad
                     number={number}
