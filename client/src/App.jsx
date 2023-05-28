@@ -9,19 +9,28 @@ import {
   MinSide,
   Rapporter,
 } from "./pages/index";
-import { useIsAuthenticated } from "react-auth-kit";
+import { useIsAuthenticated, useAuthUser } from "react-auth-kit";
 
 function App() {
+  const auth = useAuthUser();
+  //! Hmmmmmmmmmm
+  // axios.defaults.withCredentials = true;
+  // axios.defaults.baseURL = "http://localhost:5000/api";
+  // axios.defaults.headers.common["Authorization"] = auth().token;
+
   const isAuthenticated = useIsAuthenticated();
   return (
     <>
       {isAuthenticated() && <Navbar />}
       <div>
         <Routes>
-          <Route path="/" element={isAuthenticated() ? <Home /> : <Login />} />
+          <Route
+            path="/"
+            element={isAuthenticated() ? <Home auth={auth} /> : <Login />}
+          />
           <Route
             path="/admin"
-            element={isAuthenticated() ? <Admin /> : <Login />}
+            element={isAuthenticated() ? <Admin auth={auth} /> : <Login />}
           />
           <Route
             path="/grafer"

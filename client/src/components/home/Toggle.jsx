@@ -1,7 +1,16 @@
 import { Switch } from "@headlessui/react";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 
-const Toggle = ({ disableCard, enabled, setEnabled }) => {
+const Toggle = ({
+  setTurbineState,
+  turbineState,
+  disableCard,
+  enabled,
+  setEnabled,
+}) => {
+  const calculateSwitch = () => {
+    turbineState <= 0 ? setEnabled(false) : setEnabled(true);
+  };
   return (
     <div className=" flex items-center justify-between gap-3 py-3 text-lg">
       <h2>{enabled ? "Pumpe ut:" : "Slippe inn:"}</h2>
@@ -11,7 +20,11 @@ const Toggle = ({ disableCard, enabled, setEnabled }) => {
         <BsArrowLeft className={"text-3xl"} />
       )}
       <Switch
+        // Togglen gjør ingenting
+        // lurer på om vi burde bytte til to knapper.
+        // Lettere??
         checked={enabled}
+        // onChange={calculateSwitch()}
         onChange={setEnabled}
         className={`${enabled ? "bg-pump-out" : "bg-let-in"}
                         relative inline-flex h-[28px] w-[52px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 ${
