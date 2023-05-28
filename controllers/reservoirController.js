@@ -497,7 +497,9 @@ const noe = asyncHandler(async (req, res) => {
   // Dette med et energitap på 10% og strømpris slik den er nå. Det er opp til operatør å avgjøre
   // om trenden i strømpris vil vare.
 
-
+  // Går ut ifra ting / setter thresholds som jeg vil.
+  // De vil alltid tjene penger om man kjøper og så selger til samme pris så kunsten blir
+  // at operatør vurderer når det er lurt å kjøpe/selge.
 
   
   //! spørre om bruker vil avbryte automatisk endring av turbinstatus ved overstigning av optimal vannstand
