@@ -40,7 +40,14 @@ const Login = () => {
         token: response.data.token,
         expiresIn: 3600,
         tokenType: "Bearer",
-        authState: { _id: response.data._id },
+        authState: {
+          _id: response.data._id,
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+          isAdmin: response.data.isAdmin,
+          email: response.data.email,
+          token: response.data.token,
+        },
       });
     } catch (err) {
       setIsError(true);
