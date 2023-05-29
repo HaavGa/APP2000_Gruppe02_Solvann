@@ -33,6 +33,7 @@ const updateGraphs = asyncHandler(async (req, res) =>
     }
   });
   //------------ solarAll ---------------------
+  
   const solarAll = await Axios.get(
     'https://solvann.azurewebsites.net/api/Solar/all',
     config, 
@@ -50,6 +51,7 @@ const updateGraphs = asyncHandler(async (req, res) =>
       console.log('Error', error.message);
     }
   });
+  
   //------------ PowerPriceAll-------------
 
   const powerPriceAll = await Axios.get(
@@ -69,6 +71,7 @@ const updateGraphs = asyncHandler(async (req, res) =>
       console.log('Error', error.message);
     }
   });
+
   //------------ WaterlevelArray --------------
 
   const waterlevelAll = await WaterLevel.find({}).sort({ date: -1 });
@@ -85,17 +88,63 @@ const updateGraphs = asyncHandler(async (req, res) =>
       tidspunkt++
     
     waterLevels.push({
-      tidspunkt,
       maling
     })
   }
+
+  for(let i = 0; i< waterlevelAll.length-1; i++)
+  {
+    const maling = waterlevelAll[i].waterLevel; 
+    waterLevels[i] = maling
+  }
+
+  waterLevels = getMeasurements(waterLevels);
+
+  //-------------- waterInflux ---------------------
+  const waterInflux = await Axios.get(
+    'https://solvann.azurewebsites.net/api/WaterInflux',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+  //--------- turbine states -----------------
+
+  const turbineStates = await Axios.get(
+    'https://solvann.azurewebsites.net/api/Turbines',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
   //---------------buy/sell--------------------
   // Tips på når det lønner seg å selge kraft. Vi har gått ut ifra at etterspørsel henger
   // sammen med strømpris fordi dette er den eneste måten vi kan måle det på.
 
   // OBS! Her har jeg satt grenser og tall selv. Dette kan alltids justeres og er blitt satt
   // kun som eksempel.
-  
+
   const avgPowerPrice = 515; // [NOK/MWh]
   const powerThreshold = 1.1; 
   const maxSolarProduction = 20; // [kWh / s]
@@ -115,89 +164,7 @@ const updateGraphs = asyncHandler(async (req, res) =>
   const buySolar = solarProdNow > maxSolarProduction / 4 * 3; // Hvis solcellene produserer over 75% av maks kapasitet
   const buyWaterLevel = waterLevelNow < highWaterLevel;
 
-  // -------------- Send -------------------
-  res.status(200).json({
-    vannstand: groupState.data.waterLevel,
-    sell: sellPowerPrice&&sellSolar&&sellWaterLevel,
-    buy: buyPowerPrice&&buySolar&&buyWaterLevel,
-    vannstandArray: waterlevelAll,
-    solar: getMeasurements(solarAll.data),
-    powerPrice: getMeasurements(powerPriceAll.data),
-  });
-});
-
-const updateHome = asyncHandler(async (req, res) => 
-{
-  //---------- Config -------------------
-  const config = 
-  {
-    headers: {
-      Accept: 'application/json',
-      GroupId: process.env.SOLVANN_USER,
-      GroupKey: process.env.SOLVANN_PASSWORD,
-    }
-  };
-
-  //---------- groupState --------------
-  
-  const groupState = await Axios.get(
-    'https://solvann.azurewebsites.net/api/GroupState',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
-  
-  //-------------- waterInflux ---------------------
-  const waterInflux = await Axios.get(
-    'https://solvann.azurewebsites.net/api/WaterInflux',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
-  
-  
-
-  //---------- Tid til over eller under grensa ------------
-
-  const turbineStates = await Axios.get(
-    'https://solvann.azurewebsites.net/api/Turbines',
-    config, 
-  )
-  .catch(function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } 
-    else if (error.request) {
-      console.log(error.request);
-    } 
-    else {
-      console.log('Error', error.message);
-    }
-  });
+  //---------- Hvor lang tid før reservoaret når øvre eller nedre grense ------
 
   let usageCapacityAll =
   turbineStates.data[0].capacityUsage +
@@ -263,6 +230,98 @@ const updateHome = asyncHandler(async (req, res) =>
     }
 
   }
+
+  // -------------- Send -------------------
+  res.status(200).json({
+    vannstand: groupState.data.waterLevel,
+    sell: sellPowerPrice&&sellSolar&&sellWaterLevel,
+    buy: buyPowerPrice&&buySolar&&buyWaterLevel,
+    vannEndring: outputTimeRemaining,
+    vannstandArray: waterLevels,
+    solar: getMeasurements(solarAll.data),
+    powerPrice: getMeasurements(powerPriceAll.data),
+  });
+});
+
+const updateHome = asyncHandler(async (req, res) => 
+{
+  //---------- Config -------------------
+  const config = 
+  {
+    headers: {
+      Accept: 'application/json',
+      GroupId: process.env.SOLVANN_USER,
+      GroupKey: process.env.SOLVANN_PASSWORD,
+    }
+  };
+
+  //---------- groupState --------------
+  
+  const groupState = await Axios.get(
+    'https://solvann.azurewebsites.net/api/GroupState',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+  
+  //-------------- waterInflux ---------------------
+  const waterInflux = await Axios.get(
+    'https://solvann.azurewebsites.net/api/WaterInflux',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
+  const turbineStates = await Axios.get(
+    'https://solvann.azurewebsites.net/api/Turbines',
+    config, 
+  )
+  .catch(function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } 
+    else if (error.request) {
+      console.log(error.request);
+    } 
+    else {
+      console.log('Error', error.message);
+    }
+  });
+
+  let usageCapacityAll =
+  turbineStates.data[0].capacityUsage +
+  turbineStates.data[1].capacityUsage +
+  turbineStates.data[2].capacityUsage +
+  turbineStates.data[3].capacityUsage +
+  turbineStates.data[4].capacityUsage +
+  turbineStates.data[5].capacityUsage;
+
+  const waterOut = usageCapacityAll * 41.4;
+  const totalChange = (waterInflux.data + waterOut) * 3600 ;
   
   //---------------Send--------------------
   res.status(200).json({
@@ -273,7 +332,6 @@ const updateHome = asyncHandler(async (req, res) =>
     vannInn: waterInflux.data,
     vannUt: waterOut,
     totalEndring: totalChange,
-    vannEndring: outputTimeRemaining,
     
   });
 
@@ -405,7 +463,7 @@ function getMeasurements (array) {
   const modulo = timer % 2;
   const startTime = timer - modulo
   const startverdi = array.length-1 - modulo;
-  const antMaling = startTime / 2 + 12;
+  const antMaling = startTime / 2 + 14;
 
   let tidspunkt = startTime;
   let output = [];
