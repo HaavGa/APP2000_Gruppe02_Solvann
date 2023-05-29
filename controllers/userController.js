@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import ChangelogRole from '../models/changelogRoleModel.js';
 import generateToken from '../utils/generateToken.js';
 
 const getUsers = asyncHandler(async (req, res) => {
@@ -12,22 +13,7 @@ const getUsers = asyncHandler(async (req, res) => {
 
   res.status(200).json(usersFound);
 });
-/*
-const getUser = asyncHandler(async (req, res) => {
-  const user = await User.findById({ _id: req.params.id }).select('-password');
-  if(!user){
-    res.status(404);
-    throw new Error("User not found.");
-  }
-  res.status(200).json({
-    id: user.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
-    isAdmin: user.isAdmin,
-  });
-});
-*/
+
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
@@ -38,7 +24,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (userExists) {
     res.status(400).json({ error: "Bruker finnes fra før." });
-    throw new Error('User already exists');
+    throw new Error('Bruker finnes fra før.');
   }
   
   const user = await User.create({
@@ -87,9 +73,6 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.status(200).json(userDeleted);
 });
 
-
-
-
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
 // @access  Public
@@ -115,6 +98,20 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+const updatePassword = asyncHandler(async (req, res) => {
+  
+  req.user.password = req.body.password;
+
+  const updatedUser = await req.user.save();
+
+  if(!updatedUser){
+    res.status(400).json({ Error: "Kunne ikke oppdatere passordet." });
+    throw new Error({ error: "Kunne ikke oppdatere passordet." });
+  }
+
+  res.status(200).json({ msg: "Passord oppdatert" });
+});
+
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
@@ -129,8 +126,22 @@ const updateUser = asyncHandler(async (req, res) => {
   user.firstName = req.body.firstName || user.firstName;
   user.lastName = req.body.lastName || user.lastName;
   user.email = req.body.email || user.email;
-  user.isAdmin = req.body.isAdmin || user.isAdmin;
-    
+  
+  if(req.body.isAdmin){
+    user.isAdmin = req.body.isAdmin;
+    const log = new ChangelogRole({
+      adminId: req.user.id,
+      userId: user.id,
+      isAdmin: user.isAdmin,
+    });
+
+    const savedLog = await log.save();
+
+    if(!savedLog){
+      res.status(400).json({ Error: "Kunne ikke logge endring av rolle." });
+      throw new Error({ error: "Kunne ikke logge endring av rolle." });
+    }
+  }
 
   if (req.body.password) {
     user.password = req.body.password;
@@ -152,5 +163,6 @@ export {
   authUser,
   registerUser,
   updateUser,
-  getUsers
+  getUsers,
+  updatePassword,
 };
