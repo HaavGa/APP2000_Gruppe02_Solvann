@@ -40,8 +40,9 @@ const ModalChangePassword = () => {
 
     // @Håvard
     // lagre nytt passord i databasen 
+    // Eventuelt gi bekreftelse til bruker
 
-    setIsOpen(false);
+    setIsOpen(false); //lukker modalen når "lagre passord"-knappen trykkes 
   };
 
   return (
