@@ -7,6 +7,7 @@ const PopoverChangeLoad = ({
   allowNumbers,
   handleSubmit,
   disableCard,
+  setLoad,
 }) => {
   return (
     <Popover className="relative">
@@ -46,6 +47,7 @@ const PopoverChangeLoad = ({
                   <button
                     onClick={async (e) => {
                       await handleSubmit(e);
+                      setLoad(number);
                       close();
                     }}
                     className="mt-5 w-full rounded-lg border-2 border-gray-500 bg-gray-300 py-1 text-xl font-semibold  hover:bg-gray-400"

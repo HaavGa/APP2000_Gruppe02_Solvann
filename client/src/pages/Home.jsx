@@ -4,11 +4,19 @@ import WaterReservoirCard from "../components/home/WaterReservoirCard";
 import WaterReservoir from "../components/home/WaterReservoir";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Spinner from "../components/Spinner";
 
-const Home = () => {
+const Home = ({ auth }) => {
   const [homeValues, setHomeValues] = useState({});
   const [turbines, setTurbines] = useState([]);
-  const [color, setColor] = useState("");
+  const [classNames, setClassNames] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [powerOut, setPowerOut] = useState(0);
+
+  // const firstName = auth().firstName;
+  // const lastName = auth().lastName;
+  const token = auth().token;
+  // console.log(`My name is ${firstName} ${lastName} and the token is ${token}`);
 
   const config = {
     headers: {
@@ -58,6 +66,23 @@ const Home = () => {
   // }, [waterLevel]);
 
   useEffect(() => {
+    const getHomeValues = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(
+          "https://solvann.cyclic.app/api/reservoir/updateHome"
+        );
+        setHomeValues(response.data);
+        setTurbines(response.data.turbinStatuser);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getHomeValues();
+  }, []);
+
+  useEffect(() => {
     // const homeValuesInterval = setInterval(() => {
     const getHomeValues = async () => {
       try {
@@ -67,13 +92,13 @@ const Home = () => {
         setHomeValues(response.data);
         setTurbines(response.data.turbinStatuser);
       } catch (err) {
-        console.log(err.message);
+        console.log(err);
       }
     };
     getHomeValues();
     // }, 5000);
     // return () => clearInterval(homeValuesInterval);
-  }, []);
+  }, []); // homeValues inni her for automatisk oppdatering
 
   const {
     miljokostnader: environmentCost = 0,
@@ -86,12 +111,17 @@ const Home = () => {
 
   return (
     <div className="relative flex h-screen overflow-y-hidden bg-bg-main">
+      {isLoading && (
+        <div className="absolute z-30 grid h-full w-full scale-[2] place-items-center bg-bg-main">
+          <Spinner />
+        </div>
+      )}
       <div className="mx-auto grid grid-rows-2 gap-x-32 p-10">
         <div className="row-span-2 flex flex-col items-center space-y-5">
           <WaterReservoir
             waterLevel={waterLevel}
-            color={color}
-            setColor={setColor}
+            classNames={classNames}
+            setClassNames={setClassNames}
           />
           <WaterReservoirCard
             waterLevel={waterLevel}
@@ -110,6 +140,8 @@ const Home = () => {
               turbinNr={turbinNr + 1}
               capacityUsage={capacityUsage}
               config={config}
+              powerOut={powerOut}
+              setPowerOut={setPowerOut}
             />
           ))}
         </div>

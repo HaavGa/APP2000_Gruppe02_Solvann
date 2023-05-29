@@ -51,7 +51,6 @@ const SignupForm = ({ fetchUsers }) => {
     const baseUrl = "https://solvann.cyclic.app/api/users/";
     const data = ({ firstName, lastName, email, password, isAdmin } = values);
     try {
-      console.log(isAdmin);
       axios.post(`${baseUrl}`, data);
     } catch (err) {
       console.log(err.response.data.message);

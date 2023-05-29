@@ -15,7 +15,6 @@ const Grafer = () => {
           Dropdown inn her
         </button>
       </div> */}
-      p-2 rounded
       <div className="pt-5">
         <WaterChart />
       </div>
