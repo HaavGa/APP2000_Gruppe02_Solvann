@@ -52,7 +52,8 @@ const WaterChart = () => {
   });
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    // const interval = setInterval(async () => {
+    const getChartData = async () => {
       const response = await axios.get(
         "https://solvann.azurewebsites.net/api/WaterInflux/all"
       );
@@ -63,20 +64,24 @@ const WaterChart = () => {
         datasets: [
           {
             data: [...data],
-            borderColor: "black",
+            borderColor: "#438238",
+            fill: true,
             backgroundColor: "red",
           },
           {
             label: "Meter",
-            data: [...oldData], //funker ikke med waterData.data
+            data: [...oldData],
+            fill: true,
             borderColor: "#334155",
-            backgroundColor: "#334155",
+            backgroundColor: "red",
             borderDash: [5, 5],
           },
         ],
       });
-    }, 60000);
-    return () => clearInterval(interval);
+    };
+    getChartData();
+    // }, 60000);
+    // return () => clearInterval(interval);
   }, [chartData]);
 
   return (
