@@ -19,7 +19,7 @@ export default function Navbar() {
     setIsShown((prevIsShown) => !prevIsShown);
     console.log(isShown);
   }
-  
+
   return (
     <>
       {isShown && <ModalChangePassword />}
