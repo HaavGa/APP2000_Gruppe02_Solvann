@@ -5,6 +5,7 @@ import {
   updateUser,
   getUsers,
   deleteUser,
+  updatePassword,
 } from '../controllers/userController.js';
 import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
@@ -16,6 +17,7 @@ router.route('/')
 router.route('/:id')
 .delete(protect, isAdmin, deleteUser)
 .patch(protect, isAdmin, updateUser);
+router.post('/updatePassword', protect, updatePassword);
 router.post('/login', authUser);
 
 
