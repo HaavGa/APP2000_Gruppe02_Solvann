@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
-import Spinner from "../Spinner";
+import Spinner from "../utils/Spinner";
 import { ImUserTie } from "react-icons/im";
 
 const UsersList = ({ users, isLoading, updateUser, deleteUser, openModal }) => {

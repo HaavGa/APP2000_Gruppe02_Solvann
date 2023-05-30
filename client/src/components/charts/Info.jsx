@@ -7,9 +7,6 @@ const Info = ({ buy, sell, waterLevel }) => {
     <div className="rounded-md bg-white text-gray-700">
       <h1 className=" text-6xl font-semibold">Info</h1>
       <div className="my-2 h-1 w-full bg-gray-700"></div>
-      {/* <p>Burde du kjøpe? {buy ? "Ja" : "Nei"}</p>
-      <p>Burde du selge? {sell ? "Ja" : "Nei"}</p>
-      <p>Vannivået er {waterLevel.toFixed(2)} meter</p> */}
       <div className="translate-y-5">
         <InfoCard
           icon={<CiShoppingCart />}

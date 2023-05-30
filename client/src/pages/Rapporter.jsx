@@ -2,7 +2,7 @@ import ExportToExcel from "../components/reports/ExportToExcel";
 
 const Rapporter = () => {
   const currentDate = new Date().toJSON().slice(0, 10);
-  
+
   // dummy data for bruker-rapporten
   const userData = [
     {

@@ -1,6 +1,6 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import { useState } from "react";
-import logo from "../images/solvann-logo.png";
+import logo from "../../images/solvann-logo.png";
 import { Menu } from "@headlessui/react";
 import { HiOutlineUser } from "react-icons/hi";
 import { BiEdit } from "react-icons/bi";
@@ -19,7 +19,7 @@ const Navbar = ({ auth }) => {
     setIsShown((prevIsShown) => !prevIsShown);
   };
 
-  function CustomLink({ to, children, ...props }) {
+  const CustomLink = ({ to, children, ...props }) => {
     const resolvedPath = useResolvedPath(to);
     const isActive = useMatch({ path: resolvedPath.pathname, end: true });
     return (
@@ -35,7 +35,7 @@ const Navbar = ({ auth }) => {
         </Link>
       </li>
     );
-  }
+  };
 
   return (
     <>

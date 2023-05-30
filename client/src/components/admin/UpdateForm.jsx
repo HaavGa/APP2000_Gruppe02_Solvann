@@ -2,7 +2,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
-import Spinner from "../Spinner";
+import Spinner from "../utils/Spinner";
 YupPassword(Yup);
 
 const UpdateForm = ({

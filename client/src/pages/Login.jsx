@@ -5,7 +5,7 @@ import { useSignIn } from "react-auth-kit";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { useState, useEffect } from "react";
-import Spinner from "../components/Spinner";
+import Spinner from "../components/utils/Spinner";
 YupPassword(Yup);
 
 const Login = () => {
@@ -34,7 +34,6 @@ const Login = () => {
       console.log(import.meta.env.PROD);
       console.log(window.location.hostname);
       const response = await axios.post(`${baseUrl}`, values);
-
       setIsLoading(false);
       signIn({
         token: response.data.token,

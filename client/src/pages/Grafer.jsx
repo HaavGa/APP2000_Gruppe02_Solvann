@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Chart from "../components/charts/Chart";
 import axios from "axios";
-import Spinner from "../components/Spinner";
+import Spinner from "../components/utils/Spinner";
 import Info from "../components/charts/Info";
 
 const Grafer = () => {
@@ -30,20 +30,20 @@ const Grafer = () => {
     };
     getGraphValues();
   }, []);
-  // useEffect(() => {
-  //   const getGraphValues = async () => {
-  //     try {
-  //       const response = await axios.get(BASE_URL_GRAPH);
-  //       setGraphValues(response.data);
-  //       setPowerPrice(response.data.powerPrice);
-  //       setSolar(response.data.solar);
-  //       setWaterLevelArray(response.data.vannstandArray);
-  //     } catch (err) {
-  //       console.log(err.message);
-  //     }
-  //   };
-  //   getGraphValues();
-  // }, [graphValues]); // graphValues inni her for automatisk oppdatering
+  useEffect(() => {
+    const getGraphValues = async () => {
+      try {
+        const response = await axios.get(BASE_URL_GRAPH);
+        setGraphValues(response.data);
+        setPowerPrice(response.data.powerPrice);
+        setSolar(response.data.solar);
+        setWaterLevelArray(response.data.vannstandArray);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getGraphValues();
+  }, []); // graphValues inni her for automatisk oppdatering
 
   const { buy = false, sell = false, vannstand: waterLevel = 0 } = graphValues;
   // console.log(powerPrice);
@@ -60,10 +60,25 @@ const Grafer = () => {
       <div className="m-2 grid h-screen grid-cols-2 grid-rows-2 gap-5">
         {graphValues && (
           <>
-            <Chart data={powerPrice} title={"Strømpris"} yAxis={"Kroner"} />
+            <Chart
+              data={powerPrice}
+              title={"Strømpris"}
+              yAxis={"Kroner"}
+              color={"green"}
+            />
             <Info buy={buy} sell={sell} waterLevel={waterLevel} />
-            <Chart data={solar} title={"Solceller"} yAxis={"KWh/s"} />
-            <Chart data={waterLevelArray} title={"Vannivå"} yAxis={"Meter"} />
+            <Chart
+              data={solar}
+              title={"Solceller"}
+              yAxis={"KWh/s"}
+              color={"orange"}
+            />
+            <Chart
+              data={waterLevelArray}
+              title={"Vannivå"}
+              yAxis={"Meter"}
+              color={"blue"}
+            />
           </>
         )}
       </div>

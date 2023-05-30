@@ -1,3 +1,4 @@
+import axios from "axios";
 import path from "path";
 import express from "express";
 import dotenv from "dotenv";
@@ -13,46 +14,55 @@ import reservoarRoutes from "./routes/reservoirRoutes.js";
 import turbineRoutes from "./routes/turbineRoutes.js";
 import cors from "cors";
 
+const whitelist = [
+  "http://localhost:3000",
+  "https://solvann.cyclic.app",
+];
+
 const port = process.env.PORT || 5000;
 
 connectDB();
 
 const app = express();
+axios.defaults.withCredentials = true;
+app.options("*", cors());
 const corsOptions = {
   credentials: true,
-  origin: true,
+  origin: (origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
 };
 app.use(cors(corsOptions));
-app.options("*", cors());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, PUT, POST, PATCH, DELETE"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
-
 // app.use((req, res, next) => {
-//   res.setHeader(
-//     "Access-Control-Allow-Origin",
-//     "https://solvann.cyclic.app"
-//   );
-//   res.setHeader(
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
 //     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//     "GET, PUT, POST, PATCH, DELETE"
 //   );
-//   res.setHeader(
+//   res.header(
 //     "Access-Control-Allow-Headers",
-//     "X-Requested-With,content-type"
+//     "Origin, X-Requested-With, Content-Type, Accept"
 //   );
-//   res.setHeader("Access-Control-Allow-Credentials", true);
 //   next();
 // });
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", [...whitelist]);
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
