@@ -129,23 +129,10 @@ body {
   }
 }
 
-.clockwise-spin {
-  animation-duration: 9s;
-  animation-iteration-count: infinite;
-  animation-name: clockwiseSpin;
-  animation-timing-function: linear;
-}
-
-.anticlockwise-spin {
-  animation-duration: 9s;
-  animation-iteration-count: infinite;
-  animation-name: antiClockwiseSpin;
-  animation-timing-function: linear;
-}
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px var(--color-login-input) inset !important;
+  -webkit-box-shadow: 0 0 0 30px #224b62 inset !important;
+  -webkit-text-fill-color: white;
 }
