@@ -53,7 +53,7 @@ const Home = ({ auth }) => {
     getHomeValues();
     // }, 5000);
     // return () => clearInterval(homeValuesInterval);
-  }, [homeValues]); // homeValues inni her for automatisk oppdatering
+  }, []); // homeValues inni her for automatisk oppdatering
 
   const {
     miljokostnader: environmentCost = 0,
