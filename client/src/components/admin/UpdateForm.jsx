@@ -72,7 +72,7 @@ const UpdateForm = ({
     } catch (err) {
       console.log(err);
     }
-    () => fetchUsers();
+    fetchUsers();
   };
 
   return (

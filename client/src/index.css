@@ -20,7 +20,7 @@ body {
 }
 
 .btn {
-  @apply mt-6 self-center rounded-lg px-5 py-3 font-medium uppercase tracking-widest text-white shadow-lg hover:shadow-none focus:outline-none transition duration-200;
+  @apply mt-6 self-center rounded-lg px-5 py-3 font-medium uppercase tracking-widest shadow-lg transition duration-200 hover:shadow-none focus:outline-none;
 }
 
 .input {

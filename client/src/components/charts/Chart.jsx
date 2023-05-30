@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
+import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,29 +22,13 @@ ChartJS.register(
   Legend
 );
 
-const PowerpriceChart = () => {
-  const labels = [
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-    "dato",
-  ];
+const Chart = ({ data, title, yAxis }) => {
+  const label = title;
 
   const [chartData, setChartData] = useState({
-    labels,
+    labels: [],
     datasets: [
       {
-        label: "Meter",
         data: [],
         borderColor: "#334155",
         backgroundColor: "#fbbf24",
@@ -53,38 +37,48 @@ const PowerpriceChart = () => {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      const waterData = await Axios.get(
-        "https://solvann.azurewebsites.net/api/WaterInflux/all"
-      );
+    // const interval = setInterval(async () => {
+    const getChartData = async () => {
       setChartData({
-        labels,
+        labels: data.map((item) => item.tidspunkt),
         datasets: [
           {
+            label: label,
+            data: data.map((item) => item.maling),
+            borderColor: "#438238",
+            backgroundColor: "red",
+          },
+          {
             label: "Meter",
-            data: [
-              600, 500, 550, 650, 690, 530, 590, 500, 450, 420, 720, 520, 370,
-              480], //funker ikke med waterData.data
+            data: [],
             borderColor: "#334155",
-            backgroundColor: "#fbbf24",
+            backgroundColor: "red",
+            borderDash: [5, 5],
           },
         ],
       });
     };
-    fetchData();
-  }, []);
+    getChartData();
+    // }, 60000);
+    // return () => clearInterval(interval);
+  }, [chartData]);
 
   return (
-    <div className="mx-auto mt-8 flex h-auto w-2/4 justify-center rounded-lg bg-white">
+    <div className="h-full w-full rounded-lg bg-white">
+      <h1 className="z-50 translate-y-14 text-2xl font-bold text-black">
+        {title}
+      </h1>
+      <h2 className="z-50 -translate-x-[21.7rem] translate-y-[11.4rem] rotate-[270deg] text-xl font-bold text-black">
+        {yAxis}
+      </h2>
       <Line options={styling} data={chartData} />
     </div>
   );
 };
-
 const styling = {
   responsive: true,
   pointRadius: 4,
-  // tension: 0.4,  //avgjør hvor skarpt grafen snur
+  tension: 0.2, //avgjør hvor skarpt grafen snur
   layout: {
     padding: {
       top: 20,
@@ -100,7 +94,7 @@ const styling = {
     },
     title: {
       display: true,
-      text: "STRØMPRIS",
+      text: "",
       color: "#334155",
       font: {
         size: 20,
@@ -121,8 +115,8 @@ const styling = {
       //   },
       // },
       title: {
-        display: true,
-        text: "Tidspunkt",
+        display: false,
+        text: "",
         color: "#334155",
         font: {
           size: 18,
@@ -142,8 +136,8 @@ const styling = {
       // },
       title: {
         display: true,
-        text: "Kr/MWh",
-        color: "#334155",
+        text: "",
+        color: "",
         font: {
           size: 18,
           weight: "bold",
@@ -154,4 +148,4 @@ const styling = {
   },
 };
 
-export default PowerpriceChart;
+export default Chart;

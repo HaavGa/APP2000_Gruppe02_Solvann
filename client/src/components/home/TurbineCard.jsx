@@ -4,25 +4,28 @@ import Toggle from "./Toggle";
 import StopTurbineButton from "./StopTurbineButton";
 import StartActionButton from "./StartActionButton";
 import PopoverChangeLoad from "./PopoverChangeLoad";
+import StartTurbineToggleGroup from "./StartTurbineToggleGroup";
 
 const TurbineCard = ({
   id,
   turbinNr,
   capacityUsage,
   config,
-  powerOut,
-  setPowerOut,
+  openModal,
+  closeModal,
 }) => {
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
   const [enabled, setEnabled] = useState(false);
   const [turbineState, setTurbineState] = useState(0);
   const [load, setLoad] = useState(0);
+  const [powerOut, setPowerOut] = useState(0);
+  const [disabled, setDisabled] = useState(false);
+  const [capacityUsage2, setCapacityUsage2] = useState(0);
 
   const MAX_FLOWRATE = 41.4;
   const POWER_PER_CUBIC_METER = 1.3;
 
-  setPowerOut((1 * MAX_FLOWRATE * POWER_PER_CUBIC_METER).toFixed(2));
   // hardkodet enn så lenge
 
   const allowNumbers = (e) => {
@@ -34,6 +37,9 @@ const TurbineCard = ({
     e.preventDefault();
     setLoad(capacityUsage);
     setNumber("");
+    console.log(load);
+    setPowerOut((load * MAX_FLOWRATE * POWER_PER_CUBIC_METER).toFixed(2));
+    console.log(powerOut);
     const newCapacityUsage = +number;
     const baseUrl = `https://solvann.azurewebsites.net/api/Turbines/${id}?capacityUsage=${newCapacityUsage}`;
     try {
@@ -76,6 +82,9 @@ const TurbineCard = ({
                 setTurbineState={setTurbineState}
                 capacityUsage={1}
                 turbineStatusChange={turbineStatusChange}
+                classNames={
+                  "z-10 mt-10 w-1/2 -translate-y-2 rounded-lg border-2 py-2 text-xl"
+                }
               />
               <StartActionButton
                 setDisableCard={setDisableCard}
@@ -84,6 +93,9 @@ const TurbineCard = ({
                 setTurbineState={setTurbineState}
                 capacityUsage={-1}
                 turbineStatusChange={turbineStatusChange}
+                classNames={
+                  "z-10 mt-10 w-1/2 -translate-y-2 rounded-lg border-2 py-2 text-xl"
+                }
               />
             </div>
           ) : null}
@@ -95,7 +107,9 @@ const TurbineCard = ({
             <div className="grid grid-cols-2 gap-y-1 text-lg">
               <h2>Load:</h2>
               <div className="flex items-center justify-between">
-                <div className={"translate-x-1 text-xl"}>{load}</div>
+                <div className={`text xl ${load < 100 ? "translate-x-3" : ""}`}>
+                  {load}%
+                </div>
                 <div className="z-10 translate-y-1">
                   <PopoverChangeLoad
                     number={number}
@@ -107,14 +121,46 @@ const TurbineCard = ({
                 </div>
               </div>
               <h2 className="pt-1">Power out:</h2>
-              <p className="pt-1 text-right">{powerOut} MWh/s</p>
+              <p className="pt-1 text-right">
+                {(powerOut / 100).toFixed(2)} MWh/s
+              </p>
             </div>
-            <Toggle
+            {/* <Toggle
               enabled={enabled}
               setEnabled={setEnabled}
               disableCard={disableCard}
               turbineState={turbineState}
               setTurbineState={setTurbineState}
+            /> */}
+            {/* <div className="flex justify-between">
+              <StartActionButton
+                setDisableCard={setDisableCard}
+                text={"Slipper inn"}
+                color={"orange"}
+                setTurbineState={setTurbineState}
+                capacityUsage={-1}
+                turbineStatusChange={turbineStatusChange}
+                disabled={disabled}
+                setDisabled={setDisabled}
+                classNames={"z-10 my-1 rounded-lg border-2 px-2 py-2 text-lg"}
+              />
+              <StartActionButton
+                setDisableCard={setDisableCard}
+                text={"Pumper ut"}
+                color={"blue"}
+                setTurbineState={setTurbineState}
+                capacityUsage={1}
+                turbineStatusChange={turbineStatusChange}
+                disabled={disabled}
+                setDisabled={setDisabled}
+                classNames={"z-10 my-1 rounded-lg border-2 px-2 py-2 text-lg"}
+              />
+            </div> */}
+            <StartTurbineToggleGroup
+              setTurbineState={setTurbineState}
+              turbineStatusChange={turbineStatusChange}
+              capacityUsage2={capacityUsage2}
+              setCapacityUsage2={setCapacityUsage2}
             />
 
             <div className="mt-3 flex justify-center">

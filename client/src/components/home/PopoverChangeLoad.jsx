@@ -10,7 +10,7 @@ const PopoverChangeLoad = ({
   setLoad,
 }) => {
   return (
-    <Popover className="relative">
+    <Popover className="relative z-[100]">
       {({ open, close }) => (
         <>
           <Popover.Button
