@@ -61,7 +61,7 @@ const Chart = ({ data, title, yAxis }) => {
     getChartData();
     // }, 60000);
     // return () => clearInterval(interval);
-  }, [chartData]);
+  }, []); // chartData inn her for automatisk oppdatering
 
   return (
     <div className="h-full w-full rounded-lg bg-white">
