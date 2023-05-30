@@ -7,19 +7,18 @@ const StartTurbineToggleGroup = ({
   capacityUsage2,
   setCapacityUsage2,
 }) => {
-  const [turbine, setTurbine] = useState("startup");
+  const [turbine, setTurbine] = useState("let-in");
 
   return (
     <RadioGroup value={turbine} onChange={setTurbine}>
       <div className="flex flex-row justify-between py-3 text-white">
-        <RadioGroup.Option value="startup">
+        <RadioGroup.Option value="let-in">
           {({ checked }) => (
             <span
               onClick={() => {
-                setCapacityUsage2(-1);
+                setCapacityUsage2(1);
                 setTurbineState(capacityUsage2);
                 turbineStatusChange(capacityUsage2);
-                console.log("stop");
               }}
               className={
                 checked
@@ -31,14 +30,13 @@ const StartTurbineToggleGroup = ({
             </span>
           )}
         </RadioGroup.Option>
-        <RadioGroup.Option value="business">
+        <RadioGroup.Option value="pump-out">
           {({ checked }) => (
             <span
               onClick={() => {
-                setCapacityUsage2(1);
+                setCapacityUsage2(-1);
                 setTurbineState(capacityUsage2);
                 turbineStatusChange(capacityUsage2);
-                console.log("start");
               }}
               className={
                 checked

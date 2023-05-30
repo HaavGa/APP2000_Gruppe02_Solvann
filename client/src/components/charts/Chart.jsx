@@ -46,8 +46,6 @@ const Chart = ({ data, title, yAxis, color }) => {
     const interval = setInterval(() => {
       const getChartData = async () => {
         const { firstHalf, secondHalf } = divideData(data);
-        console.log(firstHalf);
-        console.log(secondHalf);
         setChartData({
           labels: firstHalf
             .slice(0)

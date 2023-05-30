@@ -46,10 +46,6 @@ const Grafer = () => {
   }, []); // graphValues inni her for automatisk oppdatering
 
   const { buy = false, sell = false, vannstand: waterLevel = 0 } = graphValues;
-  // console.log(powerPrice);
-  // console.log(solar);
-  // console.log(waterLevelArray);
-  // console.log(buy, sell, waterLevel);
   return (
     <div className="relative m-7 h-screen overflow-hidden bg-bg-main text-center text-white">
       {isLoading && (

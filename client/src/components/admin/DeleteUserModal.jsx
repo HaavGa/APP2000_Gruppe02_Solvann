@@ -7,7 +7,6 @@ const DeleteUserModal = ({ isOpen, setIsOpen }) => {
       const response = await axios.delete(
         `https://solvann.cyclic.app/api/users/${_id}`
       );
-      console.log(response);
     } catch (err) {
       console.log(err.response.data.message);
     }

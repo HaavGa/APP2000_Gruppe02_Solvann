@@ -30,16 +30,13 @@ const Admin = () => {
   }, []);
 
   const updateUser = async (_id) => {
-    console.log(_id);
     setUpdateForm(true);
     setLoadingEdit(true);
     try {
       const response = await axios.patch(
         `https://solvann.cyclic.app/api/users/${_id}`
       );
-      console.log(response.data);
       setSavedValues(response.data);
-      console.log(savedValues);
       setLoadingEdit(false);
     } catch (err) {
       console.log(err.data.message);
@@ -48,12 +45,10 @@ const Admin = () => {
   };
 
   const deleteUser = async (_id) => {
-    console.log(_id);
     try {
       const response = await axios.delete(
         `https://solvann.cyclic.app/api/users/${_id}`
       );
-      console.log(response);
     } catch (err) {
       console.log(err.response.data.message);
     }
