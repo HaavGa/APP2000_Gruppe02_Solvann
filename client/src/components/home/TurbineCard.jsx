@@ -22,11 +22,10 @@ const TurbineCard = ({
   const [powerOut, setPowerOut] = useState(0);
   const [disabled, setDisabled] = useState(false);
   const [capacityUsage2, setCapacityUsage2] = useState(0);
+  // const [capacityUsage2, setCapacityUsage2] = useState(false);
 
   const MAX_FLOWRATE = 41.4;
   const POWER_PER_CUBIC_METER = 1.3;
-
-  // hardkodet enn så lenge
 
   const allowNumbers = (e) => {
     const value = e.target.value.replace(/\D/g, "");
@@ -159,8 +158,8 @@ const TurbineCard = ({
             <StartTurbineToggleGroup
               setTurbineState={setTurbineState}
               turbineStatusChange={turbineStatusChange}
-              capacityUsage2={capacityUsage2}
               setCapacityUsage2={setCapacityUsage2}
+              capacityUsage2={capacityUsage2}
             />
 
             <div className="mt-3 flex justify-center">

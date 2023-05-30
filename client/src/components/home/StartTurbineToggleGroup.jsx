@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 
-const StartTurbineToggleGroup = (
+const StartTurbineToggleGroup = ({
   setTurbineState,
   turbineStatusChange,
   capacityUsage2,
-  setCapacityUsage2
-) => {
+  setCapacityUsage2,
+}) => {
   const [turbine, setTurbine] = useState("startup");
 
   return (

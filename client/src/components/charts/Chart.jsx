@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,8 +21,15 @@ ChartJS.register(
   Legend
 );
 
-const Chart = ({ data, title, yAxis }) => {
+const Chart = ({ data, title, yAxis, color }) => {
   const label = title;
+
+  const divideData = (data) => {
+    const splitIndex = 12;
+    const firstHalf = data.splice(0, splitIndex);
+    const secondHalf = data.splice(-splitIndex);
+    return { firstHalf: firstHalf, secondHalf: secondHalf };
+  };
 
   const [chartData, setChartData] = useState({
     labels: [],
@@ -37,38 +43,44 @@ const Chart = ({ data, title, yAxis }) => {
   });
 
   useEffect(() => {
-    // const interval = setInterval(async () => {
-    const getChartData = async () => {
-      setChartData({
-        labels: data.map((item) => item.tidspunkt),
-        datasets: [
-          {
-            label: label,
-            data: data.map((item) => item.maling),
-            borderColor: "#438238",
-            backgroundColor: "red",
-          },
-          {
-            label: "Meter",
-            data: [],
-            borderColor: "#334155",
-            backgroundColor: "red",
-            borderDash: [5, 5],
-          },
-        ],
-      });
-    };
-    getChartData();
-    // }, 60000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(() => {
+      const getChartData = async () => {
+        const { firstHalf, secondHalf } = divideData(data);
+        console.log(firstHalf);
+        console.log(secondHalf);
+        setChartData({
+          labels: firstHalf
+            .slice(0)
+            .reverse()
+            .map((item) => item.tidspunkt),
+          datasets: [
+            {
+              label: label,
+              data: firstHalf.map((item) => item.maling),
+              borderColor: "gray",
+              backgroundColor: "gray",
+              borderDash: [5, 5],
+            },
+            {
+              label: label,
+              data: secondHalf.map((item) => item.maling),
+              borderColor: color,
+              backgroundColor: color,
+            },
+          ],
+        });
+      };
+      getChartData();
+    }, 2000);
+    return () => clearInterval(interval);
   }, []); // chartData inn her for automatisk oppdatering
 
   return (
-    <div className="h-full w-full rounded-lg bg-white">
-      <h1 className="z-50 translate-y-14 text-2xl font-bold text-black">
+    <div className="relative h-full w-full rounded-lg bg-white">
+      <h1 className="flex translate-y-10 justify-center text-2xl font-bold text-black">
         {title}
       </h1>
-      <h2 className="z-50 -translate-x-[21.7rem] translate-y-[11.4rem] rotate-[270deg] text-xl font-bold text-black">
+      <h2 className="absolute z-20 flex translate-y-40 rotate-[270deg] text-xl font-bold text-black">
         {yAxis}
       </h2>
       <Line options={styling} data={chartData} />
@@ -82,7 +94,7 @@ const styling = {
   layout: {
     padding: {
       top: 20,
-      bottom: 20,
+      bottom: 0,
       left: 20,
       right: 30,
     },
@@ -123,7 +135,7 @@ const styling = {
           weight: "bold",
           lineHeight: 1.2,
         },
-        padding: { top: 20, left: 0, right: 0, bottom: 0 },
+        padding: { top: 0, left: 0, right: 0, bottom: 0 },
       },
     },
     y: {
@@ -142,7 +154,7 @@ const styling = {
           size: 18,
           weight: "bold",
         },
-        padding: { top: 0, left: 0, right: 0, bottom: 10 },
+        padding: { top: 0, left: 0, right: 0, bottom: 0 },
       },
     },
   },

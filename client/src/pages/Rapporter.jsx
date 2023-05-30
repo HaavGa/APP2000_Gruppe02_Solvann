@@ -2,7 +2,7 @@ import ExportToExcel from "../components/reports/ExportToExcel";
 
 const Rapporter = () => {
   const currentDate = new Date().toJSON().slice(0, 10);
-  
+
   // dummy data for bruker-rapporten
   const userData = [
     {
@@ -46,26 +46,28 @@ const Rapporter = () => {
         },
       },
       __v: 0,
-    }];
+    },
+  ];
 
   // dummy-data for vannstand-rapporten
   const waterlevelData = [
     {
-      "waterLevel": 50,
-      "date": {
-        "$date": {
-          "$numberLong": "1685052002629"
-        }
-      }
+      waterLevel: 50,
+      date: {
+        $date: {
+          $numberLong: "1685052002629",
+        },
+      },
     },
     {
-      "waterLevel": 27.167331326978715,
-      "date": {
-        "$date": {
-          "$numberLong": "1685059202660"
-        }
-      }
-  }];
+      waterLevel: 27.167331326978715,
+      date: {
+        $date: {
+          $numberLong: "1685059202660",
+        },
+      },
+    },
+  ];
 
   return (
     <div className="h-screen bg-gray-700 py-5 text-center text-white">

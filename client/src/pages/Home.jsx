@@ -4,7 +4,7 @@ import WaterReservoirCard from "../components/home/WaterReservoirCard";
 import WaterReservoir from "../components/home/WaterReservoir";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Spinner from "../components/Spinner";
+import Spinner from "../components/utils/Spinner";
 import DangerModal from "../components/home/StopAllTurbinesModal";
 import StopAllTurbinesModal from "../components/home/StopAllTurbinesModal";
 
@@ -78,6 +78,12 @@ const Home = ({ auth }) => {
       <div>
         <StopAllTurbinesModal isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
+      {auth().isAdmin && (
+        <div className="absolute z-10 flex flex-col items-center p-4 py-8 text-xl text-white">
+          <p>Stopp alle turbiner</p>
+          <StopAllTurbinesButton openModal={openModal} />
+        </div>
+      )}
       <div className="mx-auto grid grid-rows-2 gap-x-20 p-12">
         <div className="row-span-2 flex flex-col items-center space-y-5">
           <WaterReservoir
@@ -106,12 +112,6 @@ const Home = ({ auth }) => {
           ))}
         </div>
       </div>
-      {auth().isAdmin && (
-        <div className="absolute z-10 flex translate-x-3 translate-y-11 flex-col items-center text-xl text-white">
-          <p>Stopp alle turbiner</p>
-          <StopAllTurbinesButton openModal={openModal} />
-        </div>
-      )}
     </div>
   );
 };
