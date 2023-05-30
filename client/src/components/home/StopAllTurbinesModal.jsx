@@ -5,7 +5,7 @@ const StopAllTurbinesModal = ({ isOpen, setIsOpen }) => {
   const stopAllTurbines = () => {
     const baseUrl = "https://solvann.cyclic.app/api/turbine/";
     const data = {
-      capacityUsage: 1,
+      capacityUsage: 0,
     };
     try {
       axios.post(`${baseUrl}`, data);
