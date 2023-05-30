@@ -1,25 +1,71 @@
-import WaterChart from "../components/charts/WaterChart";
-import PowerpriceChart from "../components/charts/PowerpriceChart";
+import { useState, useEffect } from "react";
+import Chart from "../components/charts/Chart";
+import axios from "axios";
+import Spinner from "../components/Spinner";
+import Info from "../components/charts/Info";
 
 const Grafer = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [graphValues, setGraphValues] = useState({});
+  const [powerPrice, setPowerPrice] = useState([]);
+  const [solar, setSolar] = useState([]);
+  const [waterLevelArray, setWaterLevelArray] = useState([]);
+
+  const BASE_URL_GRAPH =
+    "https://solvann.cyclic.app/api/reservoir/updateGraphs";
+
+  useEffect(() => {
+    const getGraphValues = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios.get(BASE_URL_GRAPH);
+        setGraphValues(response.data);
+        setPowerPrice(response.data.powerPrice);
+        setSolar(response.data.solar);
+        setWaterLevelArray(response.data.vannstandArray);
+        setIsLoading(false);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
+    getGraphValues();
+  }, []);
+  // useEffect(() => {
+  //   const getGraphValues = async () => {
+  //     try {
+  //       const response = await axios.get(BASE_URL_GRAPH);
+  //       setGraphValues(response.data);
+  //       setPowerPrice(response.data.powerPrice);
+  //       setSolar(response.data.solar);
+  //       setWaterLevelArray(response.data.vannstandArray);
+  //     } catch (err) {
+  //       console.log(err.message);
+  //     }
+  //   };
+  //   getGraphValues();
+  // }, [graphValues]); // graphValues inni her for automatisk oppdatering
+
+  const { buy = false, sell = false, vannstand: waterLevel = 0 } = graphValues;
+  // console.log(powerPrice);
+  // console.log(solar);
+  // console.log(waterLevelArray);
+  // console.log(buy, sell, waterLevel);
   return (
-    <div className="bg-gray-700 py-5 text-center text-white">
-      <h1 className="text-4xl">Grafer</h1>
-      <h2 className="mt-2 mb-2 text-xl">
-        OBS! Dummy-grafer, ikke tall fra API'et. Reagerer heller ikke på valgt
-        dato foreløpig.
-      </h2>
-      {/* <div className="mt-14 h-8 items-center flex flex-row justify-center">
-        <p className="px-4 text-lg">Velg graf:</p>
-        <button className="bg-white text-black">
-          Dropdown inn her
-        </button>
-      </div> */}
-      <div className="pt-5">
-        <WaterChart />
-      </div>
-      <div className="pt-5">
-        <PowerpriceChart />
+    <div className="relative m-7 h-screen overflow-hidden bg-bg-main text-center text-white">
+      {isLoading && (
+        <div className="absolute z-30 grid h-full w-full scale-[2] place-items-center bg-bg-main">
+          <Spinner />
+        </div>
+      )}
+      <div className="m-2 grid h-screen grid-cols-2 grid-rows-2 gap-5">
+        {graphValues && (
+          <>
+            <Chart data={powerPrice} title={"Strømpris"} yAxis={"Kroner"} />
+            <Info buy={buy} sell={sell} waterLevel={waterLevel} />
+            <Chart data={solar} title={"Solceller"} yAxis={"KWh/s"} />
+            <Chart data={waterLevelArray} title={"Vannivå"} yAxis={"Meter"} />
+          </>
+        )}
       </div>
     </div>
   );

@@ -56,7 +56,7 @@ const SignupForm = ({ fetchUsers }) => {
       console.log(err.response.data.message);
       setError(err.response.data.message);
     }
-    () => fetchUsers();
+    fetchUsers();
   };
 
   return (
@@ -201,7 +201,10 @@ const SignupForm = ({ fetchUsers }) => {
           />
         </div>
         <div className="my-3 text-center text-red-400">{error}</div>
-        <button type="submit" className="btn w-full bg-black hover:bg-gray-900">
+        <button
+          type="submit"
+          className="btn w-full bg-black text-white hover:bg-gray-900"
+        >
           Registrer
         </button>
       </form>

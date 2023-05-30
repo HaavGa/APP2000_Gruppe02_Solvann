@@ -5,6 +5,9 @@ const StartActionButton = ({
   setTurbineState,
   capacityUsage,
   turbineStatusChange,
+  disabled,
+  setDisabled,
+  classNames,
 }) => {
   const colorVariants = {
     blue: "bg-blue-200 border-blue-500 hover:bg-blue-300",
@@ -16,8 +19,9 @@ const StartActionButton = ({
         setDisableCard(false);
         setTurbineState(capacityUsage);
         turbineStatusChange(capacityUsage);
+        setDisabled(true);
       }}
-      className={`${colorVariants[color]} z-10 mt-10 w-1/2 -translate-y-2 rounded-lg border-2 py-2 text-xl`}
+      className={`${colorVariants[color]} ${classNames}`}
     >
       {text}
     </button>

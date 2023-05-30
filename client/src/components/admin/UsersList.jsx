@@ -1,9 +1,9 @@
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
-import Spinner from "../Spinner"
-import { ImUserTie } from "react-icons/im"
+import Spinner from "../Spinner";
+import { ImUserTie } from "react-icons/im";
 
-const UsersList = ({ users, isLoading, updateUser, deleteUser }) => {
+const UsersList = ({ users, isLoading, updateUser, deleteUser, openModal }) => {
   const [pageNumber, setPageNumber] = useState(0);
 
   const usersPerPage = 5;
@@ -89,6 +89,7 @@ const UsersList = ({ users, isLoading, updateUser, deleteUser }) => {
                       type="button"
                       className="inline-flex items-center rounded-lg bg-red-500 py-2 px-3 text-center text-sm font-medium text-white shadow-md shadow-gray-300 transition-transform hover:scale-[1.02] hover:bg-red-600"
                       onClick={() => deleteUser(_id)}
+                      // onClick={openModal}
                     >
                       <svg
                         className="mr-2 h-5 w-5"

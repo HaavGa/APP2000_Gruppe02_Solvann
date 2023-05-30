@@ -8,16 +8,33 @@ import { TbLogout } from "react-icons/tb";
 import { useSignOut } from "react-auth-kit";
 import ModalChangePassword from "./ModalChangePassword";
 
-export default function Navbar() {
+const Navbar = ({ auth }) => {
   const [isShown, setIsShown] = useState(false);
   const signOut = useSignOut();
 
-  function classNames(...classes) {
+  const classNames = (...classes) => {
     return classes.filter(Boolean).join(" ");
-  }
+  };
   const editPassword = () => {
     setIsShown((prevIsShown) => !prevIsShown);
-    console.log(isShown);
+  };
+
+  function CustomLink({ to, children, ...props }) {
+    const resolvedPath = useResolvedPath(to);
+    const isActive = useMatch({ path: resolvedPath.pathname, end: true });
+    return (
+      <li
+        className={
+          isActive
+            ? "rounded-xl text-logo"
+            : "hover:rounded-xl hover:bg-gray-700"
+        }
+      >
+        <Link to={to} {...props}>
+          {children}
+        </Link>
+      </li>
+    );
   }
 
   return (
@@ -48,10 +65,11 @@ export default function Navbar() {
           <CustomLink to="/rapporter" className="navLink">
             Rapporter
           </CustomLink>
-
-          <CustomLink to="/admin" className="navLink">
-            Admin
-          </CustomLink>
+          {auth().isAdmin && (
+            <CustomLink to="/admin" className="navLink">
+              Admin
+            </CustomLink>
+          )}
           <Menu as="div" className="relative inline-block text-left">
             <div>
               <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900">
@@ -64,8 +82,8 @@ export default function Navbar() {
             <Menu.Items className=" absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="py-2">
                 <Menu.Item>
-                  <p className="py-2 text-center text-base font-bold text-gray-900">
-                    Navn Navnesen
+                  <p className="py-2 text-center text-lg font-bold text-gray-900">
+                    {`${auth().firstName} ${auth().lastName}`}
                   </p>
                 </Menu.Item>
                 <Menu.Item>
@@ -123,20 +141,6 @@ export default function Navbar() {
       </nav>
     </>
   );
-}
+};
 
-function CustomLink({ to, children, ...props }) {
-  const resolvedPath = useResolvedPath(to);
-  const isActive = useMatch({ path: resolvedPath.pathname, end: true });
-  return (
-    <li
-      className={
-        isActive ? "rounded-xl text-logo" : "hover:rounded-xl hover:bg-gray-700"
-      }
-    >
-      <Link to={to} {...props}>
-        {children}
-      </Link>
-    </li>
-  );
-}
+export default Navbar;

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import {
@@ -6,22 +7,17 @@ import {
   Grafer,
   Home,
   Login,
-  MinSide,
   Rapporter,
 } from "./pages/index";
 import { useIsAuthenticated, useAuthUser } from "react-auth-kit";
 
 function App() {
   const auth = useAuthUser();
-  //! Hmmmmmmmmmm
-  // axios.defaults.withCredentials = true;
-  // axios.defaults.baseURL = "http://localhost:5000/api";
-  // axios.defaults.headers.common["Authorization"] = auth().token;
 
   const isAuthenticated = useIsAuthenticated();
   return (
     <>
-      {isAuthenticated() && <Navbar />}
+      {isAuthenticated() && <Navbar auth={auth} />}
       <div>
         <Routes>
           <Route
@@ -30,7 +26,15 @@ function App() {
           />
           <Route
             path="/admin"
-            element={isAuthenticated() ? <Admin auth={auth} /> : <Login />}
+            element={
+              isAuthenticated() && auth().isAdmin ? (
+                <Admin />
+              ) : isAuthenticated() && !auth().isAdmin ? (
+                <ErrorPage />
+              ) : (
+                <Login />
+              )
+            }
           />
           <Route
             path="/grafer"
@@ -39,10 +43,6 @@ function App() {
           <Route
             path="/rapporter"
             element={isAuthenticated() ? <Rapporter /> : <Login />}
-          />
-          <Route
-            path="/minside"
-            element={isAuthenticated() ? <MinSide /> : <Login />}
           />
           <Route path="/*" element={<ErrorPage />} />
         </Routes>

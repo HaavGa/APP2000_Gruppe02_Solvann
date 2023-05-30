@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { Dialog } from '@headlessui/react'
+import { useState } from "react";
+import axios from "axios";
+import { Dialog } from "@headlessui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
@@ -37,23 +38,30 @@ const ModalChangePassword = () => {
   });
 
   const submitHandler = (values) => {
-
     // @Håvard
-    // lagre nytt passord i databasen 
+    const baseUrl = "https://solvann.cyclic.app/api/users/updatePassword";
+    const data = ({ password } = values);
+    try {
+      axios.post(`${baseUrl}`, data);
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+    // lagre nytt passord i databasen
     // Eventuelt gi bekreftelse til bruker
+    // "https://solvann.cyclic.app/api/users/updatePassword"
 
-    setIsOpen(false); //lukker modalen når "lagre passord"-knappen trykkes 
+    setIsOpen(false); //lukker modalen når "lagre passord"-knappen trykkes
   };
 
   return (
     <Dialog
-      open={isOpen} 
+      open={isOpen}
       onClose={() => setIsOpen(false)}
-      className="fixed inset-x-0 inset-y-4 pt-[25vh] z-20"
+      className="fixed inset-x-0 inset-y-4 z-20 pt-[25vh]"
     >
       <Dialog.Overlay className="fixed inset-0 bg-gray-700/80" />
       <div className="relative mx-auto max-w-xl rounded-xl bg-white text-center shadow-2xl ring-1 ring-black/5">
-        <h1 className="text-xl font-semibold pt-4">Endre passord</h1>
+        <h1 className="pt-4 text-xl font-semibold">Endre passord</h1>
         <div className="flex justify-center">
           <form onSubmit={formik.handleSubmit} className="my-6">
             <label
@@ -105,7 +113,7 @@ const ModalChangePassword = () => {
             </div>
             <button
               type="submit"
-              className="btn bg-black hover:bg-gray-900"
+              className="btn bg-black text-white hover:bg-gray-900"
             >
               Lagre nytt passord
             </button>
@@ -114,6 +122,6 @@ const ModalChangePassword = () => {
       </div>
     </Dialog>
   );
-}
+};
 
 export default ModalChangePassword;
