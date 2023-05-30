@@ -105,7 +105,7 @@ const TurbineCard = ({
             </h1>
             <div className="h-[2px] w-full -translate-y-3 bg-gray-700"></div>
             <div className="grid grid-cols-2 gap-y-1 text-lg">
-              <h2>Load:</h2>
+              <h2>Kapasitet:</h2>
               <div className="flex items-center justify-between">
                 <div className={`text xl ${load < 100 ? "translate-x-3" : ""}`}>
                   {load}%
@@ -120,7 +120,7 @@ const TurbineCard = ({
                   />
                 </div>
               </div>
-              <h2 className="pt-1">Power out:</h2>
+              <h2 className="pt-1">Effekt:</h2>
               <p className="pt-1 text-right">
                 {(powerOut / 100).toFixed(2)} MWh/s
               </p>

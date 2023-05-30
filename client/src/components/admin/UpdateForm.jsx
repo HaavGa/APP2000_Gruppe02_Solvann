@@ -217,7 +217,10 @@ const UpdateForm = ({
             className="mt-2 h-5 w-5 rounded-md"
           />
         </div>
-        <button type="submit" className="btn w-full bg-black hover:bg-gray-900">
+        <button
+          type="submit"
+          className="btn w-full bg-black text-white hover:bg-gray-900"
+        >
           Oppdater
         </button>
       </form>
