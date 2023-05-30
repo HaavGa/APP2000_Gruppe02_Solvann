@@ -31,8 +31,6 @@ const Login = () => {
     setIsLoading(true);
     const baseUrl = "https://solvann.cyclic.app/api/users/login";
     try {
-      console.log(import.meta.env.PROD);
-      console.log(window.location.hostname);
       const response = await axios.post(`${baseUrl}`, values);
       setIsLoading(false);
       signIn({
@@ -45,7 +43,6 @@ const Login = () => {
           lastName: response.data.lastName,
           isAdmin: response.data.isAdmin,
           email: response.data.email,
-          // token: response.data.token,
         },
       });
     } catch (err) {

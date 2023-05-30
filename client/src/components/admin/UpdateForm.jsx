@@ -66,7 +66,6 @@ const UpdateForm = ({
     try {
       const { id } = values;
       const baseUrl = `https://solvann.cyclic.app/api/users/${id}`;
-      console.log(values);
 
       axios.patch(`${baseUrl}`, values);
     } catch (err) {

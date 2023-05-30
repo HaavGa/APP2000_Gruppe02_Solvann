@@ -6,21 +6,13 @@ import StartActionButton from "./StartActionButton";
 import PopoverChangeLoad from "./PopoverChangeLoad";
 import StartTurbineToggleGroup from "./StartTurbineToggleGroup";
 
-const TurbineCard = ({
-  id,
-  turbinNr,
-  capacityUsage,
-  config,
-  openModal,
-  closeModal,
-}) => {
+const TurbineCard = ({ id, turbinNr, capacityUsage, config }) => {
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
   const [enabled, setEnabled] = useState(false);
   const [turbineState, setTurbineState] = useState(0);
   const [load, setLoad] = useState(0);
   const [powerOut, setPowerOut] = useState(0);
-  const [disabled, setDisabled] = useState(false);
   const [capacityUsage2, setCapacityUsage2] = useState(0);
   // const [capacityUsage2, setCapacityUsage2] = useState(false);
 
@@ -36,9 +28,7 @@ const TurbineCard = ({
     e.preventDefault();
     setLoad(capacityUsage);
     setNumber("");
-    console.log(load);
     setPowerOut((load * MAX_FLOWRATE * POWER_PER_CUBIC_METER).toFixed(2));
-    console.log(powerOut);
     const newCapacityUsage = +number;
     const baseUrl = `https://solvann.azurewebsites.net/api/Turbines/${id}?capacityUsage=${newCapacityUsage}`;
     try {

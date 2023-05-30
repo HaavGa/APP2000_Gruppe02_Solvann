@@ -5,7 +5,6 @@ const StartActionButton = ({
   setTurbineState,
   capacityUsage,
   turbineStatusChange,
-  disabled,
   setDisabled,
   classNames,
 }) => {
@@ -19,7 +18,6 @@ const StartActionButton = ({
         setDisableCard(false);
         setTurbineState(capacityUsage);
         turbineStatusChange(capacityUsage);
-        setDisabled(true);
       }}
       className={`${colorVariants[color]} ${classNames}`}
     >
