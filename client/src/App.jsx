@@ -42,7 +42,7 @@ function App() {
           />
           <Route
             path="/rapporter"
-            element={isAuthenticated() ? <Rapporter /> : <Login />}
+            element={isAuthenticated() ? <Rapporter auth={auth} /> : <Login />}
           />
           <Route path="/*" element={<ErrorPage />} />
         </Routes>

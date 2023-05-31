@@ -16,8 +16,9 @@ const ExportToExcel = ({ excelData, fileName, btnText }) => {
 
   return (
     <button
-      className="btn bg-white text-black hover:bg-gray-200 w-[18rem]"
-      onClick={(e) => exportToCSV(excelData, fileName)}>
+      className="btn w-[18rem] bg-white text-black hover:bg-gray-200"
+      onClick={(e) => exportToCSV(excelData, fileName)}
+    >
       {btnText}
     </button>
   );
