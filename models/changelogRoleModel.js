@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+/**
+ * @author Emil Waldemar Strand
+ * @desc model for changelogRole-collection
+ */
 const changelogRoleSchema = mongoose.Schema({
 	adminId: {
     type: String,

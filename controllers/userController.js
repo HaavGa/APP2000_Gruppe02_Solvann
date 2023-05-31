@@ -3,6 +3,17 @@ import User from '../models/userModel.js';
 import ChangelogRole from '../models/changelogRoleModel.js';
 import generateToken from '../utils/generateToken.js';
 
+/**
+ * @author Brad Traversy, Emil Waldemar Strand
+ * @source https://github.com/bradtraversy/mern-auth/blob/master/backend/controllers/userController.js
+ *
+ */
+
+/**
+ * @desc Henter alle brukere
+ * @route GET /api/users/
+ * @access Private
+ */
 const getUsers = asyncHandler(async (req, res) => {
   const usersFound = await User.find({}).sort({ username: 1 }).select('-password');
   
@@ -14,9 +25,11 @@ const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json(usersFound);
 });
 
-// @desc    Register a new user
-// @route   POST /api/users
-// @access  Public
+/**
+ * @desc Registrerer ny bruker
+ * @route POST /api/users/
+ * @access Private
+ */
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password, isAdmin } = req.body;
 
@@ -53,9 +66,11 @@ const registerUser = asyncHandler(async (req, res) => {
   
 });
 
-// @desc    Delete goal
-// @route   DELETE /api/version/users
-// @access  Private
+/**
+ * @desc Sletter bruker
+ * @route DELETE /api/users/:id
+ * @access Private
+ */
 const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById({ _id: req.params.id }).select('-password');
   if (!user) {
@@ -73,9 +88,11 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.status(200).json(userDeleted);
 });
 
-// @desc    Auth user & get token
-// @route   POST /api/users/auth
-// @access  Public
+/**
+ * @desc Autentiserer bruker
+ * @route POST /api/users/login
+ * @access Public
+ */
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -98,6 +115,12 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc Oppdaterer kun passord på brukeren som har
+ * legger inn nytt.
+ * @route POST /api/users/updatePassword
+ * @access Private
+ */
 const updatePassword = asyncHandler(async (req, res) => {
   
   req.user.password = req.body.password;
@@ -112,9 +135,11 @@ const updatePassword = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: "Passord oppdatert" });
 });
 
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
+/**
+ * @desc Oppdaterer bruker
+ * @route PATCH /api/users/:id
+ * @access Public
+ */
 const updateUser = asyncHandler(async (req, res) => {
 
   const user = await User.findById({ _id: req.params.id });

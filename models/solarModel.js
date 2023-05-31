@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+/**
+ * @author Emil Waldemar Strand
+ * @desc model for solar-collection
+ */
 const solarSchema = mongoose.Schema({
   avgOutput: {
     type: Number,

@@ -14,6 +14,9 @@ import reservoarRoutes from "./routes/reservoirRoutes.js";
 import turbineRoutes from "./routes/turbineRoutes.js";
 import cors from "cors";
 
+/**
+ * @author Brad Traversy, Emil Waldemar Strand, Håvard Garsrud
+ */
 const whitelist = [
   "http://localhost:3000",
   "https://solvann.cyclic.app",

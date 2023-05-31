@@ -9,6 +9,9 @@ import {
 } from '../controllers/userController.js';
 import { protect, isAdmin } from '../middleware/authMiddleware.js';
 
+/**
+ * @author Emil Waldemar Strand
+ */
 const router = express.Router();
 
 router.route('/')
