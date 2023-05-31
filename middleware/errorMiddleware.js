@@ -4,6 +4,11 @@ const notFound = (req, res, next) => {
   next(error);
 };
 
+/**
+ * @author Brad Traversy
+ * @desc hjelpemetode for feilbehandling.
+ * @source https://github.com/bradtraversy/mern-auth/blob/master/backend/middleware/errorMiddleware.js
+ */
 const errorHandler = (err, req, res, next) => {
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   let message = err.message;

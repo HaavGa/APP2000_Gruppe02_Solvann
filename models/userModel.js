@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
+/**
+ * @author Brad Traversy
+ * @desc model for brukere.
+ * @source https://github.com/bradtraversy/mern-auth/blob/master/backend/models/userModel.js
+ */
 const userSchema = mongoose.Schema(
   {
     firstName: {
@@ -30,12 +35,23 @@ const userSchema = mongoose.Schema(
   }
 );
 
-// Match user entered password to hashed password in database
+/**
+ * @author BradTraversy
+ * @desc matcher hashet inntastet passord opp mot hashet passord i
+ * databasen.
+ * @source https://github.com/bradtraversy/mern-auth/blob/master/backend/models/userModel.js
+ * @param {string} enteredPassword
+ * @returns {boolean} om det matcher eller ikke
+ */
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Encrypt password using bcrypt
+/**
+ * @author Brad Traversy
+ * @desc Krypterer passord med Bcrypt.
+ * @source https://github.com/bradtraversy/mern-auth/blob/master/backend/models/userModel.js
+ */
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();

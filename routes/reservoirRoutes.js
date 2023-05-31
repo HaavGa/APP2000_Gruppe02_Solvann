@@ -8,6 +8,9 @@ import {
   updateHome,
 } from "../controllers/reservoirController.js";
 
+/**
+ * @author Emil Waldemar Strand
+ */
 router.get('/updateHome', updateHome);
 router.get('/updateGraphs', updateGraphs);
 router.get('/log2Hour', log2Hour);

@@ -4,6 +4,19 @@ import Solar from "../models/solarModel.js";
 import axios from "axios";
 import generateToken from "../utils/generateToken.js";
 
+/**
+ * @author Emil Waldemar Strand
+ * Denne fila inneholder metoder knytta til reservoaret.
+ */
+
+/**
+ * @desc Blir brukt til å oppdatere siden "Grafer".
+ * Kobler seg opp mot solvann API og henter ut opplysninger.
+ * Behandler data om nødvendig, gjør beregninger og
+ * returnerer til frontend.
+ * @route GET /api/reservoir/updateGraphs
+ * @access Private
+ */
 const updateGraphs = asyncHandler(async (req, res) => {
   const config = {
     headers: {
@@ -214,6 +227,14 @@ const updateGraphs = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * @desc Blir brukt til å oppdatere siden "Hjem".
+ * Kobler seg opp mot solvann API og henter ut opplysninger.
+ * Behandler data om nødvendig, gjør beregninger og
+ * returnerer til frontend.
+ * @route GET /api/reservoir/updateHome
+ * @access Private
+ */
 const updateHome = asyncHandler(async (req, res) => {
   //---------- Config -------------------
   const config = {
@@ -292,6 +313,15 @@ const updateHome = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * @desc Denne metoden er ment til å bli kjørt hver andre time
+ * Den henter data fra solvann api, behandler og logger
+ * i databasen. Den sjekker også vannstand og snur
+ * turbinene om nødvendig for å holde vannstanden
+ * innenfor optimale verdier.
+ * @route GET /api/reservoir/log2Hour
+ * @access Private
+ */
 const log2Hour = asyncHandler(async (req, res) => {
   const config = {
     headers: {
@@ -352,6 +382,13 @@ const log2Hour = asyncHandler(async (req, res) => {
   res.status(200).json(maling);
 });
 
+/**
+ * @desc Metoden er ment til å bli kjørt automatisk av cyclic hver
+ * 24 time. Den henter ut data fra solvann API, behandler og
+ * legger i databasen.
+ * @route GET /api/reservoir/log24Hour
+ * @access Private
+ */
 const log24Hour = asyncHandler(async (req, res) => {
   const config = {
     headers: {
@@ -398,6 +435,12 @@ const log24Hour = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: "ok" });
 });
 
+/**
+ * @desc Tar imot en array av målinger og returnerer en array
+ * hvor målingene har tilknyttet tidspunkt.
+ * @param {(number|Array)} array  ubehandlet data
+ * @returns {(number|Array)}      behandlet data
+ */
 function getMeasurements(array) {
   const timer = new Date().getHours();
   const modulo = timer % 2;
@@ -423,96 +466,5 @@ function getMeasurements(array) {
 
   return output;
 }
-
-const noe = asyncHandler(async (req, res) => {
-  // ------------------ Her er det matematikk og forutsetninger, sensor ---------------------------
-
-  // Number of turbines
-  const numTurbines = 6;
-
-  // Maksimal mengde vann gjennom en turbin enten man suger inn eller spyler ut. Gitt i oppgaven
-  // [ m^3/s ]
-  const maxFlowRate = 41.4;
-
-  // Mengde energi en turbin kan produsere per kubikkmeter. Gitt i oppgaven
-  // [ kWh/m^3 ]
-  const energyProduction = 1.3;
-
-  // Maksimal mengde energi en turbin kan produsere.
-  // [ kWh/s ]
-  const maxEnergyProduction = energyProduction * maxFlowRate; // Dette blir 53.82
-
-  // Total mengde energy alle turbiner kan produsere per sekund
-  // [ kWh/s ]
-  const maxEnergyProductionAll = maxEnergyProduction * numTurbines; // Dette blir 322.92
-
-  // Mengde vann som kan suges inn per energienhet. Gitt i oppgaven.
-  // [ m^3/kWh ]
-  const numCubicMeterPerKiloWatt = 2;
-
-  // maksimal energibruk for én turbin ved full "trøkk".
-  // [ kWh/s ]
-  const maxEnergyConsumption = maxFlowRate / numCubicMeterPerKiloWatt; // Dette blir 20.7
-
-  // maksimal energibruk for alle turbiner ved full "trøkk".
-  // [ kWh/s ]
-  const maxEnergyConsumptionAll = maxEnergyConsumption * numTurbines; // Dette blir 124.2
-
-  // Pris i nok per mega watt timer. Gitt i oppgaven.
-  // [ NOK/MWh ]
-  const avgPowerPrice = 515;
-
-  // Om solvann suger inn vann i reservoaret i én time, til gjennomsnittspris.
-  // 3600 er antall sekunder i en time
-  // Vi deler strømprisen på tusen for å få kWh
-  // [ NOK ]
-  const avgExspenseOneHour =
-    (maxEnergyConsumptionAll * 3600 * avgPowerPrice) / 1000; // Dette blir 230266.8
-
-  // Om solvann produserer strøm i én time til gjennommsnittspris.
-  // [ NOK ]
-  const avgEarningOneHour =
-    (maxEnergyProductionAll * 3600 * avgPowerPrice) / 1000; // Dette blir 598693.68
-
-  // Ta
-  const totalEarningOneHour = avgEarningOneHour - avgExspenseOneHour; // Dette blir 368426.88
-
-  const efficiency = totalEarningOneHour / avgEarningOneHour;
-
-  // -------------------------------------------------------------------------------------------------
-
-  // Skal solvann selge strøm for å så tjene penger på å selge strømmen igjen til gjennomsnittspris?
-  // Dette med et energitap på 10% og strømpris slik den er nå. Det er opp til operatør å avgjøre
-  // om trenden i strømpris vil vare.
-
-  // Går ut ifra ting / setter thresholds som jeg vil.
-  // De vil alltid tjene penger om man kjøper og så selger til samme pris så kunsten blir
-  // at operatør vurderer når det er lurt å kjøpe/selge.
-
-  //! spørre om bruker vil avbryte automatisk endring av turbinstatus ved overstigning av optimal vannstand
-
-  // penger som blir tjent akkurat nå ved gitt strømpris. Her må jeg ta hensyn til slitasjen.
-
-  //res.status(200).json(turbineStates.data[0].capacityUsage);
-  //res.status(200).json({ msg: "ok" });
-
-  // strømpris er høy && vannstand er høy
-  // -> blast ut
-
-  // strømpris er lav && vannstand er lav
-  // -> blast inn
-
-  // forutse periode med antatt lav strømpris?
-
-  // Jeg regner med at det koster store summer å snu retningen på turbinene og at ikke det skjer på sekundet. Er et tap der også.
-
-  // det koster penger å suge inn. hvor mange timer med strømpris 50% av gjennomsnittet må til for å selge med gevinst til gjennomsnittpris.
-
-  //if(natt && høyStrømpris && over35m )
-
-  // vannstand er waterLevel fra groupstate * 1 000 0000 m^3
-  // Det står at hver turbin kan ta imot 41.4 m^3/s. regner da med at vanntapet i reservoaret fra en turbin er 41.4m^3/s
-  // vanntapet fra alle turbiner på maks kapasitet er 41.4m^3/s * 6 = 248.4 m^3/s
-});
 
 export { log2Hour, log24Hour, updateGraphs, updateHome };

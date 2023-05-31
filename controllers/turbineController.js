@@ -4,6 +4,11 @@ import Turbine from "../models/turbineModel.js";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 
+/**
+ * @author Emil Waldemar Strand
+ * Inneholder metoder som handler spesifikt om turbinene.
+ */
+
 const turbines = [
   "f6730322-fac6-405c-a754-04313942bc31",
   "77234f52-a0b3-4dae-9cc5-99b8c7361a5c",
@@ -13,9 +18,12 @@ const turbines = [
   "eacabb78-6203-4e8f-bb7f-f696e86816ca",
 ];
 
-// @desc    Auth user & get token
-// @route   POST /api/users/auth
-// @access  Public
+/**
+ * @desc    Setter ny turbinstatus og logger ny
+ * turbinstatus i databasen sammen med hvem som har gjort det.
+ * @route   POST /api/turbine/:turbineNr
+ * @access  Private
+ */
 const setTurbine = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
@@ -71,6 +79,12 @@ const setTurbine = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc    Setter ny turbinstatus på alle turbiner og logger ny
+ * turbinstatus i databasen sammen med hvem som har gjort det.
+ * @route   POST /api/turbine/
+ * @access  Private
+ */
 const setAll = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
@@ -119,6 +133,11 @@ const setAll = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: "ok." });
 });
 
+/**
+ * @desc    Henter ut logg fra databasen
+ * @route   GET /api/turbine/
+ * @access  Private
+ */
 const getAll = asyncHandler(async (req, res) => {
   const changeLog = await Turbine.find({});
   if (!changeLog) {

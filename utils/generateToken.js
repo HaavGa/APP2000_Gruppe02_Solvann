@@ -1,5 +1,12 @@
 import jwt from 'jsonwebtoken';
 
+/**
+ * @author Brad Traversy
+ * @desc lager token og signer med payload og secret. Deretter
+ * oppretter den cookie.
+ * @param {string} userId
+ * @param {boolean} isAdmin
+ */
 const generateToken = (res, userId, isAdmin) => {
   const token = jwt.sign({ userId, isAdmin }, process.env.JWT_SECRET, {
     expiresIn: '30d',

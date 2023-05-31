@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+/**
+ * @author Emil Waldemar Strand
+ * @desc model for waterLevel collection
+ */
 const waterLevelSchema = mongoose.Schema({
   waterLevel: {
     type: Number,
