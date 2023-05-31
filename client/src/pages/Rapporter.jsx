@@ -1,6 +1,6 @@
 import ExportToExcel from "../components/reports/ExportToExcel";
 
-const Rapporter = () => {
+const Rapporter = ({ auth }) => {
   const currentDate = new Date().toJSON().slice(0, 10);
 
   // dummy data for bruker-rapporten
@@ -82,13 +82,15 @@ const Rapporter = () => {
   return (
     <div className="h-screen bg-gray-700 py-5 text-center text-white">
       <h1 className="text-4xl">Rapporter</h1>
-      <div>
-        <ExportToExcel
-          excelData={userData}
-          fileName={"Brukere - " + currentDate}
-          btnText={"Last ned brukere"}
-        />
-      </div>
+      {auth().isAdmin && (
+        <div>
+          <ExportToExcel
+            excelData={userData}
+            fileName={"Brukere - " + currentDate}
+            btnText={"Last ned brukere"}
+          />
+        </div>
+      )}
       <div>
         <ExportToExcel
           excelData={waterlevelData}
