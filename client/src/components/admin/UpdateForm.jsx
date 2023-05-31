@@ -5,6 +5,15 @@ import YupPassword from "yup-password";
 import Spinner from "../utils/Spinner";
 YupPassword(Yup);
 
+/**
+ * @author Håvard Garsrud
+ * Skjema for oppdatering av allerede eksisterende bruker
+ * @param {boolean} loadingEdit loadingEdit
+ * @param {object} savedValues savedValues
+ * @param {method} setUpdateForm setUpdateForm
+ * @param {method} fetchUsers fetchUsers
+ * @returns Skjema for å legge til bruker
+ */
 const UpdateForm = ({
   loadingEdit,
   savedValues,
@@ -31,7 +40,6 @@ const UpdateForm = ({
       confirmPassword: confirmPassword,
       isAdmin: isAdmin,
     },
-    // enableReinitialize: true,
     // validere form
     validationSchema: Yup.object({
       firstName: Yup.string()

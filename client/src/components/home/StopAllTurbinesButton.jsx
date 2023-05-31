@@ -1,3 +1,8 @@
+/**
+ * Knapp som stopper alle turbinene
+ * @param {boolean} openModal openModal
+ * @returns knapp som stopper alle turbinene
+ */
 const StopAllTurbinesButton = ({ openModal }) => {
   return (
     <button

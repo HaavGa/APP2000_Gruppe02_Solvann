@@ -8,6 +8,13 @@ import { TbLogout } from "react-icons/tb";
 import { useSignOut } from "react-auth-kit";
 import ModalChangePassword from "./ModalChangePassword";
 
+/**
+ * Bygger ut navbaren
+ * @source https://github.com/WebDevSimplified/react-navbar/blob/main/src/Navbar.js
+ * @param {objekt} auth objekt tilbudt av "react-auth-kit" for å
+ * håndtere autentisering
+ * @returns Navbar
+ */
 const Navbar = ({ auth }) => {
   const [isShown, setIsShown] = useState(false);
   const signOut = useSignOut();

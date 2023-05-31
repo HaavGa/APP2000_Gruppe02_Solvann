@@ -1,3 +1,14 @@
+/**
+ * Oppretter vannreservoar med farge som oppdaterer seg basert
+ * på vannnivå
+ * @source https://stackoverflow.com/questions/24721233/drawing-water-container-with-css
+ * @param {number} waterLevel waterLevel
+ * @param {string} classNames classNames
+ * @param {method} setClassNames setClassNames
+ * @param {method} setShadow setShadow
+ * @param {method} shadow shadow
+ * @returns vannreservoaret
+ */
 const WaterReservoir = ({
   waterLevel,
   classNames,
@@ -5,6 +16,10 @@ const WaterReservoir = ({
   setShadow,
   shadow,
 }) => {
+  /**
+   * Metoden endrer "vannet" fra blått til rødt når det går
+   * utenfor akseptabelt nivå
+   */
   const finalWaterlevel = waterLevel * 2;
   finalWaterlevel > 50 && finalWaterlevel < 80
     ? setClassNames("bg-blue-500")

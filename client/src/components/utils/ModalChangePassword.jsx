@@ -6,6 +6,12 @@ import * as Yup from "yup";
 import YupPassword from "yup-password";
 YupPassword(Yup);
 
+/**
+ * @author Mari Hansen
+ * @source https://github.com/fireclint/headlessui-button-react/blob/main/src/Navbar.jsx.
+ * Modal for å endre passord
+ * @returns modal for å endre passord
+ */
 const ModalChangePassword = () => {
   const [isOpen, setIsOpen] = useState(true);
 

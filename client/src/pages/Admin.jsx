@@ -3,8 +3,12 @@ import axios from "axios";
 import SignupForm from "../components/admin/SignupForm";
 import UpdateForm from "../components/admin/UpdateForm";
 import UsersList from "../components/admin/UsersList";
-import DeleteUserModal from "../components/admin/DeleteUserModal";
 
+/**
+ * @author Håvard Garsrud
+ * Admin-siden
+ * @returns Admin-siden
+ */
 const Admin = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +17,9 @@ const Admin = () => {
   const [savedValues, setSavedValues] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  /**
+   * Metoden henter ut alle brukerne i databasen
+   */
   const fetchUsers = async () => {
     setIsLoading(true);
     try {
@@ -20,15 +27,21 @@ const Admin = () => {
       setUsers(response.data);
       setIsLoading(false);
     } catch (err) {
-      // console.log(err.response.data.message);
       console.log(err);
     }
   };
 
+  /**
+   * Metoden kjører fetchUsers() med en gang siden lastes inn
+   */
   useEffect(() => {
     fetchUsers();
   }, []);
 
+  /**
+   * Metoden oppdaterer en bruker i databasen
+   * @param {number} _id id-en til brukeren
+   */
   const updateUser = async (_id) => {
     setUpdateForm(true);
     setLoadingEdit(true);
@@ -44,6 +57,10 @@ const Admin = () => {
     fetchUsers();
   };
 
+  /**
+   * Metoden sletter en bruker i databasen
+   * @param {number} _id id-en til brukeren
+   */
   const deleteUser = async (_id) => {
     try {
       const response = await axios.delete(
@@ -55,27 +72,14 @@ const Admin = () => {
     fetchUsers();
   };
 
-  // const openModal = () => {
-  //   setIsOpen(true);
-  // };
-
   return (
     <div className="h-screen bg-gray-700 py-3 text-center">
       <div className="mt-10 flex justify-center gap-2 ">
-        {/* <div>
-          <DeleteUserModal isOpen={isOpen} setIsOpen={setIsOpen} />
-        </div> */}
-        {/* <div>
-          <button onClick={openModal} className="btn bg-red-300">
-            slett bruker
-          </button>
-        </div> */}
         <UsersList
           users={users}
           isLoading={isLoading}
           updateUser={updateUser}
           deleteUser={deleteUser}
-          // openModal={openModal}
         />
         {!updateForm && <SignupForm fetchUsers={fetchUsers} />}
         {savedValues && updateForm && (

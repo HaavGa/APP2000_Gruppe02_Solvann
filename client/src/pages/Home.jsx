@@ -5,9 +5,13 @@ import WaterReservoir from "../components/home/WaterReservoir";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Spinner from "../components/utils/Spinner";
-import DangerModal from "../components/home/StopAllTurbinesModal";
 import StopAllTurbinesModal from "../components/home/StopAllTurbinesModal";
 
+/**
+ * @author Håvard Garsrud
+ * @param {AuthStateUserObject} auth auth-objekt som viser elementer basert på hva som er lagret i objektet
+ * @returns Hjem-siden
+ */
 const Home = ({ auth }) => {
   const [homeValues, setHomeValues] = useState({});
   const [turbines, setTurbines] = useState([]);
@@ -15,6 +19,10 @@ const Home = ({ auth }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  /**
+   * Config som setter headeren til GroupId og GroupKey, som er
+   * nødvendig for å gjøre API-kall mot Solvann sitt API
+   */
   const config = {
     headers: {
       GroupId: import.meta.env.VITE_SOLVANN_USER,
@@ -24,6 +32,9 @@ const Home = ({ auth }) => {
 
   const BASE_URL_HOME = "https://solvann.cyclic.app/api/reservoir/updateHome";
 
+  /**
+   * Metoden henter hjem-verdier fra vårt API, og legger de inn i state når siden lastes inn.
+   */
   useEffect(() => {
     const getHomeValues = async () => {
       setIsLoading(true);
@@ -39,8 +50,10 @@ const Home = ({ auth }) => {
     getHomeValues();
   }, []);
 
+  /**
+   * Metoden oppdaterer siden når staten "homeValues" endrer seg
+   */
   useEffect(() => {
-    // const homeValuesInterval = setInterval(() => {
     const getHomeValues = async () => {
       try {
         const response = await axios.get(BASE_URL_HOME);
@@ -51,9 +64,7 @@ const Home = ({ auth }) => {
       }
     };
     getHomeValues();
-    // }, 5000);
-    // return () => clearInterval(homeValuesInterval);
-  }, []); // homeValues inni her for automatisk oppdatering
+  }, [homeValues]);
 
   const {
     miljokostnader: environmentCost = 0,
@@ -64,6 +75,9 @@ const Home = ({ auth }) => {
     vannstand: waterLevel = 0,
   } = homeValues;
 
+  /**
+   * Metoden setter staten setIsOpen til true
+   */
   const openModal = () => {
     setIsOpen(true);
   };

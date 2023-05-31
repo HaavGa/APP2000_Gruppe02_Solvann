@@ -2,6 +2,15 @@ import { Popover } from "@headlessui/react";
 import { BsChevronDown } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 
+/**
+ * Popover tilbudt av HeadlessUI, brukt for å endre kapasitet på en turbin
+ * @param {method} number number
+ * @param {method} allowNumbers allowNumber
+ * @param {method} handleSubmit handleSubmit
+ * @param {method} disableCard disableCard
+ * @param {method} setLoad setLoad
+ * @returns
+ */
 const PopoverChangeLoad = ({
   number,
   allowNumbers,

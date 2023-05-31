@@ -2,6 +2,14 @@ import InfoCard from "./InfoCard";
 import { CiShoppingCart, CiShoppingTag } from "react-icons/ci";
 import { IoWater } from "react-icons/io5";
 
+/**
+ * @author Håvard Garsrud
+ * Oppretter en boks med relevant info
+ * @param {boolean} buy om man burde kjøpe eller ikke
+ * @param {boolean} sell om man burde selge eller ikke
+ * @param {number} waterLevel nåværende vannstand
+ * @returns
+ */
 const Info = ({ buy, sell, waterLevel }) => {
   return (
     <div className="rounded-md bg-white text-gray-700">

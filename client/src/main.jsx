@@ -5,6 +5,13 @@ import { AuthProvider } from "react-auth-kit";
 import "./index.css";
 import App from "./App";
 
+/**
+ * @author Håvard Garsrud
+ * Metoden henter et element med ID "root" og legger hele
+ * applikasjonen inni denne.
+ * AuthProvider: Provider tilbudt av pakken react-auth-kit som
+ * hjelper med autentisering av frontend
+ */
 const root = createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

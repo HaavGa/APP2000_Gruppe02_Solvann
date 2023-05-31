@@ -1,6 +1,12 @@
 import axios from "axios";
 import { Dialog } from "@headlessui/react";
 
+/**
+ * Modal med knapp som stopper alle turbinene
+ * @param {method} isOpen
+ * @param {method} setIsOpen
+ * @returns modal som viser knappen som stopper turbinene
+ */
 const StopAllTurbinesModal = ({ isOpen, setIsOpen }) => {
   const stopAllTurbines = () => {
     const baseUrl = "https://solvann.cyclic.app/api/turbine/";

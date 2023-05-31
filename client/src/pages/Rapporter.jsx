@@ -1,9 +1,19 @@
 import ExportToExcel from "../components/reports/ExportToExcel";
 
+/**
+ * @author Mari Hansen
+ * Rapporter-siden
+ * @returns Rapporter-siden
+ */
 const Rapporter = ({ auth }) => {
+  /**
+   * Henter ut dagens dato
+   */
   const currentDate = new Date().toJSON().slice(0, 10);
 
-  // dummy data for bruker-rapporten
+  /**
+   * Dummydata for bruker-rapporten
+   */
   const userData = [
     {
       _id: "6476201146c30b73d65b1206",
@@ -55,7 +65,9 @@ const Rapporter = ({ auth }) => {
     },
   ];
 
-  // dummy-data for vannstand-rapporten
+  /**
+   * Dummydata for vannstand-rapporten
+   */
   const waterlevelData = [
     {
       waterlevel: 40.051923674910746,

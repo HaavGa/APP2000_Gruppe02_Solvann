@@ -1,7 +1,15 @@
+/**
+ *  @author Håvard Garsrud
+    Css-fila til hele
+ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/**
+ *  @author Håvard Garsrud
+    Custom variabler som
+ */
 @layer base {
   :root {
     --color-bg-nav: 215 28% 17%;

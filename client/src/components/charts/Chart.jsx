@@ -21,9 +21,23 @@ ChartJS.register(
   Legend
 );
 
+/**
+ * Oppretter en graf
+ * @source https://github.com/reactchartjs/react-chartjs-2/blob/master/sandboxes/line/default/App.tsx
+ * @param {object} data daten som skal vises
+ * @param {string} title tittelen til grafen
+ * @param {string} yAxis tittelen til y-aksen på grafen
+ * @param {string} color fargen til grafen
+ * @returns
+ */
 const Chart = ({ data, title, yAxis, color }) => {
   const label = title;
 
+  /**
+   * Metoden deler tabellen i to deler, basert på splitIndex
+   * @param {array} data en tabell
+   * @returns et objekt med to tabeller, der de er delt på splitIndex
+   */
   const divideData = (data) => {
     const splitIndex = 12;
     const firstHalf = data.splice(0, splitIndex);
@@ -31,6 +45,9 @@ const Chart = ({ data, title, yAxis, color }) => {
     return { firstHalf: firstHalf, secondHalf: secondHalf };
   };
 
+  /**
+   * Metoden setter standard verdi for grafen
+   */
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -42,36 +59,38 @@ const Chart = ({ data, title, yAxis, color }) => {
     ],
   });
 
+  /**
+   * Metoden får inn et objekt med data, og mapper over
+   * dette og setter inn tidspunkt på x-aksen og målingen
+   * i den respektive grafen (gårsdagens eller i dag)
+   */
   useEffect(() => {
-    const interval = setInterval(() => {
-      const getChartData = async () => {
-        const { firstHalf, secondHalf } = divideData(data);
-        setChartData({
-          labels: firstHalf
-            .slice(0)
-            .reverse()
-            .map((item) => item.tidspunkt),
-          datasets: [
-            {
-              label: label,
-              data: firstHalf.map((item) => item.maling),
-              borderColor: "gray",
-              backgroundColor: "gray",
-              borderDash: [5, 5],
-            },
-            {
-              label: label,
-              data: secondHalf.map((item) => item.maling),
-              borderColor: color,
-              backgroundColor: color,
-            },
-          ],
-        });
-      };
-      getChartData();
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []); // chartData inn her for automatisk oppdatering
+    const getChartData = async () => {
+      const { firstHalf, secondHalf } = divideData(data);
+      setChartData({
+        labels: firstHalf
+          .slice(0)
+          .reverse()
+          .map((item) => item.tidspunkt),
+        datasets: [
+          {
+            label: label,
+            data: firstHalf.map((item) => item.maling),
+            borderColor: "gray",
+            backgroundColor: "gray",
+            borderDash: [5, 5],
+          },
+          {
+            label: label,
+            data: secondHalf.map((item) => item.maling),
+            borderColor: color,
+            backgroundColor: color,
+          },
+        ],
+      });
+    };
+    getChartData();
+  }, [chartData]);
 
   return (
     <div className="relative h-full w-full rounded-lg bg-white">
@@ -85,6 +104,10 @@ const Chart = ({ data, title, yAxis, color }) => {
     </div>
   );
 };
+
+/**
+ * objekt for å style grafen
+ */
 const styling = {
   responsive: true,
   pointRadius: 4,
@@ -138,12 +161,6 @@ const styling = {
     },
     y: {
       display: true,
-      // ticks: {
-      //   font: {
-      //     size: 14,
-      //     weight: 'bold',
-      //   },
-      // },
       title: {
         display: true,
         text: "",
