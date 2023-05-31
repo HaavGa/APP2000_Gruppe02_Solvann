@@ -5,9 +5,16 @@ import * as Yup from "yup";
 import YupPassword from "yup-password";
 YupPassword(Yup);
 
+/**
+ * Skjema for oppretting av bruker
+ * @param {method} fetchUsers Metoden fetchUsers
+ * @returns Skjema for å legge til bruker
+ */
 const SignupForm = ({ fetchUsers }) => {
   const [error, setError] = useState("");
-  // formik logikk
+  /**
+   * Oppretter et formik-objekt, som håndterer opprettholding og innsending av verdiene i skjemaet
+   */
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -18,7 +25,12 @@ const SignupForm = ({ fetchUsers }) => {
       isAdmin: false,
     },
 
-    // validere form
+    /**
+     * Oppretter et validationSchema, som er tilbudt av Yup.
+     * Tilbyr metoder som lar deg sette valgte attributter på input-feltene,
+     * f.eks om et felt skal være påkrevd, eller hvor mange tegn
+     * det må inneholde
+     */
     validationSchema: Yup.object({
       firstName: Yup.string()
         .max(20, "Fornavnet må være på mindre enn 20 bokstaver")
@@ -41,12 +53,21 @@ const SignupForm = ({ fetchUsers }) => {
         .required("Vennligst bekreft passordet"),
     }),
 
-    // submit form
+    /**
+     * Metode tilbudt av Formik for å håndere posting av skjema
+     * @param {object} values objekt med verdiene til input-feltene
+     * @param {function} resetForm funksjon for å "blanke ut" feltene
+     * etter innsending
+     */
     onSubmit: (values, { resetForm }) => {
       submitHandler(values);
       resetForm(values);
     },
   });
+  /**
+   * Metoden sender et API-kall for å legge til en en bruker i databasen.
+   * @param {object} values Objekt med innhentet data fra skjemaet
+   */
   const submitHandler = (values) => {
     const baseUrl = "https://solvann.cyclic.app/api/users/";
     const data = ({ firstName, lastName, email, password, isAdmin } = values);

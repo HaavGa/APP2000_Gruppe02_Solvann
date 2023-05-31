@@ -1,6 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import img404 from "../images/404img.png";
 
+/**
+ * @author Mari Hansen
+ * Siden som vises hvis bruker navigerer til en rute som ikke finnes
+ * Bruker funksjon fra "react-router-dom" som navigerer til valgt pat
+ * @returns Error-siden
+ */
 const ErrorPage = () => {
   const navigate = useNavigate();
   const toHome = () => {

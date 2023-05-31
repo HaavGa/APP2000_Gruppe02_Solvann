@@ -1,3 +1,12 @@
+/**
+ * @author Håvard Garsrud
+ * Bygger opp et kort med info
+ * @param {icon} icon ikonen
+ * @param {string} info infoen
+ * @param {string} infoHeader overskriften
+ * @param {string} color fargen til kortet
+ * @returns et enkelt kort med relevant info
+ */
 const InfoCard = ({ icon, info, infoHeader, color }) => {
   const colorVariants = {
     blue: "bg-blue-100 text-blue-500",

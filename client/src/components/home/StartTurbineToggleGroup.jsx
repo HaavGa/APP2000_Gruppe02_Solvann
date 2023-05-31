@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 
+/**
+ * @author Håvard Garsrud
+  Toggle-gruppe tilbudt av HeadlessUI for å pumpe ut eller slippe inn på en turbin
+ * @param {method} setTurbineState
+ * @param {method} turbineStatusChange
+ * @param {method} capacityUsage2
+ * @param {method} setCapacityUsage2
+ * @returns toggle-gruppe
+ */
 const StartTurbineToggleGroup = ({
   setTurbineState,
   turbineStatusChange,

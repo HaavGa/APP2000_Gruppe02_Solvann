@@ -4,6 +4,11 @@ import axios from "axios";
 import Spinner from "../components/utils/Spinner";
 import Info from "../components/charts/Info";
 
+/**
+ * @author Håvard Garsrud
+ * Grafer-siden
+ * @returns Grafer-siden
+ */
 const Grafer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [graphValues, setGraphValues] = useState({});
@@ -14,6 +19,9 @@ const Grafer = () => {
   const BASE_URL_GRAPH =
     "https://solvann.cyclic.app/api/reservoir/updateGraphs";
 
+  /**
+   * Metoden henter graf-verdier fra vårt API, og legger de inn i state når siden lastes inn.
+   */
   useEffect(() => {
     const getGraphValues = async () => {
       setIsLoading(true);
@@ -30,6 +38,10 @@ const Grafer = () => {
     };
     getGraphValues();
   }, []);
+
+  /**
+   * Metoden oppdaterer siden når staten "graphValues" endrer seg
+   */
   useEffect(() => {
     const getGraphValues = async () => {
       try {
@@ -43,7 +55,7 @@ const Grafer = () => {
       }
     };
     getGraphValues();
-  }, []); // graphValues inni her for automatisk oppdatering
+  }, [graphValues]);
 
   const { buy = false, sell = false, vannstand: waterLevel = 0 } = graphValues;
   return (

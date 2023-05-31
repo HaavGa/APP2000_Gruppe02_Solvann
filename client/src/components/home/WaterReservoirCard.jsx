@@ -1,3 +1,13 @@
+/**
+ * Bygger opp et kort med relevant info knyttet til vannreservoaret
+ * @param {number} waterLevel
+ * @param {number} waterOut
+ * @param {number} waterIn
+ * @param {number} totalChange
+ * @param {number} moneyEarned
+ * @param {number} environmentCost
+ * @returns Kort som viser relevant info om vannreservoaret
+ */
 const WaterReservoirCard = ({
   waterLevel,
   waterOut,

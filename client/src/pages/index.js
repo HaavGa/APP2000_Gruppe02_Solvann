@@ -1,3 +1,8 @@
+/**
+ * @author Håvard Garsrud
+ * "Hjelpeside" for å eksportere alle sidene i applikasjonen fra en fil
+ */
+
 export { default as Admin } from "./Admin";
 export { default as ErrorPage } from "./ErrorPage";
 export { default as Grafer } from "./Grafer";

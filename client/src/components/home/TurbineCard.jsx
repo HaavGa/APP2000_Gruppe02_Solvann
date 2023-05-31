@@ -1,11 +1,18 @@
 import axios from "axios";
 import { useState } from "react";
-import Toggle from "./Toggle";
 import StopTurbineButton from "./StopTurbineButton";
 import StartActionButton from "./StartActionButton";
 import PopoverChangeLoad from "./PopoverChangeLoad";
 import StartTurbineToggleGroup from "./StartTurbineToggleGroup";
 
+/**
+ * Oppretter et Turbinkort med relevant info for den turbinen
+ * @param {string} id
+ * @param {number} turbinNr
+ * @param {number} capacityUsage
+ * @param {object} config config for å poste mot Solvann sitt API
+ * @returns {any}
+ */
 const TurbineCard = ({ id, turbinNr, capacityUsage, config }) => {
   const [disableCard, setDisableCard] = useState(false);
   const [number, setNumber] = useState("");
@@ -19,11 +26,19 @@ const TurbineCard = ({ id, turbinNr, capacityUsage, config }) => {
   const MAX_FLOWRATE = 41.4;
   const POWER_PER_CUBIC_METER = 1.3;
 
+  /**
+   * @source https://stackoverflow.com/questions/43067719/how-to-allow-only-numbers-in-textbox-in-reactjs
+   * @param {e} e elementet som er valgt
+   */
   const allowNumbers = (e) => {
     const value = e.target.value.replace(/\D/g, "");
     value >= 100 ? setNumber(100) : setNumber(value);
   };
 
+  /**
+   * Metoden poster valgt kapasitet som effekt (funker ikke)
+   * @param {*} e
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoad(capacityUsage);
@@ -38,6 +53,10 @@ const TurbineCard = ({ id, turbinNr, capacityUsage, config }) => {
     }
   };
 
+  /**
+   * Metoden sender kapasiteten til API'et for å endre turbinstatus
+   * @param {number} capacityUsage hvilken kapasitet som er valgt
+   */
   const turbineStatusChange = (capacityUsage) => {
     const baseUrl = `https://solvann.cyclic.app/api/turbine/${turbinNr}`;
     try {
@@ -47,16 +66,6 @@ const TurbineCard = ({ id, turbinNr, capacityUsage, config }) => {
     }
     console.log(`TurbinNr: ${turbinNr} capacity usage: ${capacityUsage}`);
   };
-
-  // useEffect(() => {
-  //   const msgInterval = setInterval(async () => {
-  //     const response = await axios.get(
-  //       "https://solvann.cyclic.app/api/water/test"
-  //     );
-  //     setMsg(response.data.msg);
-  //   }, 10000);
-  //   return () => clearInterval(msgInterval);
-  // }, [msg]);
 
   return (
     <div>

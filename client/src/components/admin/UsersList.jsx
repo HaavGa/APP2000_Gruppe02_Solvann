@@ -3,7 +3,16 @@ import ReactPaginate from "react-paginate";
 import Spinner from "../utils/Spinner";
 import { ImUserTie } from "react-icons/im";
 
-const UsersList = ({ users, isLoading, updateUser, deleteUser, openModal }) => {
+/**
+ * @author Håvard Garsrud
+ * Oppretter en tabell med brukere
+ * @param {array} users users
+ * @param {boolean} isLoading isLoading
+ * @param {method} updateUser updateUser
+ * @param {method} deleteUser deleteUser
+ * @returns Liste med brukere
+ */
+const UsersList = ({ users, isLoading, updateUser, deleteUser }) => {
   const [pageNumber, setPageNumber] = useState(0);
 
   const usersPerPage = 5;

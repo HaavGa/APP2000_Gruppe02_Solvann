@@ -1,3 +1,11 @@
+/**
+ * Stop-knapp for en enkelt turbin
+ * @param {method} setDisableCard
+ * @param {method} setTurbineState
+ * @param {method} capacityUsage
+ * @param {method} turbineStatusChange
+ * @returns knapp som stopper en turbin
+ */
 const StopTurbineButton = ({
   setDisableCard,
   setTurbineState,

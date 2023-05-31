@@ -8,31 +8,50 @@ import { useState, useEffect } from "react";
 import Spinner from "../components/utils/Spinner";
 YupPassword(Yup);
 
+/**
+ * @author Håvard Garsrud
+ * @source https://tailwindcomponents.com/component/login-page-glass-effect-and-background-image
+ * Login-siden
+ * @returns Login-siden
+ */
 const Login = () => {
   const signIn = useSignIn();
   const [error, setError] = useState("");
   const [isError, setIsError] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
-  // formik logikk
+  /**
+   * Oppretter et formik-objekt, som håndterer opprettholding og innsending av verdiene i skjemaet
+   */
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    // submit form
+    /**
+     * Metode tilbudt av Formik for å håndere posting av skjema
+     * @param {object} values objekt med verdiene til input-feltene
+     * @param {function} resetForm funksjon for å "blanke ut" feltene
+     * etter innsending
+     */
     onSubmit: (values, { resetForm }) => {
       submitHandler(values);
       resetForm(values);
     },
   });
 
+  /**
+   * Metoden sender et API-kall for å logge inn en bruker.
+   * @param {object} values Objekt med innhentet data fra skjemaet
+   */
   const submitHandler = async (values) => {
     setIsLoading(true);
     const baseUrl = "https://solvann.cyclic.app/api/users/login";
     try {
       const response = await axios.post(`${baseUrl}`, values);
       setIsLoading(false);
+      /**
+       * Metode tilbudt av "react-auth-kit" for å ta vare på token og sette authState, sånn at disse verdiene vil være tilgjengelige i applikasjonen
+       */
       signIn({
         token: response.data.token,
         expiresIn: 3600,
@@ -51,6 +70,10 @@ const Login = () => {
       setError(err.response.data.message);
     }
   };
+  /**
+   * Metoden setter en errortekst hvis brukernavn eller passord er feil.
+   * Bruker setTimeout() for å fjerne den etter to sekunder (2000 ms)
+   */
   useEffect(() => {
     const errorTimeout = setTimeout(() => {
       setIsError(false);

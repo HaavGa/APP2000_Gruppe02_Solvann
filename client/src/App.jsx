@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/utils/Navbar";
 import {
@@ -11,7 +10,13 @@ import {
 } from "./pages/index";
 import { useIsAuthenticated, useAuthUser } from "react-auth-kit";
 
-function App() {
+/**
+ * @author Håvard Garsrud
+ * Selve rutene til applikasjonen, konfigurert med "react-router-dom".
+ * Bruker metoder fra "react-auth-kit" for å håndtere brukerbasert tilgang.
+ * @returns Alle rutene i applikasjonen
+ */
+const App = () => {
   const auth = useAuthUser();
 
   const isAuthenticated = useIsAuthenticated();
@@ -49,6 +54,6 @@ function App() {
       </div>
     </>
   );
-}
+};
 
 export default App;

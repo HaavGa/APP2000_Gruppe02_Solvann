@@ -1,3 +1,14 @@
+/**
+ * Knapp for å pumpe ut eller slippe inn på en turbin
+ * @param {method} setDisableCard
+ * @param {string} text
+ * @param {string} color
+ * @param {method} setTurbineState
+ * @param {number} capacityUsage
+ * @param {method} turbineStatusChange
+ * @param {string} classNames
+ * @returns Knapp med valgt farge og tekst, samt klasseNavn
+ */
 const StartActionButton = ({
   setDisableCard,
   text,
@@ -5,7 +16,6 @@ const StartActionButton = ({
   setTurbineState,
   capacityUsage,
   turbineStatusChange,
-  setDisabled,
   classNames,
 }) => {
   const colorVariants = {
